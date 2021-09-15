@@ -7,7 +7,7 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server,{ origins: '*'}); 
+const io = require('socket.io')(server); 
 const cors = require('cors');
 
 dotenv.config();
