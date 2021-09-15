@@ -1,232 +1,211 @@
 -- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
 
--- 비콘 Table Create SQL
-CREATE TABLE 비콘
+-- beacon Table Create SQL
+CREATE TABLE beacon
 (
     `id`  INT    NOT NULL    AUTO_INCREMENT, 
-    CONSTRAINT PK_비콘 PRIMARY KEY (id)
+    PRIMARY KEY (id)
 );
 
 
--- 생활관 Table Create SQL
-CREATE TABLE 생활관
+-- doom Table Create SQL
+CREATE TABLE doom
 (
-    `id`    INT            NOT NULL    AUTO_INCREMENT, 
-    `명칭`    VARCHAR(45)    NULL, 
-    `비콘id`  INT            NULL, 
-    CONSTRAINT PK_생활관 PRIMARY KEY (id)
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `name`       VARCHAR(45)    NULL, 
+    `beacon_id`  INT            NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 생활관
-    ADD CONSTRAINT FK_생활관_비콘id_비콘_id FOREIGN KEY (비콘id)
-        REFERENCES 비콘 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE doom
+    ADD CONSTRAINT FK_doom_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 생활관호실 Table Create SQL
-CREATE TABLE 생활관호실
+-- doomroom Table Create SQL
+CREATE TABLE doomroom
 (
-    `id`     INT            NOT NULL    AUTO_INCREMENT, 
-    `비콘id`   INT            NULL, 
-    `생활관id`  INT            NULL, 
-    `층수`     int            NULL, 
-    `명칭`     VARCHAR(45)    NULL, 
-    CONSTRAINT PK_호실 PRIMARY KEY (id)
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `beacon_id`  INT            NULL, 
+    `doom_id`    INT            NULL, 
+    `floor`      int            NULL, 
+    `name`       VARCHAR(45)    NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 생활관호실
-    ADD CONSTRAINT FK_생활관호실_비콘id_비콘_id FOREIGN KEY (비콘id)
-        REFERENCES 비콘 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE doomroom
+    ADD CONSTRAINT FK_doomroom_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 생활관호실
-    ADD CONSTRAINT FK_생활관호실_생활관id_생활관_id FOREIGN KEY (생활관id)
-        REFERENCES 생활관 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE doomroom
+    ADD CONSTRAINT FK_doomroom_doom_id_doom_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 관리자 Table Create SQL
-CREATE TABLE 관리자
+-- manager Table Create SQL
+CREATE TABLE manager
 (
-    `군번`  INT            NOT NULL    AUTO_INCREMENT, 
-    `이름`  VARCHAR(45)    NULL, 
-    `계급`  VARCHAR(45)    NULL, 
-    `권한`  INT            NULL, 
-    CONSTRAINT PK_ PRIMARY KEY (군번)
+    `tag`   INT            NOT NULL    AUTO_INCREMENT, 
+    `name`  VARCHAR(45)    NULL, 
+    `rank`  VARCHAR(45)    NULL, 
+    `auth`  INT            NULL, 
+    CONSTRAINT PK_ PRIMARY KEY (tag)
 );
 
 
--- 외부시설 Table Create SQL
-CREATE TABLE 외부시설
+-- outside_facility Table Create SQL
+CREATE TABLE outside_facility
 (
-    `id`    INT            NOT NULL    AUTO_INCREMENT, 
-    `명칭`    VARCHAR(45)    NULL, 
-    `비콘id`  INT            NULL, 
-    CONSTRAINT PK_영내 시설 PRIMARY KEY (id)
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `name`       VARCHAR(45)    NULL, 
+    `beacon_id`  INT            NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 외부시설
-    ADD CONSTRAINT FK_외부시설_비콘id_비콘_id FOREIGN KEY (비콘id)
-        REFERENCES 비콘 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE outside_facility
+    ADD CONSTRAINT FK_outside_facility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 생활관공공시설 Table Create SQL
-CREATE TABLE 생활관공공시설
+-- doomfacility Table Create SQL
+CREATE TABLE doomfacility
 (
-    `id`     INT            NOT NULL    AUTO_INCREMENT, 
-    `명칭`     VARCHAR(45)    NULL, 
-    `비콘id`   INT            NULL, 
-    `생활관id`  INT            NULL, 
-    `현사용인원`  INT            NULL, 
-    `층수`     INT            NULL, 
-    CONSTRAINT PK_내부시설 PRIMARY KEY (id)
+    `id`           INT            NOT NULL    AUTO_INCREMENT, 
+    `name`         VARCHAR(45)    NULL, 
+    `beacon_id`    INT            NULL, 
+    `doom_id`      INT            NULL, 
+    `user_number`  INT            NULL, 
+    `floor`        INT            NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 생활관공공시설
-    ADD CONSTRAINT FK_생활관공공시설_비콘id_비콘_id FOREIGN KEY (비콘id)
-        REFERENCES 비콘 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE doomfacility
+    ADD CONSTRAINT FK_doomfacility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 생활관공공시설
-    ADD CONSTRAINT FK_생활관공공시설_생활관id_생활관_id FOREIGN KEY (생활관id)
-        REFERENCES 생활관 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE doomfacility
+    ADD CONSTRAINT FK_doomfacility_doom_id_doom_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 사용자 Table Create SQL
-CREATE TABLE 사용자
+-- user Table Create SQL
+CREATE TABLE user
 (
-    `군번`     INT            NOT NULL    AUTO_INCREMENT, 
-    `이름`     VARCHAR(45)    NULL, 
-    `계급`     VARCHAR(45)    NULL, 
-    `호실id`   INT            NULL, 
-    `생활관id`  INT            NULL, 
-    CONSTRAINT PK_USER PRIMARY KEY (군번)
+    `tag`      INT            NOT NULL    AUTO_INCREMENT, 
+    `name`     VARCHAR(45)    NULL, 
+    `rank`     VARCHAR(45)    NULL, 
+    `room_id`  INT            NULL, 
+    `doom_id`  INT            NULL, 
+    CONSTRAINT PK_USER PRIMARY KEY (tag)
 );
 
-ALTER TABLE 사용자
-    ADD CONSTRAINT FK_사용자_생활관id_생활관_id FOREIGN KEY (생활관id)
-        REFERENCES 생활관 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE user
+    ADD CONSTRAINT FK_user_doom_id_doom_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 사용자
-    ADD CONSTRAINT FK_사용자_호실id_생활관호실_id FOREIGN KEY (호실id)
-        REFERENCES 생활관호실 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE user
+    ADD CONSTRAINT FK_user_room_id_doomroom_id FOREIGN KEY (room_id)
+        REFERENCES doomroom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 출입기록 Table Create SQL
-CREATE TABLE 출입기록
+-- access_record Table Create SQL
+CREATE TABLE access_record
 (
-    `id`     INT         NOT NULL, 
-    `사용자군번`  INT         NOT NULL    AUTO_INCREMENT, 
-    `비콘id`   INT         NULL, 
-    `입장시각`   DATETIME    NULL, 
-    `퇴장시각`   DATETIME    NULL, 
-    CONSTRAINT PK_사용자_현위치 PRIMARY KEY (id)
+    `id`         INT         NOT NULL    AUTO_INCREMENT, 
+    `user_tag`   INT         NOT NULL, 
+    `beacon_id`  INT         NULL, 
+    `in_time`    DATETIME    NULL, 
+    `out_time`   DATETIME    NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 출입기록
-    ADD CONSTRAINT FK_출입기록_사용자군번_사용자_군번 FOREIGN KEY (사용자군번)
-        REFERENCES 사용자 (군번) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE access_record
+    ADD CONSTRAINT FK_access_record_user_tag_user_tag FOREIGN KEY (user_tag)
+        REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 출입기록
-    ADD CONSTRAINT FK_출입기록_비콘id_비콘_id FOREIGN KEY (비콘id)
-        REFERENCES 비콘 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE access_record
+    ADD CONSTRAINT FK_access_record_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 근무자 Table Create SQL
-CREATE TABLE 근무자
+-- watchman Table Create SQL
+CREATE TABLE watchman
 (
-    `id`     INT     NOT NULL    AUTO_INCREMENT, 
-    `근무자군번`  INT     NULL, 
-    `담당생활관`  INT     NULL, 
-    `담당일`    DATE    NULL, 
-    `교대사유`   TEXT    NULL, 
-    CONSTRAINT PK_이상유무 PRIMARY KEY (id)
+    `id`                INT     NOT NULL    AUTO_INCREMENT, 
+    `manager_tags`      INT     NULL, 
+    `charge_doom`       INT     NULL, 
+    `responsible_date`  DATE    NULL, 
+    `shift`             TEXT    NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 근무자
-    ADD CONSTRAINT FK_근무자_근무자군번_관리자_군번 FOREIGN KEY (근무자군번)
-        REFERENCES 관리자 (군번) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE watchman
+    ADD CONSTRAINT FK_watchman_manager_tags_manager_tag FOREIGN KEY (manager_tags)
+        REFERENCES manager (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 근무자
-    ADD CONSTRAINT FK_근무자_담당생활관_생활관_id FOREIGN KEY (담당생활관)
-        REFERENCES 생활관 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE watchman
+    ADD CONSTRAINT FK_watchman_charge_doom_doom_id FOREIGN KEY (charge_doom)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 공공시설사용요청 Table Create SQL
-CREATE TABLE 공공시설사용요청
+-- facility_request Table Create SQL
+CREATE TABLE facility_request
 (
-    `id`      INT         NOT NULL    AUTO_INCREMENT, 
-    `사용자군번`   INT         NULL, 
-    `공공시설id`  INT         NULL, 
-    `요청시각`    DATETIME    NULL, 
-    `희망사용시간`  TIME        NULL, 
-    `결재여부`    TEXT        NULL, 
-    CONSTRAINT PK_이상유무 PRIMARY KEY (id)
+    `id`            INT         NOT NULL    AUTO_INCREMENT, 
+    `user_tag`      INT         NULL, 
+    `facility_id`   INT         NULL, 
+    `request_time`  DATETIME    NULL, 
+    `desired_time`  TIME        NULL, 
+    `permission`    TEXT        NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 공공시설사용요청
-    ADD CONSTRAINT FK_공공시설사용요청_공공시설id_생활관공공시설_id FOREIGN KEY (공공시설id)
-        REFERENCES 생활관공공시설 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE facility_request
+    ADD CONSTRAINT FK_facility_request_facility_id_doomfacility_id FOREIGN KEY (facility_id)
+        REFERENCES doomfacility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE 공공시설사용요청
-    ADD CONSTRAINT FK_공공시설사용요청_사용자군번_사용자_군번 FOREIGN KEY (사용자군번)
-        REFERENCES 사용자 (군번) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE facility_request
+    ADD CONSTRAINT FK_facility_request_user_tag_user_tag FOREIGN KEY (user_tag)
+        REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 외부시설이동요청 Table Create SQL
-CREATE TABLE 외부시설이동요청
+-- anomaly Table Create SQL
+CREATE TABLE anomaly
 (
-    `id`      INT         NOT NULL    AUTO_INCREMENT, 
-    `사용자군번`   INT         NULL, 
-    `외부시설id`  INT         NULL, 
-    `요청시각`    DATETIME    NULL, 
-    `결재상태`    VARCHAR     NULL, 
-    `기각사유`    TEXT        NULL, 
-    CONSTRAINT PK_이상유무 PRIMARY KEY (id)
+    `tag`            INT         NOT NULL    AUTO_INCREMENT, 
+    `temperature`    DOUBLE      NULL, 
+    `anomaly`        TEXT        NULL, 
+    `reported_time`  DATETIME    NULL, 
+    PRIMARY KEY (tag)
 );
 
-ALTER TABLE 외부시설이동요청
-    ADD CONSTRAINT FK_외부시설이동요청_사용자군번_사용자_군번 FOREIGN KEY (사용자군번)
-        REFERENCES 사용자 (군번) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE 외부시설이동요청
-    ADD CONSTRAINT FK_외부시설이동요청_외부시설id_외부시설_id FOREIGN KEY (외부시설id)
-        REFERENCES 외부시설 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE anomaly
+    ADD CONSTRAINT FK_anomaly_tag_user_tag FOREIGN KEY (tag)
+        REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
--- 이상유무 Table Create SQL
-CREATE TABLE 이상유무
+-- timetable Table Create SQL
+CREATE TABLE timetable
 (
-    `사용자군번`  INT         NOT NULL    AUTO_INCREMENT, 
-    `체온`     DOUBLE      NULL, 
-    `이상유무`   TEXT        NULL, 
-    `보고일`    DATETIME    NULL, 
-    CONSTRAINT PK_이상유무 PRIMARY KEY (사용자군번)
+    `id`           INT         NOT NULL    AUTO_INCREMENT, 
+    `doom_id`      INT         NULL, 
+    `room_id`      INT         NOT NULL, 
+    `facility_id`  INT         NULL, 
+    `start_time`   DATETIME    NULL, 
+    `end_time`     DATETIME    NULL, 
+    PRIMARY KEY (id)
 );
 
-ALTER TABLE 이상유무
-    ADD CONSTRAINT FK_이상유무_사용자군번_사용자_군번 FOREIGN KEY (사용자군번)
-        REFERENCES 사용자 (군번) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE timetable
+    ADD CONSTRAINT FK_timetable_facility_id_doomfacility_id FOREIGN KEY (facility_id)
+        REFERENCES doomfacility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE timetable
+    ADD CONSTRAINT FK_timetable_room_id_doomroom_id FOREIGN KEY (room_id)
+        REFERENCES doomroom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
--- 사용시간표 Table Create SQL
-CREATE TABLE 사용시간표
-(
-    `id`     INT         NULL, 
-    `생활관id`  INT         NULL, 
-    `호실id`   INT         NOT NULL    AUTO_INCREMENT, 
-    `시설id`   INT         NULL, 
-    `시작시각`   DATETIME    NULL, 
-    `종료시각`   DATETIME    NULL, 
-    CONSTRAINT PK_사용시간표 PRIMARY KEY (id)
-);
-
-ALTER TABLE 사용시간표
-    ADD CONSTRAINT FK_사용시간표_시설id_생활관공공시설_id FOREIGN KEY (시설id)
-        REFERENCES 생활관공공시설 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE 사용시간표
-    ADD CONSTRAINT FK_사용시간표_호실id_생활관호실_id FOREIGN KEY (호실id)
-        REFERENCES 생활관호실 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE 사용시간표
-    ADD CONSTRAINT FK_사용시간표_생활관id_생활관_id FOREIGN KEY (생활관id)
-        REFERENCES 생활관 (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE timetable
+    ADD CONSTRAINT FK_timetable_doom_id_doom_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
