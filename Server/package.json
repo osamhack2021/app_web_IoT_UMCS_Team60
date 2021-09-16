@@ -17,6 +17,7 @@
     "express-session": "^1.17.1",
     "http": "0.0.1-security",
     "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
     "nunjucks": "^3.2.2",
     "socket.io": "^2.4.1",
     "ws": "^8.2.2"

@@ -7,17 +7,15 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server); 
+const router = express.Router();
 const cors = require('cors');
+const io = require('./socket')(server); 
+
+const apiRouter = require('./routes/apiRouter');
 
 dotenv.config();
 
-const indexRouter = require('./routes');
-
 app.set('port', process.env.PORT || 3001);
-app.set('view engine', 'ejs');
-app.set('views',  __dirname + '/views'); 
-
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -41,25 +39,15 @@ app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next(); 
 }); 
-    
-app.get('/', (req, res) => {
-    res.sendFile(__dirname+'/index.html');
-})
 
-io.on('connection', (socket) => { 
-    console.log('a user connected');
-    socket.on('chat message', (msg) => {
-      
-        io.emit('chat message', msg); 
-    });
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
+//testpage route
+app.get('/', (req, res) => {
+    res.sendFile(__dirname+'/chatTest.html');
+})
 
 server.listen(3002)
 
-//app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // app.use((req, res, next) => {
 //     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
