@@ -14,10 +14,10 @@ class FormRegister extends StatelessWidget {
       key : _formKey,
       child :Column(
         children : [
-          const LabelInput(label: "id", hint: "id"),
-          const LabelInput(label: "pw", hint: "pw"),
-          const LabelInput(label: "pw check", hint: "re-enter pw"),
-          const LabelInput(label: "division", hint: "division"),
+          const LabelFormInput(label: "id", hint: "id"),
+          const LabelFormInput(label: "pw", hint: "pw"),
+          const LabelFormInput(label: "pw check", hint: "re-enter pw"),
+          const LabelFormInput(label: "division", hint: "division"),
           PostButton(onPressed: (){},label : "전입 등록 신청"),
         ],
       ),

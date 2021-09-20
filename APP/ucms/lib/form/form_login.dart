@@ -13,12 +13,12 @@ class FormLogin extends StatelessWidget {
       key : _formKey,
       child :Column(
         children : [
-          const TextField(
-            decoration: InputDecoration(hintText: "id"),
+          TextFormField(
+            decoration: const InputDecoration(hintText: "id"),
           ),
-          const TextField(
+          TextFormField(
             obscureText:true,
-            decoration: InputDecoration(hintText: "password"),
+            decoration: const InputDecoration(hintText: "password"),
           ),
           Row (
             mainAxisAlignment: MainAxisAlignment.center,

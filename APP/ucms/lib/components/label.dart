@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ucms/components/textfields.dart';
+import 'package:ucms/components/hinted_texts.dart';
 import 'package:ucms/theme/text_theme.dart';
 
-class LabelInput extends StatelessWidget {
+class LabelFormInput extends StatelessWidget {
   
-  const LabelInput({required this.label, required this.hint});
+  const LabelFormInput({required this.label, required this.hint});
 
   final String label;
   final String hint;
@@ -21,7 +21,7 @@ class LabelInput extends StatelessWidget {
         const Spacer(),
         Container(
           constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-          child: TextFieldWithHint(hint),
+          child: KTextFormField(hint : hint),
           ),
       ],
     );

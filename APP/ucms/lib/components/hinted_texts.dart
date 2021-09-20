@@ -17,3 +17,22 @@ class TextFieldWithHint extends StatelessWidget{
           );
   }
 }
+
+class KTextFormField extends StatelessWidget{
+
+  KTextFormField({required this.hint}){
+    field = TextFormField(
+            decoration: InputDecoration(
+              hintText: hint,
+            ),
+          );
+  }
+
+  final String hint;
+  TextFormField field = TextFormField();
+
+  @override
+  Widget build(BuildContext context) {
+  return field;
+  }
+}
