@@ -16,7 +16,7 @@ class LoginPage extends StatelessWidget {
                 // ignore: prefer_const_literals_to_create_immutables
                 children : [
                   const SizedBox(height:100),
-                   const Text("Login", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                   const Text("Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                    const TextField(
                      decoration: InputDecoration(
                        hintText: "id",
