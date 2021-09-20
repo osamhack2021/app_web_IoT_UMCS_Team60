@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ucms/login/login_page.dart';
+import 'package:ucms/login/register_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,9 +25,10 @@ class MyApp extends StatelessWidget {
           ), //styleFrom
         ),
       ),
-      initialRoute: "/login",
+      initialRoute: "/register",
       routes: {
         "/login": (context) => const LoginPage(),
+        "/register" : (context) => const RegisterPage(),
       },
     );
   }
