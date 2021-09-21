@@ -1,10 +1,10 @@
--- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+--  테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
 
 -- beacon Table Create SQL
 CREATE TABLE beacon
 (
     `id`  INT    NOT NULL    AUTO_INCREMENT, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_beacon PRIMARY KEY (id)
 );
 
 
@@ -14,7 +14,7 @@ CREATE TABLE doom
     `id`         INT            NOT NULL    AUTO_INCREMENT, 
     `name`       VARCHAR(45)    NULL, 
     `beacon_id`  INT            NULL, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_doom PRIMARY KEY (id)
 );
 
 ALTER TABLE doom
@@ -30,7 +30,7 @@ CREATE TABLE doomroom
     `doom_id`    INT            NULL, 
     `floor`      int            NULL, 
     `name`       VARCHAR(45)    NULL, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_doomroom PRIMARY KEY (id)
 );
 
 ALTER TABLE doomroom
@@ -42,6 +42,20 @@ ALTER TABLE doomroom
         REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- outside_facility Table Create SQL
+CREATE TABLE outside_facility
+(
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `name`       VARCHAR(45)    NULL, 
+    `beacon_id`  INT            NULL, 
+    CONSTRAINT PK_outside_facility PRIMARY KEY (id)
+);
+
+ALTER TABLE outside_facility
+    ADD CONSTRAINT FK_outside_facility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
 -- manager Table Create SQL
 CREATE TABLE manager
 (
@@ -51,41 +65,6 @@ CREATE TABLE manager
     `auth`  INT            NULL, 
     CONSTRAINT PK_ PRIMARY KEY (tag)
 );
-
-
--- outside_facility Table Create SQL
-CREATE TABLE outside_facility
-(
-    `id`         INT            NOT NULL    AUTO_INCREMENT, 
-    `name`       VARCHAR(45)    NULL, 
-    `beacon_id`  INT            NULL, 
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE outside_facility
-    ADD CONSTRAINT FK_outside_facility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
-        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-
--- doomfacility Table Create SQL
-CREATE TABLE doomfacility
-(
-    `id`           INT            NOT NULL    AUTO_INCREMENT, 
-    `name`         VARCHAR(45)    NULL, 
-    `beacon_id`    INT            NULL, 
-    `doom_id`      INT            NULL, 
-    `user_number`  INT            NULL, 
-    `floor`        INT            NULL, 
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE doomfacility
-    ADD CONSTRAINT FK_doomfacility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
-        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE doomfacility
-    ADD CONSTRAINT FK_doomfacility_doom_id_doom_id FOREIGN KEY (doom_id)
-        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- user Table Create SQL
@@ -108,6 +87,27 @@ ALTER TABLE user
         REFERENCES doomroom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- doomfacility Table Create SQL
+CREATE TABLE doomfacility
+(
+    `id`           INT            NOT NULL    AUTO_INCREMENT, 
+    `name`         VARCHAR(45)    NULL, 
+    `beacon_id`    INT            NULL, 
+    `doom_id`      INT            NULL, 
+    `user_number`  INT            NULL, 
+    `floor`        INT            NULL, 
+    CONSTRAINT PK_doomfacility PRIMARY KEY (id)
+);
+
+ALTER TABLE doomfacility
+    ADD CONSTRAINT FK_doomfacility_beacon_id_beacon_id FOREIGN KEY (beacon_id)
+        REFERENCES beacon (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE doomfacility
+    ADD CONSTRAINT FK_doomfacility_doom_id_doom_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
 -- access_record Table Create SQL
 CREATE TABLE access_record
 (
@@ -116,7 +116,7 @@ CREATE TABLE access_record
     `beacon_id`  INT         NULL, 
     `in_time`    DATETIME    NULL, 
     `out_time`   DATETIME    NULL, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_access_record PRIMARY KEY (id)
 );
 
 ALTER TABLE access_record
@@ -136,7 +136,7 @@ CREATE TABLE watchman
     `charge_doom`       INT     NULL, 
     `responsible_date`  DATE    NULL, 
     `shift`             TEXT    NULL, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_watchman PRIMARY KEY (id)
 );
 
 ALTER TABLE watchman
@@ -151,13 +151,13 @@ ALTER TABLE watchman
 -- facility_request Table Create SQL
 CREATE TABLE facility_request
 (
-    `id`            INT         NOT NULL    AUTO_INCREMENT, 
-    `user_tag`      INT         NULL, 
-    `facility_id`   INT         NULL, 
-    `request_time`  DATETIME    NULL, 
-    `desired_time`  TIME        NULL, 
-    `permission`    TEXT        NULL, 
-    PRIMARY KEY (id)
+    `id`            INT            NOT NULL    AUTO_INCREMENT, 
+    `user_tag`      INT            NULL, 
+    `facility_id`   INT            NULL, 
+    `request_time`  DATETIME       NULL, 
+    `desired_time`  TIME           NULL, 
+    `permission`    VARCHAR(45)    NULL, 
+    CONSTRAINT PK_facility_request PRIMARY KEY (id)
 );
 
 ALTER TABLE facility_request
@@ -176,7 +176,7 @@ CREATE TABLE anomaly
     `temperature`    DOUBLE      NULL, 
     `anomaly`        TEXT        NULL, 
     `reported_time`  DATETIME    NULL, 
-    PRIMARY KEY (tag)
+    CONSTRAINT PK_anomaly PRIMARY KEY (tag)
 );
 
 ALTER TABLE anomaly
@@ -193,7 +193,7 @@ CREATE TABLE timetable
     `facility_id`  INT         NULL, 
     `start_time`   DATETIME    NULL, 
     `end_time`     DATETIME    NULL, 
-    PRIMARY KEY (id)
+    CONSTRAINT PK_timetable PRIMARY KEY (id)
 );
 
 ALTER TABLE timetable
@@ -209,3 +209,22 @@ ALTER TABLE timetable
         REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
+-- outside_request Table Create SQL
+CREATE TABLE outside_request
+(
+    `id`            INT            NOT NULL    AUTO_INCREMENT, 
+    `user_tag`      INT            NOT NULL, 
+    `outside_id`    INT            NOT NULL, 
+    `request_time`  DATETIME       NULL, 
+    `permission`    VARCHAR(45)    NULL, 
+    `description`   TEXT           NULL, 
+    CONSTRAINT PK_outside_request PRIMARY KEY (id)
+);
+
+ALTER TABLE outside_request
+    ADD CONSTRAINT FK_outside_request_outside_id_outside_facility_id FOREIGN KEY (outside_id)
+        REFERENCES outside_facility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE outside_request
+    ADD CONSTRAINT FK_outside_request_user_tag_user_tag FOREIGN KEY (user_tag)
+        REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
