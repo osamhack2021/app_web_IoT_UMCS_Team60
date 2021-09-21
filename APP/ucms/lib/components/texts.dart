@@ -50,7 +50,6 @@ class _KTextFormAreaState extends State<KTextFormArea> {
             onChanged: (text) {
               setState(() {
                 if(text.isNotEmpty) ChoiceButton.selected="기타"; 
-                print("ChoiceButton.selected="+ChoiceButton.selected);
                ChoiceButtonGroup.check!();
               });
             }
