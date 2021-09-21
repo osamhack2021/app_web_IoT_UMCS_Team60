@@ -1,11 +1,10 @@
 
-// ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:ucms/theme/size.dart';
 
 class KScreen extends StatelessWidget {
-  const KScreen({required this.child});
+  const KScreen({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 

@@ -1,13 +1,11 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ucms/components/hinted_texts.dart';
+import 'package:ucms/components/texts.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 class LabelFormInput extends StatelessWidget {
   
-  const LabelFormInput({required this.label, required this.hint});
+  const LabelFormInput({Key? key, required this.label, required this.hint}) : super(key: key);
 
   final String label;
   final String hint;
@@ -30,7 +28,7 @@ class LabelFormInput extends StatelessWidget {
 
 class LabelText extends StatelessWidget {
   
-  const LabelText({required this.label, required this.content});
+  const LabelText({Key? key, required this.label, required this.content}) : super(key: key);
 
   final String label;
   final String content;

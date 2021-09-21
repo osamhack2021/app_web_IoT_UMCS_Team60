@@ -1,10 +1,10 @@
-// ignore_for_file: use_key_in_widget_constructors
+
 
 import 'package:flutter/material.dart';
 
 class TextFieldWithHint extends StatelessWidget{
 
-  const TextFieldWithHint(this.hint);
+  const TextFieldWithHint(this.hint, {Key? key}) : super(key: key);
 
   final String hint;
 
@@ -18,21 +18,4 @@ class TextFieldWithHint extends StatelessWidget{
   }
 }
 
-class KTextFormField extends StatelessWidget{
 
-  KTextFormField({required this.hint}){
-    field = TextFormField(
-            decoration: InputDecoration(
-              hintText: hint,
-            ),
-          );
-  }
-
-  final String hint;
-  TextFormField field = TextFormField();
-
-  @override
-  Widget build(BuildContext context) {
-  return field;
-  }
-}

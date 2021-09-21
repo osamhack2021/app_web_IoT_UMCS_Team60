@@ -9,13 +9,20 @@ class FormMove extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    List<String> names = ["체단실", "식당"];
+    List<ChoiceButton>? btns = [
+      ChoiceButton(label: "막사"),
+      ChoiceButton(label: "체단실"),
+      ChoiceButton(label: "노래방"),
+      ChoiceButton(label: "지통실"),
+      ChoiceButton(label: "사지방"),
+      ChoiceButton(label: "도서관"),
+      ];
     return  Form(
       key : _formKey,
       child :Column(
         children : [
-          ChoiceButtonGroup(onPressed: (){}, buttonNames: names),
-          PostButton(onPressed: (){},label: "전입 신병 가입"),
+          ChoiceButtonGroup(buttons: btns,),
+          PostButton(onPressed: (){},label: "보고"),
         ],
       ),
     );
