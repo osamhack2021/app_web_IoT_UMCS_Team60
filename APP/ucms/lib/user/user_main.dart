@@ -1,43 +1,34 @@
-// ignore_for_file: prefer_initializing_formals, must_be_immutable
+// ignore_for_file: prefer_initializing_formals, must_be_immutable, use_key_in_widget_constructors
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ucms/components/label_text.dart';
+import 'package:ucms/components/custom_buttons.dart';
+import 'package:ucms/components/custom_screen.dart';
+import 'package:ucms/components/label.dart';
+import 'package:ucms/components/texts.dart';
 
 class UserMain extends StatelessWidget {
-  UserMain({required String location, required String state}){
-    this.location =location;
-    this.state = state;
-  }
+  UserMain({required this.location, required this.state});
 
-  String location="막사-초기";
-  String state="막사 대기중 - 초기";
+  String location;
+  String state;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.all(20.0),
-          constraints: const BoxConstraints(maxWidth: 360, maxHeight: 800),
-          child: Align(
-            child: ListView(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                const SizedBox(height: 100),
-                const Text("용사 메인",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center),
-                const SizedBox(height: 20),
-                LabelText(label: "현 위치", content: location),
-                LabelText(label: "현 상태", content: state),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text("이동 보고하기", textAlign: TextAlign.center),
-                ),
-              ],
-            ),
+        body: KScreen(
+          child: ListView(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              const SizedBox(height: 100),
+              title("용사 메인"),
+              const SizedBox(height: 20),
+              LabelText(label: "현 위치", content: location),
+              LabelText(label: "현 상태", content: state),
+              PageButton(onPressed:(){},label:"이동 보고 하기"),
+            ],
           ),
         ),
       ),
