@@ -15,11 +15,8 @@ const crypto = require('crypto');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-const apiRouter = require('./routes/apiRouter')(app, dbConnection);
-const userRouter = require('./routes/userRouter')(app, passport);
-
 dotenv.config();
-app.set('port', process.env.PORT || 3001);
+app.set('port', process.env.PORT || 3003);
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -47,7 +44,14 @@ var dbModule = require('./database')();
 var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
-// passport strategy 설정
+const apiRouter = require('./routes/apiRouter')(app, dbConnection);
+const userRouter = require('./routes/userRouter')(app, dbConnection, passport);
+
+app.use('/api', apiRouter);
+app.use('/', userRouter);
+
+
+// passport setting
 passport.use(new LocalStrategy(
     function(username, password, done) {
         var sql = 'SELECT * FROM manager WHERE tag=?';
@@ -58,16 +62,14 @@ passport.use(new LocalStrategy(
                 return done('please check your id.');
 
             var userInfo = results[0];
-            crypto.pbkdf2(password, userInfo.salt, 100000, 64, 'sha512', function(err, derivedKey){
-                if(err)
-                    return done(err);
+            pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
 
-                if(derivedKey.toString('hex') === userInfo.pw)
-                    return done(null, userInfo);
-                else 
-                    return done('please check your password.');
-            });//pbkdf2
-        });//query
+            if(pwEncrypted.toString('hex') === userInfo.pw)
+                return done(null, userInfo);
+            else 
+                return done('please check your password.');
+
+        });
     }
 ));
 
@@ -100,10 +102,10 @@ app.get('/socketChat', (req, res) => {
     res.sendFile(__dirname+'/chatTest.html');
 })
 
-server.listen(3002)
 
-app.use('/api', apiRouter);
-app.use('/', userRouter);
+server.listen(app.get('port'), ()=>{
+    console.log(`server port: ${app.get('port')}`)
+});
 
 
 // app.use((req, res, next) => {
