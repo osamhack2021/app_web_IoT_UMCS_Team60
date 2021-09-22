@@ -45,10 +45,10 @@ var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
 const apiRouter = require('./routes/apiRouter')(app, dbConnection);
-const userRouter = require('./routes/userRouter')(app, dbConnection, passport);
+const managerRouter = require('./routes/managerRouter')(app, dbConnection, passport);
 
 app.use('/api', apiRouter);
-app.use('/', userRouter);
+app.use('/manager', managerRouter);
 
 
 // passport setting
@@ -96,6 +96,11 @@ app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next(); 
 }); 
+
+//socketTest page route
+app.get('/', (req, res) => {
+    res.render(`index`);
+})
 
 //socketTest page route
 app.get('/socketChat', (req, res) => {
