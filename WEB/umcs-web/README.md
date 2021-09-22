@@ -1,4 +1,4 @@
-# umcs-web
+# umcs-web (front)
 
 ## Project setup
 ```
