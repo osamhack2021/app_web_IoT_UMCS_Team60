@@ -5,7 +5,6 @@ dotenv.config();
 module.exports = function () {
   return {
     init: function () {
-        console.log(process.env.PORT)
       return mysql.createConnection({
         host: 'localhost',
         port: '3307',

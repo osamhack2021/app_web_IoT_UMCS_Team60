@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+  </head>
+  <body>
+    <h1><%= message %></h1>
+    <form action="/login" method="post">
+      <input type="text" name="username" placeholder="id" /><br />
+      <input type="password" name="password" placeholder="password" /><br />
+      <input type="submit" />
+    </form>
+    <form action="/register" method="get">
+      <button type="submit">회원가입</button>
+  </form>
+  </body>
+</html>
