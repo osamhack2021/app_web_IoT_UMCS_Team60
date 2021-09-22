@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_initializing_formals, must_be_immutable, use_key_in_widget_constructors
+// ignore_for_file: prefer_initializing_formals, must_be_immutable
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 
 class UserMain extends StatelessWidget {
-  UserMain({required this.location, required this.state});
+  UserMain({Key? key, required this.location, required this.state}) : super(key: key);
 
   String location;
   String state;
@@ -20,7 +20,6 @@ class UserMain extends StatelessWidget {
       home: Scaffold(
         body: KScreen(
           child: ListView(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               const SizedBox(height: 100),
               title("용사 메인"),
