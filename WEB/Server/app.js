@@ -12,8 +12,8 @@ const router = express.Router();
 const cors = require('cors');
 const io = require('./socket')(server); 
 const crypto = require('crypto');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const manager_passport = require('passport');
+const manager_localStrategy = require('passport-local').Strategy;
 
 dotenv.config();
 app.set('port', process.env.PORT || 3003);
@@ -36,8 +36,8 @@ app.use(session({
         secure: false
     }
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(manager_passport.initialize());
+app.use(manager_passport.session());
 
 // db connection
 var dbModule = require('./database')();
@@ -45,14 +45,14 @@ var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
 const apiRouter = require('./routes/apiRouter')(app, dbConnection);
-const managerRouter = require('./routes/managerRouter')(app, dbConnection, passport);
+const managerRouter = require('./routes/managerRouter')(app, dbConnection, manager_passport);
 
 app.use('/api', apiRouter);
 app.use('/manager', managerRouter);
 
 
 // passport setting
-passport.use(new LocalStrategy(
+manager_passport.use(new manager_localStrategy(
     function(username, password, done) {
         var sql = 'SELECT * FROM manager WHERE tag=?';
         dbConnection.query(sql, [username], function(err, results){
@@ -64,19 +64,18 @@ passport.use(new LocalStrategy(
             var userInfo = results[0];
             pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
 
-            if(pwEncrypted.toString('hex') === userInfo.pw)
+            if(pwEncrypted.toString('hex') === userInfo.enc_pwd)
                 return done(null, userInfo);
             else 
                 return done('please check your password.');
-
         });
     }
 ));
 
-passport.serializeUser(function(user, done) {
+manager_passport.serializeUser(function(user, done) {
     done(null, user.tag);
 });
-passport.deserializeUser(function(tag, done) {
+manager_passport.deserializeUser(function(tag, done) {
     var sql = 'SELECT * FROM manager WHERE tag=?';
     dbConnection.query(sql, [tag], function(err, results){
         if(err)
