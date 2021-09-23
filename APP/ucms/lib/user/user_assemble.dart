@@ -15,8 +15,7 @@ class UserAssemble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: KScreen(
+      home: KScreen(
           child: ListView(
             children: [
               const SizedBox(height: 100),
@@ -30,7 +29,6 @@ class UserAssemble extends StatelessWidget {
               PageButton(onPressed:(){},label:"소집 불가합니다."),
             ],
           ),
-        ),
       ),
     );
   }
