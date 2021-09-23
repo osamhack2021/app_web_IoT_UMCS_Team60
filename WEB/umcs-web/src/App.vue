@@ -2,37 +2,25 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="primary darken-2"
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <router-link to="#">
+          <p class="umcs-logo white--text font-weight-bold mb-0 ml-3">
+            UMCS
+          </p>
+        </router-link>
       </div>
 
       <v-spacer />
 
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"
         target="_blank"
         text
       >
-        <span class="mr-2">Latest Release</span>
+        <span class="mr-2">Team60 GitHub</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
@@ -52,3 +40,14 @@ export default {
   }),
 };
 </script>
+
+<style scoped>
+a {
+  color: #FFF;
+  text-decoration: none;
+  outline: none;
+}
+.umcs-logo {
+  font-size: 2.6rem;
+}
+</style>
