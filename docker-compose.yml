@@ -1,15 +1,5 @@
 version: '3.3'
 services:
-# backend:
-#    build: ./backend
-#    ports:
-#     - "8123:8123"
-#    depends_on:
-#     - db
-#    environment:
-#     - DATABASE_HOST=db
-#    volumes:
-#     - ./sample-service/api:/app/api
   db:
     build: ./DB
     command: 
