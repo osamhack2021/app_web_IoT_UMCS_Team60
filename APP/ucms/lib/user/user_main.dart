@@ -17,8 +17,7 @@ class UserMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: KScreen(
+      home: KScreen(
           child: ListView(
             children: [
               const SizedBox(height: 100),
@@ -26,11 +25,12 @@ class UserMain extends StatelessWidget {
               const SizedBox(height: 20),
               LabelText(label: "현 위치", content: location),
               LabelText(label: "현 상태", content: state),
-              PageButton(onPressed:(){},label:"이동 보고 하기"),
+              PageButton(onPressed:(){
+                Navigator.pushNamed(context, "/user/move");
+              },label:"이동 보고 하기"),
             ],
           ),
         ),
-      ),
     );
   }
 }

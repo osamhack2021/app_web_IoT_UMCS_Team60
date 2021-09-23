@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ucms/login/login_page.dart';
 import 'package:ucms/login/register_page.dart';
+import 'package:ucms/nav.dart';
 import 'package:ucms/user/user_assemble.dart';
 import 'package:ucms/user/user_main.dart';
 import 'package:ucms/user/user_move.dart';
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
           ), //styleFrom
         ),
       ),
-      initialRoute: "/user/assemble",
+      initialRoute: "/nav",
       routes: {
+        "/nav" : (context) => const NavPage(),
         "/login": (context) => const LoginPage(),
         "/register" : (context) => const RegisterPage(),
         "/user/main" : (context) => UserMain(location : "막사", state : "막사대기중"),

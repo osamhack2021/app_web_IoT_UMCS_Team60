@@ -22,7 +22,7 @@ class FormMove extends StatelessWidget {
       child :Column(
         children : [
           ChoiceButtonGroup(buttons: btns,),
-          PostButton(onPressed: (){},label: "보고"),
+
         ],
       ),
     );
