@@ -1,25 +1,25 @@
 module.exports = {
-  extends: ['plugin:vue/recommended'],
-  plugins: ['vuetify'],
   parserOptions: {
     parser: "babel-eslint",
   },
+  extends: ['plugin:vue/recommended'],
+  plugins: ['vuetify'],
   rules: {
     'vuetify/no-deprecated-classes': 'error',
     'vuetify/no-legacy-grid': 'error',
     'indent': ['error', 2],
   },
-  overrides: [
-    {
-      files: [
-        "**/__tests__/*.{j,t}s?(x)",
-        "**/tests/unit/**/*.spec.{j,t}s?(x)",
-      ],
-      env: {
-        jest: true,
-      },
-    },
-  ],
+  // overrides: [
+  //   {
+  //     files: [
+  //       "**/__tests__/*.{j,t}s?(x)",
+  //       "**/tests/unit/**/*.spec.{j,t}s?(x)",
+  //     ],
+  //     env: {
+  //       jest: true,
+  //     },
+  //   },
+  // ],
 };
 
 // module.exports = {
