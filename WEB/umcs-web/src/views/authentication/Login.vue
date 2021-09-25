@@ -3,7 +3,7 @@
     <v-row class="d-flex justify-center align-center">
       <v-col cols="6">
         <v-img
-          src="../assets/UMCS.png"
+          src="@/assets/UMCS.png"
           max-height="330"
         />
       </v-col>
@@ -14,29 +14,29 @@
           ref="form"
           v-model="valid"
           lazy-validation
+          @submit.prevent="submitForm"
         >
           <v-text-field
-            v-model="username"
-            :rules="usernameRules"
-            label="id"
+            v-model="userNum"
+            :rules="userNumRules"
+            label="군번"
             required
           />
 
           <v-text-field
             v-model="password"
             :rules="passwordRules"
-            label="password"
+            label="비밀번호"
             required
           />
 
           <v-btn
+            type="submit"
             :disabled="!valid"
             color="success"
             block
             class="mt-4 mr-4"
-            @click="validate"
           >
-            <!-- Validate -->
             Login
           </v-btn>
         </v-form>
@@ -49,8 +49,9 @@
 export default {
   data: () => ({
     valid: true,
-    username: '',
-    usernameRules: [
+    userNum: '',
+    // 군번 유효성 검사 필요 ('-' 포함, 숫자로만 이루어졌는지)
+    userNumRules: [
       v => !!v || 'id is required',
     ],
     password: '',
@@ -60,14 +61,11 @@ export default {
   }),
 
   methods: {
-    validate () {
-      this.$refs.form.validate()
-    },
-    reset () {
-      this.$refs.form.reset()
-    },
-    resetValidation () {
-      this.$refs.form.resetValidation()
+    submitForm () {
+      const isValid = this.$refs.form.validate()  // 유효성 검사
+      if (isValid) {
+        this.$router.push("main");
+      }
     },
   },
 }
