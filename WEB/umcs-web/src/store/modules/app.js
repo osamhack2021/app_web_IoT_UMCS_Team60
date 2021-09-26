@@ -6,7 +6,7 @@ const state = {
     { title: '건강상태 조회', icon: 'mdi-hospital-box-outline', to: '/health' },
     { title: '공용시설 시간표', icon: 'mdi-clock-outline', to: '/schedule'},
     { title: '부대 관리', icon: 'mdi-account-group-outline', to: '/manage' },
-    { title: '당직근무자 관리', icon: 'mdi-calendar-month-outline', to: '/worker'},
+    { title: '관리자 등록/조회', icon: 'mdi-calendar-month-outline', to: '/manage-admin'},
   ],
 }
 const getters = {

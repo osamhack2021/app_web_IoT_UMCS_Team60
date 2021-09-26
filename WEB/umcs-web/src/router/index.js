@@ -40,8 +40,8 @@ const routes = [
       },
       {
         path: "/worker",
-        name: "당직근무자 관리",
-        component: () => import("@/views/Worker"),
+        name: "관리자 등록/조회",
+        component: () => import("@/views/ManageAdmin"),
       },
     ],
   },

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     app
-    color="primary darken-2"
+    color="primary darken-1"
     dark
   >
     <v-app-bar-nav-icon @click="drawer = !drawer" />
