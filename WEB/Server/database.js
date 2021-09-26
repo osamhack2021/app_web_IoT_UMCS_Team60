@@ -2,9 +2,9 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
 
-module.exports = function () {
+module.exports = () => {
   return {
-    init: function () {
+    init: () => {
       return mysql.createConnection({
         host: 'localhost',
         port: '3307',
@@ -14,8 +14,8 @@ module.exports = function () {
       })
     },
 
-    db_open: function (con) {
-      con.connect(function (err) {
+    db_open: (con) => {
+      con.connect((err) => {
         if (err) {
           console.error('mysql connection error :' + err);
         } else {

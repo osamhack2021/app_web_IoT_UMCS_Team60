@@ -7,7 +7,7 @@ dbModule.db_open(dbConnection);
 router.get('/tables', (req, res) => {
     var sql = 'show tables';
 
-    dbConnection.query(sql, function (error, rows, fields) {
+    dbConnection.query(sql, (error, rows, fields) => {
         if (error) {
             console.log('error : ' + error);
         } 

@@ -9,22 +9,23 @@ dbModule.db_open(dbConnection);
 
 const LocalStrategyOption = {
     usernameField: "tag",
-    passwordField: "password"
+    passwordField: "password",
+    passReqToCallback : true
 };
-function localVerify(tag, password, done) {
+function localVerify(req, tag, password, done) {
     var sql = 'SELECT * FROM manager WHERE tag=?';
-    dbConnection.query(sql, [tag], function(err, rows, fields){
+    dbConnection.query(sql, [tag], (err, rows, fields) => {
         if(err) // db error
-            return done(null, false, {message : 'db connection error'});
+            return done(null, false, req.flash('message', 'db connection error'));
         
         var userInfo = rows[0];
         if(!userInfo) // no user 
-            return done(null, false, {message : 'please check id'} );
+            return done(null, false, req.flash('message', 'please check id'));
 
         var pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
 
         if(pwEncrypted !== userInfo.enc_pwd) // password incorrent
-            return done(null, false, {message : 'please check password'});
+            return done(null, false, req.flash('message', 'please check password'));
        
         return done(null, userInfo);
     });
@@ -33,13 +34,13 @@ function localVerify(tag, password, done) {
 module.exports = () => {
     passport.use('managerLocal', new LocalStrategy(LocalStrategyOption, localVerify));
 
-    passport.serializeUser(function(user, done) {
+    passport.serializeUser((user, done) => {
         done(null, user.tag);
     });
 
-    passport.deserializeUser(function(tag, done) {
+    passport.deserializeUser((tag, done) => {
         var sql = 'SELECT * FROM manager WHERE tag=?';
-        dbConnection.query(sql, [tag], function(err, results){
+        dbConnection.query(sql, [tag], (err, results) => {
             if(err)
                 return done(err, false);
             if(!results[0])

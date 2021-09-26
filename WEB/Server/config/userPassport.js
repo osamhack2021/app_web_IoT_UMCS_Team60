@@ -13,24 +13,25 @@ dbModule.db_open(dbConnection);
 
 const LocalStrategyOption = {
     usernameField: "tag",
-    passwordField: "password"
+    passwordField: "password",
+    passReqToCallback : true
 };
 
-function localVerify(tag, password, done) {
+function localVerify(req, tag, password, done) {
     var sql = 'SELECT * FROM user WHERE tag=?';
-    dbConnection.query(sql, [tag], function (err, rows, fields) {
+    dbConnection.query(sql, [tag], (err, rows, fields) => {
         if(err) // db error
-            return done(null, false, {message : 'db connection error'});
+        return done(null, false, req.flash('message', 'db connection error'));
         
         var userInfo = rows[0];
         if(!userInfo) // no user 
-            return done(null, false, {message : 'please check id'} );
+            return done(null, false, req.flash('message', 'please check id'));
 
         var pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
 
         if(pwEncrypted !== userInfo.enc_pwd) // password incorrent
-            return done(null, false, {message : 'please check password'});
-
+            return done(null, false, req.flash('message', 'please check password'));
+       
         return done(null, userInfo);
     })     
 }
@@ -42,14 +43,14 @@ const jwtStrategyOption = {
 
 function jwtVerift(payload, done) {
     var sql = 'SELECT * FROM user WHERE tag=?';
-    dbConnection.query(sql, [payload.tag], function (err, rows, fields) {
+    dbConnection.query(sql, [payload.tag], (err, rows, fields) => {
         if(err) // db error
-            return done(null, false, {message : 'db connection error'});
+            return done(null, false, req.flash('message', 'db connection error'));
         
         var userInfo = rows[0];
         if(!userInfo) // no user 
-            return done(null, false, {message : 'invalid token'});
-
+            return done(null, false, req.flash('message', 'token error'));
+        
         return done(null, user);
     });
 }

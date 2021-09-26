@@ -12,6 +12,8 @@ const router = express.Router();
 const cors = require('cors');
 const io = require('./socket')(server); 
 const passport = require('passport');
+const flash = require('connect-flash');
+
 
 dotenv.config();
 app.set('port', process.env.PORT || 3003);
@@ -36,6 +38,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 // passport
 const userPassportConfig = require('./config/userPassport');
@@ -56,7 +59,7 @@ app.use('/user', userRouter);
 
 
 //setting cors 
-app.all('/*', function(req, res, next) {
+app.all('/*', (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next(); 
