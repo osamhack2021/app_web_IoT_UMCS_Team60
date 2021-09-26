@@ -1,18 +1,20 @@
-module.exports = (app, dbConnection) => {
-    const router = require('express').Router();
+const router = require('express').Router();
 
-    router.get('/tables', (req, res) => {
-        var sql = 'show tables';
+var dbModule = require('../database')();
+var dbConnection = dbModule.init();
+dbModule.db_open(dbConnection);
 
-        dbConnection.query(sql, function (error, rows, fields) {
-            if (error) {
-                console.log('error : ' + error);
-            } 
-            else {
-                res.json({rows: rows});
-            }
-        });
+router.get('/tables', (req, res) => {
+    var sql = 'show tables';
+
+    dbConnection.query(sql, (error, rows, fields) => {
+        if (error) {
+            console.log('error : ' + error);
+        } 
+        else {
+            res.json({rows: rows});
+        }
     });
+});
 
-    return router;
-}
+module.exports = router;

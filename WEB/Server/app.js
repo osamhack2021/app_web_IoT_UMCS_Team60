@@ -11,9 +11,9 @@ const server = require('http').createServer(app);
 const router = express.Router();
 const cors = require('cors');
 const io = require('./socket')(server); 
-const crypto = require('crypto');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
+
 
 dotenv.config();
 app.set('port', process.env.PORT || 3003);
@@ -38,64 +38,37 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
-// db connection
-var dbModule = require('./database')();
-var dbConnection = dbModule.init();
-dbModule.db_open(dbConnection);
+// passport
+const userPassportConfig = require('./config/userPassport');
+const managerPassportConfig = require('./config/managerPassport');
 
-const apiRouter = require('./routes/apiRouter')(app, dbConnection);
-const userRouter = require('./routes/userRouter')(app, dbConnection, passport);
+userPassportConfig();
+managerPassportConfig();
+
+
+// router
+const apiRouter = require('./routes/apiRouter');
+const managerRouter = require('./routes/managerRouter');
+const userRouter = require('./routes/userRouter')
 
 app.use('/api', apiRouter);
-app.use('/', userRouter);
-
-
-// passport setting
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        var sql = 'SELECT * FROM manager WHERE tag=?';
-        dbConnection.query(sql, [username], function(err, results){
-            if(err)
-                return done(err);
-            if(!results[0])
-                return done('please check your id.');
-
-            var userInfo = results[0];
-            pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
-
-            if(pwEncrypted.toString('hex') === userInfo.pw)
-                return done(null, userInfo);
-            else 
-                return done('please check your password.');
-
-        });
-    }
-));
-
-passport.serializeUser(function(user, done) {
-    done(null, user.tag);
-});
-passport.deserializeUser(function(tag, done) {
-    var sql = 'SELECT * FROM manager WHERE tag=?';
-    dbConnection.query(sql, [tag], function(err, results){
-        if(err)
-            return done(err, false);
-        if(!results[0])
-            return done(err, false);
-
-        return done(null, results[0]);
-    });
-});
-
+app.use('/manager', managerRouter);
+app.use('/user', userRouter); 
 
 
 //setting cors 
-app.all('/*', function(req, res, next) {
+app.all('/*', (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next(); 
 }); 
+
+//socketTest page route
+app.get('/', (req, res) => {
+    res.render(`index`);
+})
 
 //socketTest page route
 app.get('/socketChat', (req, res) => {

@@ -1,70 +1,69 @@
-module.exports = (app, dbConnection, passport) => {
-    const router = require('express').Router();
-    const pwCrypto = require('../pwCrypto');
+const router = require('express').Router();
+const userAuthController = require('../controllers/userAuth');
+const { verifyToken, pw2enc } = require('../middleware/auth');
+const request = require('request-promise-native')
 
-    router.get('/', function (req, res) {
-        if(!req.user)
-            res.redirect('/login');
-        else
-            res.redirect('/welcome');
-    });
+const baseUrl = 'user';
 
-    router.get('/login', function(req, res){
-        if(!req.user)
-            res.render('login', {message:'input your id and password.'});
-        else
-            res.redirect('/welcome');
-    });
+var dbModule = require('../database')();
+var dbConnection = dbModule.init();
+dbModule.db_open(dbConnection);
 
-    router.get('/welcome', function(req, res){
-        if(!req.user)
-            return res.redirect('/login');
-        else
-          res.render('welcome', {name:req.user.name});
-    });
-    
-    router.get('/logout', function(req, res){
-        req.logout();
-        res.redirect('/');
-    });
-    
-    router.post('/login', 
-        passport.authenticate('local', {
-            successRedirect: '/welcome',
-            failureRedirect: '/login',
-            failureFlash: false
-        })
-    );
+router.get('/', (req, res) => {
+    var token = req.cookies["token"];
+    var userInfo = req.cookies["userInfo"];
+    var message = req.flash('message');
+    res.clearCookie("token");
+    res.clearCookie("userInfo");
+    res.render(`${baseUrl}/index`, {token, message, userInfo});
+});
 
-    router.get('/register', function(req, res){
-        if(!req.user)
-            res.render('register');
-        else
-            res.redirect('/welcome');
-    });
+router.post('/login', userAuthController.login, (req, res) => {
+    res.cookie('token', req.token);
+    res.redirect(`.`); 
+});
 
-    router.post('/register',  function(req, res){
-        var id = req.body.username;
-        var pw = req.body.password;
-        var name = req.body.name;
-        var sql = 'SELECT * FROM manager WHERE tag=?';
-        dbConnection.query(sql, [id], function(err, results){
+router.get('/register', (req, res) => {
+    res.render(`${baseUrl}/register`);
+});
+
+router.post('/register', (req, res) => {
+    var id = req.body.username;
+    var pw = req.body.password;
+    var name = req.body.name;
+    var sql = 'SELECT * FROM user WHERE tag=?';
+    dbConnection.query(sql, [id], (err, results) => {
+        if(err)
+            console.log(err);
+
+        if(results[0])
+            res.status(401).json({success: false, message: 'id 중복'})
+
+        const crypto = pw2enc(pw);
+        sql = "INSERT INTO user VALUES (?, ?, 'king', NULL, NULL, ?, ?)";
+        dbConnection.query(sql, [id, name, crypto.salt, crypto.pwEncrypted], (err, results) => {
             if(err)
                 console.log(err);
-            console.log(results[0])
-            if(results[0])
-                return res.render('login', {message:'id duplicated'});
-
-            const crypto = pwCrypto(pw);
-            sql = "INSERT INTO manager VALUES (?, ?, 'king', 1, ?, ?)";
-            dbConnection.query(sql, [id, name, crypto.salt, crypto.pwEncrypted], function(err, results){
-                if(err)
-                    console.log(err);
-                else
-                    return res.render('login', {message:'register success'});          
-            });//query
-        });//query
+            else
+                res.redirect(`.`);          
+        });
     });
+});
 
-    return router;
-}
+router.post('/setHeader', (req, res) => {
+    request({
+        headers: {
+            'Authorization': `Bearer ${req.body.token}`
+        },
+        url: 'http://127.0.0.1:3003/user/check',
+        method: 'GET',
+        json: true
+    }).then((response) =>{
+        res.cookie('userInfo', response);
+        res.redirect(`.`); 
+    })
+});
+
+router.get('/check', verifyToken, userAuthController.check);
+
+module.exports = router;
