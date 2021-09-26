@@ -10,37 +10,37 @@ const routes = [
   },
   {
     path: "/main",
-    name: "Main",
+    name: "메인 화면",
     component: () => import("@/layouts/adminPages/Index"),
     children: [
       {
         path: "/monitoring",
-        name: "Monitoring",
+        name: "실시간 모니터링",
         component: () => import("@/views/Monitoring"),
       },
       {
         path: "/approval",
-        name: "Move Approval",
+        name: "이동 결재",
         component: () => import("@/views/MoveApproval"),
       },
       {
         path: "/health",
-        name: "Health Care",
+        name: "건강상태 조회",
         component: () => import("@/views/HealthCare"),
       },
       {
         path: "/schedule",
-        name: "Facility Schedule",
+        name: "공용시설 시간표",
         component: () => import("@/views/FacilitySchedule"),
       },
       {
         path: "/manage",
-        name: "Account Manage",
+        name: "부대 관리",
         component: () => import("@/views/AccountManage"),
       },
       {
         path: "/worker",
-        name: "Worker",
+        name: "당직근무자 관리",
         component: () => import("@/views/Worker"),
       },
     ],

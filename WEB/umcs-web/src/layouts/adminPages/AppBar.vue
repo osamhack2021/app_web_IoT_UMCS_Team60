@@ -6,25 +6,27 @@
   >
     <v-app-bar-nav-icon @click="drawer = !drawer" />
     <div class="d-flex align-center">
-      <p class="text-h5 white--text font-weight-medium mb-0 ml-3">
+      <p class="text-h5-kr white--text font-weight-medium mb-0 ml-3">
         {{ $route.name }}
       </p>
     </div>
 
     <v-spacer />
 
-    <!-- <v-btn class="d-flex align-center justify-center mr-5">
-      <p class="text-h6 white--text font-weight-medium mr-3 my-0">
-        격리
-      </p>
-      <v-switch
-        v-model="toggleSwitch"
-        inset
-        color="info"
-        class="my-0"
-      />
-    </v-btn> -->
-    <v-btn>
+    <v-btn
+      class="mr-5"
+      icon
+    >
+      <v-badge
+        color="secondary"
+        overlap
+        content="5"
+      >
+        <v-icon>mdi-bell</v-icon>
+      </v-badge>
+    </v-btn>
+
+    <v-btn color="secondary">
       <span class="mr-2">LogOut</span>
       <v-icon>mdi-open-in-new</v-icon>
     </v-btn>

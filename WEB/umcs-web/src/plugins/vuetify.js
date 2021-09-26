@@ -10,8 +10,8 @@ export default new Vuetify({
       light: {
         primary: colors.green,
         // secondary color 고민해봐야 함
-        secondary: '#FADCAC',
-      }
+        secondary: '#363636',
+      },
     }
   }
 });
