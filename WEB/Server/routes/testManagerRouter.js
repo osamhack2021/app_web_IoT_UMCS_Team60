@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const passport = require('passport');
-const { pw2enc } = require('../middleware/auth');
+const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 const baseUrl = 'manager';
 
-var dbModule = require('../database')();
+var dbModule = require(`${process.env.PWD}/database`)();
 var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 

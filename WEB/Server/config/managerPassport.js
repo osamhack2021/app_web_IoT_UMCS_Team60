@@ -2,8 +2,9 @@ const crypto = require('crypto');
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
+const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 
-var dbModule = require('../database')();
+var dbModule = require(`${process.env.PWD}/database`)();
 var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
@@ -22,7 +23,7 @@ function localVerify(req, tag, password, done) {
         if(!userInfo) // no user 
             return done(null, false, req.flash('message', 'please check id'));
 
-        var pwEncrypted = crypto.pbkdf2Sync(password, userInfo.salt, 100000, 64, 'sha512').toString('hex');
+        var pwEncrypted = pw2enc(password, userInfo.salt).pwEncrypted;
 
         if(pwEncrypted !== userInfo.enc_pwd) // password incorrent
             return done(null, false, req.flash('message', 'please check password'));

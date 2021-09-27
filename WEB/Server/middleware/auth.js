@@ -23,8 +23,7 @@ exports.verifyToken = (req, res, next) => {
 }
 
 // pw 암호화
-exports.pw2enc = (pw) => {
-    var salt = crypto.randomBytes(64).toString('hex');
+exports.pw2enc = (pw, salt = crypto.randomBytes(64).toString('hex')) => {
     var pwEncrypted = crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex');
 
     return {salt, pwEncrypted};

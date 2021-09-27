@@ -50,8 +50,8 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-const managerRouter = require('./routes/managerRouter');
-const userRouter = require('./routes/userRouter')
+const managerRouter = require('./routes/testManagerRouter');
+const userRouter = require('./routes/testUserRouter')
 
 app.use('/api', apiRouter);
 app.use('/manager', managerRouter);
