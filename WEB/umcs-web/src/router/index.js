@@ -39,7 +39,7 @@ const routes = [
         component: () => import("@/views/AccountManage"),
       },
       {
-        path: "/worker",
+        path: "/manage-admin",
         name: "관리자 등록/조회",
         component: () => import("@/views/ManageAdmin"),
       },

@@ -64,7 +64,7 @@ export default {
     submitForm () {
       const isValid = this.$refs.form.validate()  // 유효성 검사
       if (isValid) {
-        this.$router.push("main");
+        this.$router.push("monitoring");
       }
     },
   },

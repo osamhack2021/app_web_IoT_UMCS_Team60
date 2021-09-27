@@ -18,7 +18,7 @@
       :loading="isLoading"
       :search="searchValue"
     >
-      <template v-slot:item.name="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <router-link
           to="#"
           class="info--text text-decoration-none"

@@ -44,15 +44,15 @@ export default {
     DefaultDrawerHeader,
   },
   computed: {
-    ...mapState('app', {
+    ...mapState('drawer', {
       items: 'items'
     }),
     drawer: {
       get() {
-        return this.$store.getters['app/getDrawer']
+        return this.$store.getters['drawer/getDrawer']
       },
       set(value) {
-        return this.$store.dispatch('app/toggleDrawer', value)
+        return this.$store.dispatch('drawer/toggleDrawer', value);
       }
     }
   },

@@ -1,5 +1,9 @@
-import app from './app'
+import drawer from "./drawer";
+import health from "./health";
+import facility from "./facility";
 
 export default {
-  app
-}
+  drawer,
+  health,
+  facility,
+};
