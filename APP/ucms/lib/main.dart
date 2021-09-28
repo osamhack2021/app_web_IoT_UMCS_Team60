@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:ucms/login/login_page.dart';
-import 'package:ucms/login/register_page.dart';
+import 'package:get/get.dart';
+import 'package:ucms/page_login/login_page.dart';
+import 'package:ucms/page_login/register_page.dart';
 import 'package:ucms/nav.dart';
-import 'package:ucms/user/user_assemble.dart';
-import 'package:ucms/user/user_main.dart';
-import 'package:ucms/user/user_move.dart';
+import 'package:ucms/page_user/user_assemble.dart';
+import 'package:ucms/page_user/user_main.dart';
+import 'package:ucms/page_user/user_move.dart';
+import 'package:socket_io_client/socket_io_client.dart' as socket_io;
+import 'package:ucms/data/hostnames.dart';
+
 
 void main() {
+  socket_io.Socket socket = Get.put(socket_io.io(socketHost));
+  socket.onConnect((_) {
+  });
+  socket.on("permission", (_) {socket.emit('msg', 'test');});
+  socket.on("your_status", (_) {});
+  socket.on("refresh_status", (_) {});
+  socket.on("assemble", (_) {});
+  socket.on("cohort_start", (_) {});
+  socket.on("cohort_stop", (_) {});
+  
+
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {
