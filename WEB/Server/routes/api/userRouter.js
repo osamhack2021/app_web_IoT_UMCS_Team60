@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
 const { verifyToken, pw2enc } = require(`${process.env.PWD}/middleware/auth`);
-const request = require('request-promise-native')
+const passport = require('passport');
 
-const baseUrl = 'user';
+const request = require('request-promise-native')
 
 var dbModule = require(`${process.env.PWD}/database`)();
 var dbConnection = dbModule.init();
@@ -18,37 +18,42 @@ router.get('/', (req, res) => {
     res.render(`${baseUrl}/index`, {token, message, userInfo});
 });
 
-router.post('/login', userAuth.login, (req, res) => {
-    res.cookie('token', req.token);
-    res.redirect(`.`); 
-});
 
-router.get('/register', (req, res) => {
-    res.render(`${baseUrl}/register`);
-});
-
-router.post('/register', (req, res) => {
-    var id = req.body.username;
-    var pw = req.body.password;
-    var name = req.body.name;
-    var sql = 'SELECT * FROM user WHERE tag=?';
-    dbConnection.query(sql, [id], (err, results) => {
-        if(err)
-            console.log(err);
-
-        if(results[0])
-            res.status(401).json({success: false, message: 'id 중복'})
-
-        const crypto = pw2enc(pw);
-        sql = "INSERT INTO user VALUES (?, ?, 'king', NULL, NULL, ?, ?)";
-        dbConnection.query(sql, [id, name, crypto.salt, crypto.pwEncrypted], (err, results) => {
-            if(err)
-                console.log(err);
-            else
-                res.redirect(`.`);          
+router.post('/register', userAuth.register, (req, res) => {
+    if(req.code) 
+        res.status(400).json({
+            code: req.code,
+            msg: req.msg,
+            data: {
+                tag: req.data.tag,
+            }
         });
-    });
+    else 
+        res.status(200).json({
+            code: 1,
+            msg: "success",
+            data: req.data,
+        });
 });
+
+
+router.post('/login', userAuth.login, (req, res) => {
+    if(req.code) 
+        res.status(400).json({
+            code: req.code,
+            msg: req.msg,
+            data: {
+                tag: req.body.tag
+            }
+        });
+    else
+        res.setHeader('Authorization', 'Bearer '+ req.token).status(200).json({
+            code: 1,
+            msg: "success",
+            data : req.data
+        });
+});
+
 
 router.post('/setHeader', (req, res) => {
     request({
@@ -65,5 +70,9 @@ router.post('/setHeader', (req, res) => {
 });
 
 router.get('/check', verifyToken, userAuth.check);
+
+router.get('/test',  passport.authenticate("jwt", { session: false }), (req, res) => {
+    res.json(req.user);
+});
 
 module.exports = router;

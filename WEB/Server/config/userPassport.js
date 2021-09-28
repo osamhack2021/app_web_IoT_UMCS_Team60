@@ -22,16 +22,16 @@ function localVerify(req, tag, password, done) {
     var sql = 'SELECT * FROM user WHERE tag=?';
     dbConnection.query(sql, [tag], (err, rows, fields) => {
         if(err) // db error
-        return done(null, false, req.flash('message', 'db connection error'));
+            return done(null, false, req.flash('code', 4));
         
         var userInfo = rows[0];
         if(!userInfo) // no user 
-            return done(null, false, req.flash('message', 'please check id'));
+            return done(null, false, req.flash('code', 2));
 
         var pwEncrypted = pw2enc(password, userInfo.salt).pwEncrypted;
 
         if(pwEncrypted !== userInfo.enc_pwd) // password incorrent
-            return done(null, false, req.flash('message', 'please check password'));
+            return done(null, false, req.flash('code', 3));
        
         return done(null, userInfo);
     })     
@@ -46,13 +46,13 @@ function jwtVerift(payload, done) {
     var sql = 'SELECT * FROM user WHERE tag=?';
     dbConnection.query(sql, [payload.tag], (err, rows, fields) => {
         if(err) // db error
-            return done(null, false, req.flash('message', 'db connection error'));
+            return done(null, false, req.flash('code', 4));
         
         var userInfo = rows[0];
-        if(!userInfo) // no user 
-            return done(null, false, req.flash('message', 'token error'));
+        if(!userInfo) // token error
+            return done(null, false, req.flash('message', 2));
         
-        return done(null, user);
+        return done(null, userInfo);
     });
 }
 
