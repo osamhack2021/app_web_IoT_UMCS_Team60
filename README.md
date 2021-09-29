@@ -8,7 +8,7 @@
 프로젝트명 또는 프로젝트 로고 이미지 **(택1)**
 
 ## 프로잭트 소개
-- 설명 기입
+
 
 
 ## 기능 설명
@@ -19,6 +19,7 @@
 * 권장: Google Chrome 버젼 77 이상
 
 ## 기술 스택 (Technique Used) 
+![오픈소스로 구성된 시스템](https://user-images.githubusercontent.com/28801695/135297278-a9e6bc05-35f4-4896-ace6-8f75a90bd685.jpg)
 ### Server(back-end)
  -  nodejs, php, java 등 서버 언어 버전 
  - express, laravel, sptring boot 등 사용한 프레임워크 
@@ -50,8 +51,8 @@ $ yarn start or npm run start
 |이름|역할|소개|github|이메일
 |------|:---:|:---:|:---:|:---:|
 |박재형 중위|팀장,infra 담당(DB,AWS)|아주대 졸, 무선통신 전공|<a href="https://github.com/namingsense"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/>|<a href="mailto:skyvieweye@gmail.com"> <img src="https://img.shields.io/badge/skyvieweye@gmail.com-green?logo=gmail&style=social">
-|김명승 병장|backend 담당(DB,Node.js)| |<a href="https://github.com/mskim9967"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:mskim9967@gmail.com"> <img src="https://img.shields.io/badge/mskim9967@gmail.com-green?logo=gmail&style=social"> |
-|최경민 상병|app-frontend 담당(Flutter)| 광주과학기술원 1학년 휴학, 기초교육학과(자유전공)  |<a href="https://github.com/2ood"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:kyungmin.official0@gmail.com"> <img src="https://img.shields.io/badge/kyungmin.official0@gmail.com-green?logo=gmail&style=social"> |
+|김명승 병장|backend 담당(Arduino,Node.js)| |<a href="https://github.com/mskim9967"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:mskim9967@gmail.com"> <img src="https://img.shields.io/badge/mskim9967@gmail.com-green?logo=gmail&style=social"> |
+|최경민 상병|app-frontend 담당(Flutter)| 광주과학기술원 1학년 휴학, 자유전공  |<a href="https://github.com/2ood"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:kyungmin.official0@gmail.com"> <img src="https://img.shields.io/badge/kyungmin.official0@gmail.com-green?logo=gmail&style=social"> |
 |정재욱 상병|web-frontend 담당(Vue.js)| |<a href="https://github.com/Wo-ogie"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> | <a href="mailto:siwall0105@gmail.com"> <img src="https://img.shields.io/badge/siwall0105@gmail.com-green?logo=gmail&style=social">| 
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
