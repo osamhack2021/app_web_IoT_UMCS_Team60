@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const passport = require('passport');
-const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 const managerAuth = require(`${process.env.PWD}/controllers/managerAuth`);
 
 router.get('/logout', (req, res) => {
@@ -11,13 +9,12 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/login', managerAuth.login, (req, res) => {
-    
     if(req.message) 
         res.status(400).json({
             state: "fail",
             message: req.message
         });
-    else 
+    else {
         res.status(200).json({
             state: "success",
             data: {
@@ -25,9 +22,10 @@ router.post('/login', managerAuth.login, (req, res) => {
                 name: req.user.name
             }
         });
+    }
 });
 
-router.post('/register',  managerAuth.register, (req, res) => {
+router.post('/register', managerAuth.register, (req, res) => {
     if(req.message) 
         res.status(400).json({
             state: "fail",
@@ -38,6 +36,23 @@ router.post('/register',  managerAuth.register, (req, res) => {
             state: "success",
             data: {
             }
+        });
+});
+
+// login 되어있는지 확인
+router.get('/check', (req, res) => {
+    if (req.isAuthenticated() && req.user) {
+        var { salt, enc_pwd, ...data } = req.user;
+        res.status(200).json({
+            code: 1,
+            msg: "success",
+            data
+        });
+    }
+    else
+        res.status(200).json({
+            code: 2,
+            msg: 'not_login',
         });
 });
 

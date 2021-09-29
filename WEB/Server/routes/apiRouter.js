@@ -1,14 +1,13 @@
 const router = require('express').Router();
-
-var dbModule = require(`${process.env.PWD}/database`)();
-var dbConnection = dbModule.init();
-dbModule.db_open(dbConnection);
-
 const managerRouter = require('./api/managerRouter');
 const userRouter = require('./api/userRouter')
 
-router.use('/manager', managerRouter);
-router.use('/user', userRouter); 
+const dbModule = require(`${process.env.PWD}/database`)();
+const dbConnection = dbModule.init();
+dbModule.db_open(dbConnection);
+
+router.use('/manager', managerRouter); // /api/manager
+router.use('/user', userRouter); // /api/user
 
 router.get('/tables', (req, res) => {
     var sql = 'show tables';

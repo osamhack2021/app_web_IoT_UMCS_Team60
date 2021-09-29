@@ -1,28 +1,25 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 
-dotenv.config();
-
-var dbModule = require(`${process.env.PWD}/database`)();
-var dbConnection = dbModule.init();
+const dbModule = require(`${process.env.PWD}/database`)();
+const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
-const register = async (req, res, next) => {
+const register = (req, res, next) => {
     var msg = {4: 'db_error', 2: 'duplicate_id', 3: 'wrong_facility_ids'};
     var { password, ...data } = req.body;
     req.data = data;
 
     var sql = 'SELECT * FROM user WHERE tag=?';
-    dbConnection.query(sql, [req.body.tag], (err, results) => {
-        if(err) {
+    dbConnection.query(sql, [req.body.tag], (err, rows) => {
+        if(err) { // db error
             req.code = 4;
             req.msg = msg[req.code];
             return next(err)
         }
             
-        if(results[0]) {
+        if(rows[0]) { // 신규 가입자 tag 중복
             req.code = 2;
             req.msg = msg[req.code];
             return next();
@@ -31,12 +28,13 @@ const register = async (req, res, next) => {
         const crypto = pw2enc(req.body.password);
 
         sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?)";
-        dbConnection.query(sql, [req.body.tag, req.body.name, req.body.rank, req.body.room_id, req.body.doom_id, crypto.salt, crypto.pwEncrypted], (err, results) => {
-            if(err) {
+        dbConnection.query(sql, [req.body.tag, req.body.name, req.body.rank, req.body.room_id, req.body.doom_id, crypto.salt, crypto.pwEncrypted], (err, rows) => {
+            if(err) { // room_id, doom_id 등 등록되지 않은 시설 id가 들어옴
                 req.code = 3;
                 req.msg = msg[req.code];
                 return next();
             }
+
             return next();
         });
     });
@@ -44,46 +42,60 @@ const register = async (req, res, next) => {
 
 
 const login = (req, res, next) => {
-    var msg = {4: 'db_error', 2: 'cannot_find_id', 3: 'wrong_password'};
+    const msg = {4: 'db_error', 5: 'authenticate_error', 2: 'cannot_find_id', 3: 'wrong_password'};
+
     passport.authenticate('userLocal', { session: false }, (err, user) => {
-        if(err) {
+        if(err) { // 인증 error
             req.code = 4;
             req.msg = msg[req.code];
             return next();
         }
-        if(!user) {
-            req.code = req.flash('code')[0];
+        if(!user) { // 로그인 실패 시 user가 비어있음
+            req.code = req.flash('code')[0]; // managerPassport의 localVerify에서 넘겨받은 flash
             req.msg = msg[req.code];
             return next();
         }
-        else {
+        else { // 로그인 성공
             req.login(user, { session: false }, () => {
-                var { salt, enc_pwd, ...payload } = user;
-                const token = jwt.sign(
+                const { salt, enc_pwd, ...payload } = user; // 비밀번호 관련 정보를 제외하고 payload에 저장
+
+                const token = jwt.sign( // jwt 생성
                     payload, // user info
                     process.env.JWT_SECRET, // secret key
                     {
                         expiresIn: "365d"
                     } // option
                 );
+
                 req.token = token;
-                var { salt, enc_pwd, ...data } = req.user;
-                req.data = data;
+                req.data = payload;
+                
                 next();
             });
         }
 
     })(req, res, next);
-
 };
 
-
-const check = (req, res) => {
-    res.json(req.decoded);
-};
+// jwt가 유효한지 확인
+const verifyToken = (req, res, next) => {
+    try {
+        const token = req.headers.authorization.split('Bearer ')[1];
+        req.decoded = jwt.verify(token, process.env.JWT_SECRET);
+        next();
+    } catch (err) {
+        if (err.name == 'TokenExpiredError') {
+            req.msg = "token 만료";
+        }
+        else { 
+            req.msg = "유효하지 않은 token";
+        }
+        next();
+    }
+}
 
 module.exports = {
     login,
-    check,
+    verifyToken,
     register
 }

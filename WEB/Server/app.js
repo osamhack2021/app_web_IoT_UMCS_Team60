@@ -1,21 +1,20 @@
 const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
 const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require( 'body-parser' );
+const bodyParser = require('body-parser');
 const session = require('express-session');
-const nunjucks = require('nunjucks');
-const dotenv = require('dotenv');
-const app = express();
-const server = require('http').createServer(app);
 const router = express.Router();
 const cors = require('cors');
 const passport = require('passport');
 const flash = require('connect-flash');
 const FileStore = require("session-file-store")(session);
+require('dotenv').config();
 
-dotenv.config();
 app.set('port', process.env.PORT || 3003);
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -41,7 +40,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+// socket connection
 const io = require('./socket')(server, session); 
+
+
 // passport
 const userPassportConfig = require('./config/userPassport');
 const managerPassportConfig = require('./config/managerPassport');
@@ -52,12 +54,8 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-const managerRouter = require('./routes/testManagerRouter');
-const userRouter = require('./routes/testUserRouter')
 
 app.use('/api', apiRouter);
-app.use('/manager', managerRouter);
-app.use('/user', userRouter); 
 
 
 //setting cors 
@@ -67,12 +65,17 @@ app.all('/*', (req, res, next) => {
     next(); 
 }); 
 
-//socketTest page route
+
+// test page router
+const testManagerRouter = require('./routes/testManagerRouter');
+const testUserRouter = require('./routes/testUserRouter')
+app.use('/manager', testManagerRouter);
+app.use('/user', testUserRouter); 
+
 app.get('/', (req, res) => {
     res.render(`index`);
 })
 
-//socketTest page route
 app.get('/socketChat', (req, res) => {
     res.sendFile(__dirname+'/chatTest.html');
 })
@@ -81,17 +84,3 @@ app.get('/socketChat', (req, res) => {
 server.listen(app.get('port'), ()=>{
     console.log(`server port: ${app.get('port')}`)
 });
-
-
-// app.use((req, res, next) => {
-//     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
-//     error.status = 404;
-//     next(error);
-// });
-
-// app.use((err, req, res, next) => {
-//     res.locals.message = err.message;
-//     res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-//     res.status(err.status || 500);
-//     res.json({page:'error'});
-// });

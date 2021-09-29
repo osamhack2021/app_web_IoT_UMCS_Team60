@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const userAuthController = require(`${process.env.PWD}/controllers/userAuth`);
-const { verifyToken, pw2enc } = require(`${process.env.PWD}/middleware/auth`);
+const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
+const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 const request = require('request-promise-native')
 
 const baseUrl = 'user';
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     res.render(`${baseUrl}/index`, {token, message, userInfo});
 });
 
-router.post('/login', userAuthController.login, (req, res) => {
+router.post('/login', userAuth.login, (req, res) => {
     res.cookie('token', req.token);
     res.redirect(`.`); 
 });
@@ -64,6 +64,8 @@ router.post('/setHeader', (req, res) => {
     })
 });
 
-router.get('/check', verifyToken, userAuthController.check);
+router.get('/check', userAuth.verifyToken, (req, res) => {
+    res.json(req.decoded);
+});
 
 module.exports = router;
