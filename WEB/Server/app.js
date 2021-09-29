@@ -10,10 +10,9 @@ const app = express();
 const server = require('http').createServer(app);
 const router = express.Router();
 const cors = require('cors');
-const io = require('./socket')(server); 
 const passport = require('passport');
 const flash = require('connect-flash');
-
+const FileStore = require("session-file-store")(session);
 
 dotenv.config();
 app.set('port', process.env.PORT || 3003);
@@ -28,18 +27,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.urlencoded({ extended: true }) );
 app.use(session({
-    resave: false,
-    saveUninitialized: false,
+    key: 'express.sid',
     secret: process.env.COOKIE_SECRET,
+    saveUninitialized: true,
+    resave: true,
     cookie: {
         httpOnly: true,
         secure: false
-    }
+    },
+    store: new FileStore(),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+const io = require('./socket')(server, session); 
 // passport
 const userPassportConfig = require('./config/userPassport');
 const managerPassportConfig = require('./config/managerPassport');
