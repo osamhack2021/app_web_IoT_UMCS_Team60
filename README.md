@@ -72,7 +72,7 @@
 <table><tbody>
  <tr>
   <td>
-   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" width="40" height="40"/> <br>Vue</div>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" height="40"/> <br>Vue</div>
   </td>
   <td>
    <div align="center"> <img src="https://yamoo9.github.io/vuex/images/vuex.png" width="40" height="40"/> <br>Vuex</div>
@@ -81,25 +81,31 @@
    <div align="center"> <img src="https://seeklogo.com/images/V/vuetify-logo-3BCF73C928-seeklogo.com.png" height="40"/> <br>Vuetify</div>
   </td>
   <td>
-   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="40" height="40"/><br>HTML</div>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40"/><br>HTML</div>
   </td>
     <td>
-   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="40" height="40"/><br>CSS</div>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="40"/><br>CSS</div>
   </td>
   <td>
    <div align="center"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sass_Logo_Color.svg/1200px-Sass_Logo_Color.svg.png" height="40"/> <br>SCSS</div>
   </td>
   <td>
-   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>JavaScript</div>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40"/><br>JavaScript</div>
   </td>
   <td>
-   <div align="center"> <img src="https://seeklogo.com/images/E/eslint-logo-DDFB6EBCF6-seeklogo.com.png" width="40" height="40"/> <br>Eslint</div>
+   <div align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/540px-Npm-logo.svg.png" height="40"/><br>npm</div>
   </td>
   <td>
-   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+   <div align="center"> <img src="https://seeklogo.com/images/E/eslint-logo-DDFB6EBCF6-seeklogo.com.png" height="40"/> <br>Eslint</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://seeklogo.com/images/J/jest-logo-F9901EBBF7-seeklogo.com.png" height="40"/><br>Jest</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="40"/><br>socket.io</div>
   </td>      
   <td>
-   <div align="center"><img src="https://leolanchas.com/wp-content/uploads/2013/07/0d184ee3-fd8d-4b94-acf4-b4e686e57375.png" width="40" height="40"/><br>passport.js</div>
+   <div align="center"><img src="https://leolanchas.com/wp-content/uploads/2013/07/0d184ee3-fd8d-4b94-acf4-b4e686e57375.png" height="40"/><br>passport.js</div>
   </td>
  </tr>
  </tbody></table>
