@@ -17,8 +17,8 @@
         <v-card
           class="mx-auto mb-5"
         >
-          <v-card-title class="text-h6-kr">
-            {{ this.$store.getters['facility/getFocusingItem'] }}
+          <v-card-title class="text-h6">
+            {{ getFocusingItem }}
           </v-card-title>
         </v-card>
         <data-table
@@ -48,6 +48,7 @@ export default {
     ...mapGetters('facility', [
       'getFacilityList',
       'getFacilityTimeTable',
+      'getFocusingItem',
     ])
   },
 };

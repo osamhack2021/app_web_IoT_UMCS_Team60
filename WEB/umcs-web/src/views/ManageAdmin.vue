@@ -1,11 +1,18 @@
 <template>
   <v-container>
-    Manage Admin
+    <!-- Calendar -->
+    <admin-calendar />
   </v-container>
 </template>
 
 <script>
-export default {}
+import AdminCalendar from "@/components/AdminCalendar/Calendar"
+
+export default {
+  components: {
+    AdminCalendar,
+  },
+};
 </script>
 
 <style scoped>

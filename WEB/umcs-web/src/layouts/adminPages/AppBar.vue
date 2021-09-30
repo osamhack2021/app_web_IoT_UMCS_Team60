@@ -6,7 +6,7 @@
   >
     <v-app-bar-nav-icon @click="drawer = !drawer" />
     <div class="d-flex align-center">
-      <p class="text-h5-kr white--text font-weight-medium mb-0 ml-3">
+      <p class="text-h5 white--text font-weight-medium mb-0 ml-3">
         {{ $route.name }}
       </p>
     </div>
