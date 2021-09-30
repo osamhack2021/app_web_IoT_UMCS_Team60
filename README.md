@@ -20,15 +20,98 @@
 
 ## 기술 스택 (Technique Used) 
 ![오픈소스로 구성된 시스템](https://user-images.githubusercontent.com/28801695/135297278-a9e6bc05-35f4-4896-ace6-8f75a90bd685.jpg)
-### Server(back-end)
- -  nodejs, php, java 등 서버 언어 버전 
- - express, laravel, sptring boot 등 사용한 프레임워크 
- - DB 등 사용한 다른 프로그램 
+### Infra
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="40" height="40"/> <br>Git</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="40" height="40"/><br>Docker</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg" width="40" height="40"/><br>AWS</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://icon-library.com/images/web-application-firewall-icon/web-application-firewall-icon-21.jpg" width="40" height="40"/><br>WAF</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://www.pngkey.com/png/detail/898-8981784_aws-codedeploy-logo-png-transparent-aws-code-deploy.png" width="40" height="40"/><br>codepipeline</div>
+  </td>
+ </tr>
+ </tbody></table>
  
-### Front-end
- -  react.js, vue.js 등 사용한 front-end 프레임워크 
- -  UI framework
- - 기타 사용한 라이브러리
+### Backend
+<table><tbody>
+ <tr>
+   <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" width="40" height="40"/> <br>MySQL</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" width="40" height="40"/> <br>Node.js</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original-wordmark.svg" width="40" height="40"/><br>Express</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>Javascript</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="40" height="40"/><br>Linux</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://img.stackshare.io/service/8309/advancedRESTclient.png" width="40" height="40"/><br>ARC</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+  </td>
+ </tr>
+ </tbody></table>
+
+### Frontend - web
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" width="40" height="40"/> <br>Vue</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="40" height="40"/><br>html5</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="40" height="40"/><br>css</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>Javascript</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+  </td>      
+  <td>
+   <div align="center"><img src="https://leolanchas.com/wp-content/uploads/2013/07/0d184ee3-fd8d-4b94-acf4-b4e686e57375.png" width="40" height="40"/><br>passport.js</div>
+  </td>
+ </tr>
+ </tbody></table>
+ 
+### Frontend - app
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" width="40" height="40"/> <br>Flutter</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" width="40" height="40"/><br>Dart</div>
+  </td>
+    <td>
+<div align="center"> <img src="https://jwt.io/img/pic_logo.svg" alt="jwt" width="40" height="40"/><br>JWT</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>Javascript</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+  </td>      
+ </tr>
+ </tbody></table>
 
 ## 설치 안내 (Installation Process)
 ```bash
