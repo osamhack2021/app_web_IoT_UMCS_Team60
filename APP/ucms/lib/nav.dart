@@ -18,7 +18,10 @@ class NavPage extends StatelessWidget {
             children : [
               const SizedBox(height:100),
                 title("navigation - dev"),
-                
+
+                PageButton(onPressed: (){
+                  Navigator.pushNamed(context, "/beacon_test");
+                }, label: "비콘테스트 페이지"),
                 PageButton(onPressed: (){
                   Navigator.pushNamed(context, "/login");
                 }, label: "로그인 페이지"),
