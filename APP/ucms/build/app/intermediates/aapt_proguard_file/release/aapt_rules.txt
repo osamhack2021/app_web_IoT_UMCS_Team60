@@ -1,0 +1,10 @@
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+-keep class com.example.ucms.MainActivity { <init>(); }
+-keep class com.umair.beacons_plugin.BeaconsBroadcastReceiver { <init>(); }
+-keep class com.umair.beacons_plugin.BeaconsDiscoveryService { <init>(); }
+-keep class com.umair.beacons_plugin.RebootBroadcastReceiver { <init>(); }
+-keep class org.altbeacon.beacon.BeaconIntentProcessor { <init>(); }
+-keep class org.altbeacon.beacon.service.BeaconService { <init>(); }
+-keep class org.altbeacon.beacon.service.ScanJob { <init>(); }
+-keep class org.altbeacon.beacon.startup.StartupBroadcastReceiver { <init>(); }
+-keep class org.altbeacon.bluetooth.BluetoothTestJob { <init>(); }
