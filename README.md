@@ -93,9 +93,6 @@
    <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40"/><br>JavaScript</div>
   </td>
   <td>
-   <div align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/540px-Npm-logo.svg.png" height="40"/><br>npm</div>
-  </td>
-  <td>
    <div align="center"> <img src="https://seeklogo.com/images/E/eslint-logo-DDFB6EBCF6-seeklogo.com.png" height="40"/> <br>Eslint</div>
   </td>
   <td>
