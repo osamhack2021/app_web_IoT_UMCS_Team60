@@ -8,7 +8,7 @@ dbModule.db_open(dbConnection);
 
 const register = (req, res, next) => {
     var msg = {4: 'db_error', 2: 'duplicate_id', 3: 'wrong_facility_ids'};
-    var { password, ...data } = req.body;
+    var { password, ...data } = req.body; // password를 제외한 req.body를 data로 넘겨줌
     req.data = data;
 
     var sql = 'SELECT * FROM user WHERE tag=?';
@@ -73,29 +73,38 @@ const login = (req, res, next) => {
                 next();
             });
         }
-
     })(req, res, next);
 };
 
-// jwt가 유효한지 확인
-const verifyToken = (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split('Bearer ')[1];
-        req.decoded = jwt.verify(token, process.env.JWT_SECRET);
-        next();
-    } catch (err) {
-        if (err.name == 'TokenExpiredError') {
-            req.msg = "token 만료";
+// jwt로 로그인
+const jwtLogin = (req, res, next) => {
+    const msg = {2: 'token_error', 4: 'db_error'};
+
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+        if(err) { // 인증 error
+            req.code = 2;
+            req.msg = msg[req.code];
+            return next();
         }
-        else { 
-            req.msg = "유효하지 않은 token";
+        if(!user) { // 로그인 실패 시 user가 비어있음
+            req.code = req.flash('code')[0]; // managerPassport의 jwtVerift에서 넘겨받은 flash
+            req.msg = msg[req.code];
+            return next();
         }
-        next();
-    }
+        else { // 로그인 성공
+            req.login(user, { session: false }, () => {
+                const { salt, enc_pwd, ...payload } = user; // 비밀번호 관련 정보를 제외하고 payload에 저장
+
+                req.data = payload;
+                
+                next();
+            });
+        }
+    })(req, res, next);
 }
 
 module.exports = {
     login,
-    verifyToken,
+    jwtLogin,
     register
 }

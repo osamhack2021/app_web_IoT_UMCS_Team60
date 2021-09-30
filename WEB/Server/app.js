@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const router = express.Router();
 const cors = require('cors');
 const passport = require('passport');
 const flash = require('connect-flash');

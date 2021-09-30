@@ -64,8 +64,8 @@ router.post('/setHeader', (req, res) => {
     })
 });
 
-router.get('/check', userAuth.verifyToken, (req, res) => {
-    res.json(req.decoded);
+router.get('/check', userAuth.jwtLogin, (req, res) => {
+    res.json(req.data);
 });
 
 module.exports = router;

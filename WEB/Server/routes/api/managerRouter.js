@@ -9,33 +9,37 @@ router.get('/logout', (req, res) => {
 });
 
 router.post('/login', managerAuth.login, (req, res) => {
-    if(req.message) 
+    if(req.code) 
         res.status(400).json({
-            state: "fail",
-            message: req.message
+            code: req.code,
+            msg: req.msg,
+            data: {
+                tag: req.body.tag
+            }
         });
     else {
         res.status(200).json({
-            state: "success",
-            data: {
-                tag: req.user.tag,
-                name: req.user.name
-            }
+            code: 1,
+            msg: "success",
+            data: req.data,
         });
     }
 });
 
 router.post('/register', managerAuth.register, (req, res) => {
-    if(req.message) 
+    if(req.code)
         res.status(400).json({
-            state: "fail",
-            message: req.message
+            code: req.code,
+            msg: req.msg,
+            data: {
+                tag: req.data.tag,
+            }
         });
     else 
         res.status(200).json({
-            state: "success",
-            data: {
-            }
+            code: 1,
+            msg: "success",
+            data: req.data,
         });
 });
 

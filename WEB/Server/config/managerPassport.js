@@ -17,7 +17,7 @@ function localVerify(req, tag, password, done) {
     var sql = 'SELECT * FROM manager WHERE tag=?';
     dbConnection.query(sql, [tag], (err, rows) => {
         if(err) // db error
-        return done(null, false, req.flash('code', 4));
+            return done(null, false, req.flash('code', 4));
         
         var managerInfo = rows[0];
         if(!managerInfo) // tag 불일치
@@ -27,7 +27,7 @@ function localVerify(req, tag, password, done) {
         var pwEncrypted = pw2enc(password, managerInfo.salt).pwEncrypted;
 
         if(pwEncrypted !== managerInfo.enc_pwd) // 암호화 한 요청 password와 db의 암호화된 pw가 불일치하면
-        return done(null, false, req.flash('code', 3));
+            return done(null, false, req.flash('code', 3));
        
         return done(null, managerInfo);
     });

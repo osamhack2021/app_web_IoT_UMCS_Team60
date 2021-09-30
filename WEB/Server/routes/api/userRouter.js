@@ -1,16 +1,6 @@
 const router = require('express').Router();
 const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
 
-router.get('/', (req, res) => {
-    var token = req.cookies["token"];
-    var userInfo = req.cookies["userInfo"];
-    var message = req.flash('message');
-    res.clearCookie("token");
-    res.clearCookie("userInfo");
-    res.render(`${baseUrl}/index`, {token, message, userInfo});
-});
-
-
 router.post('/register', userAuth.register, (req, res) => {
     if(req.code) 
         res.status(400).json({
@@ -46,10 +36,8 @@ router.post('/login', userAuth.login, (req, res) => {
         });
 });
 
-// test code
-const passport = require('passport');
-router.get('/test',  passport.authenticate("jwt", { session: false }), (req, res) => {
-    res.json(req.user);
+router.get('/check', userAuth.jwtLogin, (req, res) => {
+    res.json(req.data);
 });
 
 

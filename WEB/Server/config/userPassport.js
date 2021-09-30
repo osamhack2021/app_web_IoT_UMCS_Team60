@@ -47,7 +47,7 @@ function jwtVerift(payload, done) {
             return done(null, false, req.flash('code', 4));
         
         var userInfo = rows[0];
-        if(!userInfo) // tag 불일치
+        if(!userInfo) // jwt 비유효
             return done(null, false, req.flash('message', 2));
         
         return done(null, userInfo);
