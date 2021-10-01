@@ -4,7 +4,7 @@
   "description": "GIF CHATTING",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "fuser -k 3003/tcp && nodemon app"
   },
   
   "author": "Effort",

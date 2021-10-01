@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <title>manager socket test</title>
+</head>
+<body>
+  <h1>manager socket page</h1>
+
+  <ul id="messages"></ul>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    $(function () {
+      const socket = io('/manager', {
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiJ0ZXN0IiwibmFtZSI6IuycoOyggO2FjOyKpO2KuCIsInJhbmsiOiJraW5nIiwicm9vbV9pZCI6bnVsbCwiZG9vbV9pZCI6bnVsbCwiaWF0IjoxNjMyOTAyNDAwLCJleHAiOjE2NjQ0Mzg0MDB9.hfKpCcJcNMk7FW8Aqn7SIabNthrgvMtJc8He0F7ZInI"
+            },
+          }
+        }
+       });
+
+      socket.on('user2manager', function(msg) { 
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+    });
+  </script>
+</body>
+</html>

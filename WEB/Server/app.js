@@ -79,6 +79,14 @@ app.get('/socketChat', (req, res) => {
     res.sendFile(__dirname+'/chatTest.html');
 })
 
+app.get('/socketUser', (req, res) => {
+    res.sendFile(__dirname+'/socketUser.html');
+})
+
+app.get('/socketManager', (req, res) => {
+    res.sendFile(__dirname+'/socketManager.html');
+})
+
 
 server.listen(app.get('port'), ()=>{
     console.log(`server port: ${app.get('port')}`)
