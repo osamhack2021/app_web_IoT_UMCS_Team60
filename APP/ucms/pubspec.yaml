@@ -37,7 +37,7 @@ dependencies:
   validators: ^3.0.0
   get: ^4.3.8
   socket_io_client: ^1.0.1
-  shared_preferences: ^2.0.8
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:

@@ -4,31 +4,36 @@ import 'package:ucms/components/texts.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 class LabelFormInput extends StatelessWidget {
-  
-  const LabelFormInput({Key? key, required this.label, required this.hint}) : super(key: key);
+  const LabelFormInput(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller})
+      : super(key: key);
 
   final String label;
   final String hint;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style:bold()),
+        Text(label, style: bold()),
         const Spacer(),
         Container(
           constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-          child: KTextFormField(hint : hint),
-          ),
+          child: KTextFormField(hint: hint, controller: controller),
+        ),
       ],
     );
   }
 }
 
 class LabelText extends StatelessWidget {
-  
-  const LabelText({Key? key, required this.label, required this.content}) : super(key: key);
+  const LabelText({Key? key, required this.label, required this.content})
+      : super(key: key);
 
   final String label;
   final String content;
@@ -36,15 +41,15 @@ class LabelText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(label, style:const TextStyle(fontWeight: FontWeight.bold)),
-      const Spacer(),
-      Container(
-        constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-        child: Text(content),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const Spacer(),
+        Container(
+          constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+          child: Text(content),
         ),
-    ],
-  );
+      ],
+    );
   }
 }
