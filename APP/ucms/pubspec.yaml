@@ -38,6 +38,7 @@ dependencies:
   get: ^4.3.8
   socket_io_client: ^1.0.1
   get_storage: ^2.0.3
+  beacons_plugin: ^2.0.1
 
 dev_dependencies:
   flutter_test:
