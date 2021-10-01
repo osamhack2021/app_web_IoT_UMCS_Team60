@@ -10,6 +10,7 @@ import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/socket/socket.dart';
+import 'package:ucms/utils/beacon_test.dart';
 
 void main() async {
   startSocket();
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/nav",
       routes: {
-        "/nav": (context) => const NavPage(),
+        "/beacon_test" : (context) => const BeaconTest(),
+        "/nav" : (context) => const NavPage(),
         "/login": (context) => const LoginPage(),
         "/register": (context) => RegisterPage(),
         "/user/main": (context) => UserMain(location: "", state: ""),
