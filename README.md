@@ -3,12 +3,10 @@
 
 
 # Project name or Logo
-![Logo](https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png)
-
-프로젝트명 또는 프로젝트 로고 이미지 **(택1)**
+<img src="./docs/logo.png" height=400 alt="Team logo">
 
 ## 프로잭트 소개
-- 설명 기입
+
 
 
 ## 기능 설명
@@ -19,15 +17,124 @@
 * 권장: Google Chrome 버젼 77 이상
 
 ## 기술 스택 (Technique Used) 
-### Server(back-end)
- -  nodejs, php, java 등 서버 언어 버전 
- - express, laravel, sptring boot 등 사용한 프레임워크 
- - DB 등 사용한 다른 프로그램 
+![오픈소스로 구성된 시스템](https://user-images.githubusercontent.com/28801695/135297278-a9e6bc05-35f4-4896-ace6-8f75a90bd685.jpg)
+### Infra
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="40" height="40"/> <br>Git</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="40" height="40"/><br>Docker</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg" width="40" height="40"/><br>AWS</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://icon-library.com/images/web-application-firewall-icon/web-application-firewall-icon-21.jpg" width="40" height="40"/><br>WAF</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://www.pngkey.com/png/detail/898-8981784_aws-codedeploy-logo-png-transparent-aws-code-deploy.png" width="40" height="40"/><br>codepipeline</div>
+  </td>
+ </tr>
+ </tbody></table>
  
-### Front-end
- -  react.js, vue.js 등 사용한 front-end 프레임워크 
- -  UI framework
- - 기타 사용한 라이브러리
+### Backend
+<table><tbody>
+ <tr>
+   <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" width="40" height="40"/> <br>MySQL</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" width="40" height="40"/> <br>Node.js</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original-wordmark.svg" width="40" height="40"/><br>Express</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>Javascript</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="40" height="40"/><br>Linux</div>
+  </td>
+      <td>
+   <div align="center"><img src="https://img.stackshare.io/service/8309/advancedRESTclient.png" width="40" height="40"/><br>ARC</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+  </td>
+ </tr>
+ </tbody></table>
+
+### Frontend - web
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" height="40"/> <br>Vue</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://yamoo9.github.io/vuex/images/vuex.png" width="40" height="40"/> <br>Vuex</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://seeklogo.com/images/V/vuetify-logo-3BCF73C928-seeklogo.com.png" height="40"/> <br>Vuetify</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40"/><br>HTML</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="40"/><br>CSS</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sass_Logo_Color.svg/1200px-Sass_Logo_Color.svg.png" height="40"/> <br>SCSS</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40"/><br>JavaScript</div>
+  </td>
+  <td>
+   <div align="center"> <img src="https://seeklogo.com/images/E/eslint-logo-DDFB6EBCF6-seeklogo.com.png" height="40"/> <br>Eslint</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://seeklogo.com/images/J/jest-logo-F9901EBBF7-seeklogo.com.png" height="40"/><br>Jest</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="40"/><br>socket.io</div>
+  </td>      
+  <td>
+   <div align="center"><img src="https://leolanchas.com/wp-content/uploads/2013/07/0d184ee3-fd8d-4b94-acf4-b4e686e57375.png" height="40"/><br>passport.js</div>
+  </td>
+ </tr>
+ </tbody></table>
+ 
+### Frontend - app
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" width="40" height="40"/> <br>Flutter</div>
+  </td>
+  <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" width="40" height="40"/><br>Dart</div>
+  </td>
+    <td>
+<div align="center"> <img src="https://jwt.io/img/pic_logo.svg" alt="jwt" width="40" height="40"/><br>JWT</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="40" height="40"/><br>Javascript</div>
+  </td>
+    <td>
+   <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="40" height="40"/><br>socket.io</div>
+  </td>      
+ </tr>
+ </tbody></table>
+ 
+ ### IoT
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" width="40" height="40"/> <br>Arduino</div>
+  </td> 
+ </tr>
+ </tbody></table>
+
 
 ## 설치 안내 (Installation Process)
 ```bash
@@ -47,8 +154,12 @@ $ yarn start or npm run start
  샘플 에디터 [https://stackedit.io/app#](https://stackedit.io/app#)
  
 ## 팀 정보 (Team Information)
-- hong gil dong (hong999@gmail.com), Github Id: gildong999
-- kim su ji (suji999@gmail.com), Github Id: suji999
+|이름|역할|소개|github|이메일
+|:-------:|:---:|:---:|:---:|:---:|
+|박재형<br>중위|팀장,infra 담당(DB,AWS)|아주대 졸, 무선통신 전공|<a href="https://github.com/namingsense"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/>|<a href="mailto:skyvieweye@gmail.com"> <img src="https://img.shields.io/badge/skyvieweye@gmail.com-green?logo=gmail&style=social">
+|김명승<br>병장|IoT,backend 담당<br>(Arduino,Node.js)|중앙대학교 2학년 휴학,<br> 소프트웨어학부|<a href="https://github.com/mskim9967"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:mskim9967@gmail.com"> <img src="https://img.shields.io/badge/mskim9967@gmail.com-green?logo=gmail&style=social"> |
+|최경민<br>상병|app-frontend 담당(Flutter)| 광주과학기술원 1학년 휴학,<br>기초교육학부(자유전공)  |<a href="https://github.com/2ood"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:kyungmin.official0@gmail.com"> <img src="https://img.shields.io/badge/kyungmin.official0@gmail.com-green?logo=gmail&style=social"> |
+|정재욱<br>상병|web-frontend 담당(Vue.js)| 아주대 소프트웨어학과 1학년<br>휴학,자동차SW전공 복수전공 |<a href="https://github.com/Wo-ogie"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> | <a href="mailto:siwall0105@gmail.com"> <img src="https://img.shields.io/badge/siwall0105@gmail.com-green?logo=gmail&style=social">| 
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
  * [MIT](https://github.com/osam2020-WEB/Sample-ProjectName-TeamName/blob/master/license.md)
