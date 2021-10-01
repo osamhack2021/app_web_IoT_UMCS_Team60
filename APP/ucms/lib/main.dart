@@ -8,6 +8,7 @@ import 'package:ucms/page_user/user_main.dart';
 import 'package:ucms/page_user/user_move.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/utils/beacon_test.dart';
 
 
 void main() {
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/nav",
       routes: {
+        "/beacon_test" : (context) => const BeaconTest(),
         "/nav" : (context) => const NavPage(),
         "/login": (context) => const LoginPage(),
         "/register" : (context) => const RegisterPage(),
