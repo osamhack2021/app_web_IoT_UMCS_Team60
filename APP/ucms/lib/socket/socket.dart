@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:ucms/data/jwt.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/hostnames.dart';
 
 void startSocket() {
-  
+  var prefs = Get.find<SharedPreferences>();
   socket_io.Socket socket = Get.put(socket_io.io(socketHost, 
     OptionBuilder()
     .setTransports(['websocket']) // for Flutter or Dart VM
-    .setExtraHeaders({'authorization': ("Bearer "+jwtToken!)}) // optional
+    .setExtraHeaders({'authorization': prefs.getString("token")==null?"":("Bearer "+prefs.getString("token")!)}) // optional
     .build())
   );
   

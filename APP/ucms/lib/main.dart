@@ -6,15 +6,16 @@ import 'package:ucms/nav.dart';
 import 'package:ucms/page_user/user_assemble.dart';
 import 'package:ucms/page_user/user_main.dart';
 import 'package:ucms/page_user/user_move.dart';
+import 'package:ucms/shared_prefs/prefs_initialize.dart';
 import 'package:ucms/socket/socket.dart';
 
 
 
-void main() {
+void main() async {
   startSocket();
-  
+  prefsInitialize();
+
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
