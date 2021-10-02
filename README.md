@@ -3,10 +3,12 @@
 
 
 # Project name or Logo
-<img src="./docs/logo.png" height=400 alt="Team logo">
+<img src="./docs/banner.png" height=200 alt="Team banner">
 
-## 프로잭트 소개
 
+## 프로젝트 소개
+
+<img src="./docs/logo.png" height=100 alt="Team logo">
 
 
 ## 기능 설명
