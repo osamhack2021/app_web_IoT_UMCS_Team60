@@ -1,7 +1,7 @@
 const passport = require('passport');
-const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
+const { pw2enc } = require(`../middleware/auth`);
 
-const dbModule = require(`${process.env.PWD}/database`)();
+const dbModule = require(`../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 

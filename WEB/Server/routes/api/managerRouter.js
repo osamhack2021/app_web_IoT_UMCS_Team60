@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const managerAuth = require(`${process.env.PWD}/controllers/managerAuth`);
+const managerAuth = require(`../../controllers/managerAuth`);
 
 router.get('/logout', (req, res) => {
     req.logout();
