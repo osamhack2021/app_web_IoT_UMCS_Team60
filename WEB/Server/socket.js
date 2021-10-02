@@ -1,7 +1,7 @@
 const passportSocketIo = require("passport.socketio");
-const { decodeToken } = require(`${process.env.PWD}/middleware/auth`);
+const { decodeToken } = require(`./middleware/auth`);
 
-const dbModule = require(`${process.env.PWD}/database`)();
+const dbModule = require(`./database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
     

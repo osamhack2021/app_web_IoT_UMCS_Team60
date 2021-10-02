@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
-const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
+const userAuth = require(`../controllers/userAuth`);
+const { pw2enc } = require(`../middleware/auth`);
 const request = require('request-promise-native')
 
 const baseUrl = 'user';
 
-var dbModule = require(`${process.env.PWD}/database`)();
+var dbModule = require(`../database`)();
 var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 

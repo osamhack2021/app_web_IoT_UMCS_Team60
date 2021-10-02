@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
+const userAuth = require(`../../controllers/userAuth`);
 
 router.post('/register', userAuth.register, (req, res) => {
     if(req.code) 
