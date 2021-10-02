@@ -12,7 +12,7 @@ const flash = require('connect-flash');
 const FileStore = require("session-file-store")(session);
 require('dotenv').config();
 
-app.set('port', process.env.PORT || 3003);
+app.set('port', process.env.PORT);
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
