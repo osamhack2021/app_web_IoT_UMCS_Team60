@@ -3,7 +3,7 @@
 
 
 # Project name or Logo
-<img src="./docs/banner.png" height=200 alt="Team banner">
+<img src="./docs/banner-2.0.png" height=200 alt="Team banner">
 
 
 ## 프로젝트 소개
