@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const userAuthController = require('../controllers/userAuth');
-const { verifyToken, pw2enc } = require('../middleware/auth');
+const userAuth = require(`${process.env.PWD}/controllers/userAuth`);
+const { pw2enc } = require(`${process.env.PWD}/middleware/auth`);
 const request = require('request-promise-native')
 
 const baseUrl = 'user';
 
-var dbModule = require('../database')();
+var dbModule = require(`${process.env.PWD}/database`)();
 var dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     res.render(`${baseUrl}/index`, {token, message, userInfo});
 });
 
-router.post('/login', userAuthController.login, (req, res) => {
+router.post('/login', userAuth.login, (req, res) => {
     res.cookie('token', req.token);
     res.redirect(`.`); 
 });
@@ -64,6 +64,8 @@ router.post('/setHeader', (req, res) => {
     })
 });
 
-router.get('/check', verifyToken, userAuthController.check);
+router.get('/check', userAuth.jwtLogin, (req, res) => {
+    res.json(req.data);
+});
 
 module.exports = router;

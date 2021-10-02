@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <title>user socket test</title>
+</head>
+<body>
+  <h1>user socket page</h1>
+  <form action="" id="move_request">
+    이동 요청 (move_request)
+    <input type="number" id="a" placeholder="outside_id" />
+    <input type="submit" />
+  </form>
+
+  <form action="" id="location_report">
+    위치 보고 (location_report) 
+    <input type="number" id="b" placeholder="beacon_id" />
+    <input type="submit" />
+  </form>
+  
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    $(function () {
+      const socket = io('/user', {
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiJ0ZXN0IiwibmFtZSI6IuycoOyggO2FjOyKpO2KuCIsInJhbmsiOiJraW5nIiwicm9vbV9pZCI6bnVsbCwiZG9vbV9pZCI6bnVsbCwiaWF0IjoxNjMyOTAyNDAwLCJleHAiOjE2NjQ0Mzg0MDB9.hfKpCcJcNMk7FW8Aqn7SIabNthrgvMtJc8He0F7ZInI"
+            },
+          }
+        }
+       });
+      $('#move_request').submit(function(e) {
+        e.preventDefault(); 
+        socket.emit('move_request', {outside_id: $('#a').val()});
+        
+        return false;
+      });
+      $('#location_report').submit(function(e) {
+        e.preventDefault();
+        socket.emit('location_report', {beacon_id: $('#b').val(), time: new Date()});
+        
+        return false;
+      });
+
+      socket.on('chat message', function(msg) { 
+        $('#messages').append($('<li>').text(msg)); 
+      });
+    });
+  </script>
+</body>
+</html>

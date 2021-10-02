@@ -1,22 +1,19 @@
 const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
 const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require( 'body-parser' );
+const bodyParser = require('body-parser');
 const session = require('express-session');
-const nunjucks = require('nunjucks');
-const dotenv = require('dotenv');
-const app = express();
-const server = require('http').createServer(app);
-const router = express.Router();
 const cors = require('cors');
-const io = require('./socket')(server); 
 const passport = require('passport');
 const flash = require('connect-flash');
+const FileStore = require("session-file-store")(session);
+require('dotenv').config();
 
+app.set('port', process.env.PORT);
 
-dotenv.config();
-app.set('port', process.env.PORT || 3003);
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -28,17 +25,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.urlencoded({ extended: true }) );
 app.use(session({
-    resave: false,
-    saveUninitialized: false,
+    key: 'express.sid',
     secret: process.env.COOKIE_SECRET,
+    saveUninitialized: true,
+    resave: true,
     cookie: {
         httpOnly: true,
         secure: false
-    }
+    },
+    store: new FileStore(),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// socket connection
+const io = require('./socket')(server, session); 
+
 
 // passport
 const userPassportConfig = require('./config/userPassport');
@@ -50,12 +53,8 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-const managerRouter = require('./routes/managerRouter');
-const userRouter = require('./routes/userRouter')
 
 app.use('/api', apiRouter);
-app.use('/manager', managerRouter);
-app.use('/user', userRouter); 
 
 
 //setting cors 
@@ -65,31 +64,30 @@ app.all('/*', (req, res, next) => {
     next(); 
 }); 
 
-//socketTest page route
+
+// test page router
+const testManagerRouter = require('./routes/testManagerRouter');
+const testUserRouter = require('./routes/testUserRouter')
+app.use('/manager', testManagerRouter);
+app.use('/user', testUserRouter); 
+
 app.get('/', (req, res) => {
     res.render(`index`);
 })
 
-//socketTest page route
 app.get('/socketChat', (req, res) => {
     res.sendFile(__dirname+'/chatTest.html');
+})
+
+app.get('/socketUser', (req, res) => {
+    res.sendFile(__dirname+'/socketUser.html');
+})
+
+app.get('/socketManager', (req, res) => {
+    res.sendFile(__dirname+'/socketManager.html');
 })
 
 
 server.listen(app.get('port'), ()=>{
     console.log(`server port: ${app.get('port')}`)
 });
-
-
-// app.use((req, res, next) => {
-//     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
-//     error.status = 404;
-//     next(error);
-// });
-
-// app.use((err, req, res, next) => {
-//     res.locals.message = err.message;
-//     res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-//     res.status(err.status || 500);
-//     res.json({page:'error'});
-// });

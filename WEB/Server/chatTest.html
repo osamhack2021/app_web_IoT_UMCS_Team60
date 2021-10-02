@@ -18,11 +18,19 @@
   <form action="">
     <input id="m" autocomplete="off" /><button>Send</button>
   </form>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script>
     $(function () {
-      var socket = io();
+      const socket = io('https://osamhack2021-app-web-iot-umcs-team60-pvpvjw57c9pxq-3003.githubpreview.dev', {
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiJ0ZXN0IiwibmFtZSI6IuycoOyggO2FjOyKpO2KuCIsInJhbmsiOiJraW5nIiwicm9vbV9pZCI6bnVsbCwiZG9vbV9pZCI6bnVsbCwiaWF0IjoxNjMyOTAyNDAwLCJleHAiOjE2NjQ0Mzg0MDB9.hfKpCcJcNMk7FW8Aqn7SIabNthrgvMtJc8He0F7ZInI"
+            },
+          }
+        }
+       });
       $('form').submit(function(e) {  //<form>의 <input>(채팅방의 send 버튼)이 클릭될 경우
         e.preventDefault(); // prevents page reloading
         socket.emit('chat message', $('#m').val());
