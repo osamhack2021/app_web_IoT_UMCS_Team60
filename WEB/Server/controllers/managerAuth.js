@@ -51,8 +51,8 @@ const register = (req, res, next) => {
             
         const crypto = pw2enc(req.body.password);
         
-        sql = "INSERT INTO manager VALUES (?, ?, 'king', 1, ?, ?)";
-        dbConnection.query(sql, [req.body.tag, req.body.name, crypto.salt, crypto.pwEncrypted], (err, rows) => {
+        sql = "INSERT INTO manager VALUES (?, ?, ?, ?, ?, ?)";
+        dbConnection.query(sql, [req.body.tag, req.body.name, req.body.rank, req.body.auth, crypto.salt, crypto.pwEncrypted], (err, rows) => {
             if(err)
                 return next(err)
 

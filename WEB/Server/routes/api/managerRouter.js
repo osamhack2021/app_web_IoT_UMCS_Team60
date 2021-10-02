@@ -4,7 +4,8 @@ const managerAuth = require(`${process.env.PWD}/controllers/managerAuth`);
 router.get('/logout', (req, res) => {
     req.logout();
     res.status(200).json({
-        state: "success",
+        code: 1,
+        msg: "success",
     });
 });
 
