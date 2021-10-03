@@ -61,7 +61,19 @@ const register = (req, res, next) => {
     });
 };
 
+const checkLogin = (req, res, next) => {
+    
+    if (req.isAuthenticated() && req.user)
+        return next();
+    else 
+    return res.status(400).json({
+        code: 9,
+        msg: 'not_login',
+    });
+};
+
 module.exports = {
     login,
-    register
+    register,
+    checkLogin
 }
