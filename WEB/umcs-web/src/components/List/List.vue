@@ -30,7 +30,7 @@ import DefaultListItem from './ListItem';
 import DefaultListGroup from './ListGroup';
 
 export default {
-  name: "FacilityList",
+  name: "DefaultList",
   components: {
     DefaultListItem,
     DefaultListGroup,

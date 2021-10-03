@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    redirect: "/login"
+    redirect: "/authentication/login"
   },
   {
     path: "/main",
@@ -20,8 +20,24 @@ const routes = [
       },
       {
         path: "/approval",
-        name: "이동 결재",
-        component: () => import("@/views/MoveApproval"),
+        name: "시설 이동/이용 신청",
+        component: () => import("@/views/ApprovalReport"),
+        children: [
+          {
+            path: "/",
+            redirect: "moving"
+          },
+          {
+            path: "moving",
+            name: "이동 신청",
+            component: () => import("@/views/Approval/MovingApproval"),
+          },
+          {
+            path: "using",
+            name: "이용 신청",
+            component: () => import("@/views/Approval/UsingApproval"),
+          }
+        ]
       },
       {
         path: "/health",
@@ -34,13 +50,13 @@ const routes = [
         component: () => import("@/views/FacilitySchedule"),
       },
       {
-        path: "/manage",
+        path: "/manage-army",
         name: "부대 관리",
-        component: () => import("@/views/AccountManage"),
+        component: () => import("@/views/ManageArmy"),
       },
       {
         path: "/manage-admin",
-        name: "관리자 등록/조회",
+        name: "날짜별 관리자 조회",
         component: () => import("@/views/ManageAdmin"),
       },
     ],
@@ -50,7 +66,7 @@ const routes = [
     component: () => import("@/layouts/authentication/Index"),
     children: [
       {
-        path: "/login",
+        path: "login",
         name: "Login",
         component: () => import("@/views/authentication/Login"),
       },

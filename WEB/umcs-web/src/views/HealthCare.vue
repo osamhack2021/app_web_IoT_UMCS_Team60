@@ -9,7 +9,7 @@
       <v-col cols="6">
         <data-table
           :datas="getHealthDatas"
-          :need-search="search"
+          :need-search="true"
         />
       </v-col>
     </v-row>
@@ -26,10 +26,6 @@ export default {
     Calendar,
     DataTable,
   },
-  data: () => ({
-    search: true,
-    // Data Table
-  }),
   computed: {
     ...mapGetters('health', [
       'getHealthDatas',

@@ -13,7 +13,7 @@
         </v-card>
       </v-col>
       <!-- Facility Time Table -->
-      <v-col cols="7">
+      <!-- <v-col cols="7">
         <v-card
           class="mx-auto mb-5"
         >
@@ -22,33 +22,46 @@
           </v-card-title>
         </v-card>
         <data-table
-          :datas="getFacilityTimeTable"
-          :need-search="search"
+          :datas="facilityTimeTable"
+          store-name="facility"
+          :need-c-r-u-d="true"
         />
+      </v-col> -->
+      <v-col cols="7">
+        <v-card
+          class="mx-auto mb-5"
+        >
+          <v-card-title class="text-h6">
+            {{ getFocusingItem }}
+          </v-card-title>
+        </v-card>
+        <temp-facility-schedule />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
-import DataTable from "@/components/DataTable";
+import { mapState, mapGetters } from "vuex"
+// import DataTable from "@/components/DataTable";
 import FacilityList from '@/components/List/List';
+import TempFacilitySchedule from "@/views/tempFacilitySchedule";
 
 export default {
   name: "FacilitySchedule",
   components: {
-    DataTable,
+    // DataTable,
     FacilityList,
+    TempFacilitySchedule,
   },
-  data: () => ({
-    search: false,
-  }),
   computed: {
+    ...mapState('facility', [
+      "facilityTimeTable"
+    ]),
     ...mapGetters('facility', [
       'getFacilityList',
-      'getFacilityTimeTable',
       'getFocusingItem',
+      'getTimeTable',
     ])
   },
 };

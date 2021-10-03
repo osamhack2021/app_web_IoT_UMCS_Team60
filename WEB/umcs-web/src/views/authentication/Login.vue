@@ -47,6 +47,7 @@
 
 <script>
 export default {
+  name: "LoginForm",
   data: () => ({
     valid: true,
     userNum: '',
@@ -64,7 +65,7 @@ export default {
     submitForm () {
       const isValid = this.$refs.form.validate()  // 유효성 검사
       if (isValid) {
-        this.$router.push("monitoring");
+        this.$router.push("/main");
       }
     },
   },
