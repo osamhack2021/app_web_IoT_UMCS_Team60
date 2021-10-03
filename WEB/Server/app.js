@@ -53,8 +53,10 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
+const uploadRouter = require('./routes/uploadRouter');
 
 app.use('/api', apiRouter);
+app.use('/upload', uploadRouter);
 
 
 //setting cors 
