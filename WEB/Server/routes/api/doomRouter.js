@@ -29,7 +29,7 @@ router.post('/', managerAuth.checkLogin, (req, res) => {
 
 
 router.get('/', (req, res) => {
-    var msg = {4: 'db_error'};
+    var msg = {2:'not_found', 4: 'db_error'};
 
     var sql = "SELECT * FROM doom";
     dbConnection.query(sql, (err, rows) => {
