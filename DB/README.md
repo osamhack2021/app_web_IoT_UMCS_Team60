@@ -7,7 +7,7 @@
 $ docker-compose build
 $ docker-compose up -d #빌드시간 1분 정도, mysql 도커 생성 완료
 
-#참고: mysql 도커 접속 포트 : 3307
+#참고: mysql 도커 접속 포트 : 3306
 #참고: root 계정 비번 6060, 유저 계정 server : 비번 6060
 
 ```
