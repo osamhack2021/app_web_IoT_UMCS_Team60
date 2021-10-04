@@ -79,8 +79,8 @@ router.get('/search', async (req, res) => {
         var sql = "SELECT tag, name, `rank`, doom_id, room_id FROM user";
         if(Object.keys(req.query).length) {
             sql += " WHERE";
-            for(key in req.query)
-                sql += ` ${key} = ? AND`;
+            for(key in req.query)  // rank는 mysql 예약어이므로 `rank` 로 sql문 보내야 함
+                sql += ` \`${key}\` = ? AND`;
             sql = sql.substr(0, sql.length - 3);
         }
         
@@ -125,8 +125,7 @@ router.get('/:id', async (req, res) => {
         return res.status(200).json({
             code: 1,
             msg: "success",
-            total: users.length,
-            data: users
+            data: users[0]
         });
 
     } catch(err) {

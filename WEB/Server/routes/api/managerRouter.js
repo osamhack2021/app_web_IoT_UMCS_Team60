@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const managerAuth = require(`../../controllers/managerAuth`);
 
+const dbPromiseConnection = require("../../databasePromise");
+
 router.get('/logout', (req, res) => {
     req.logout();
     res.status(200).json({
@@ -62,34 +64,99 @@ router.get('/check', (req, res) => {
 });
 
 
-const dbModule = require(`../../database`)();
-const dbConnection = dbModule.init();
-dbModule.db_open(dbConnection);
+router.get('/', async (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "SELECT tag, name, `rank`, auth FROM manager";
+        const [users] = await dbPromiseConnection.query(sql);
 
-router.get('/', (req, res) => {
-    var msg = {4: 'db_error'};
-
-    var sql = "SELECT * FROM manager";
-    dbConnection.query(sql, (err, rows) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
-        if(!rows.length)
-            return res.status(204).json({
+        if(!users.length)
+            return res.status(200).json({
                 code: 2,
                 msg: msg[2]
             });
-
+        
         return res.status(200).json({
             code: 1,
             msg: "success",
-            total: rows.length,
-            data: rows
+            total: users.length,
+            data: users
         });
-    });
+
+    } catch(err) {
+        console.log(err);
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err : err
+        });
+    }
+});
+
+
+router.get('/search', async (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "SELECT tag, name, `rank`, auth FROM manager";
+        if(Object.keys(req.query).length) {
+            sql += " WHERE";
+            for(key in req.query) // rank는 mysql 예약어이므로 `rank` 로 sql문 보내야 함
+                sql += ` \`${key}\` = ? AND`;
+            sql = sql.substr(0, sql.length - 3);
+        }
+        
+        const [users] = await dbPromiseConnection.query(sql, Object.values(req.query));
+
+        if(!users.length)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2]
+            });
+        
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            total: users.length,
+            data: users
+        });
+
+    } catch(err) {
+        console.log(err);
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err : err
+        });
+    }
+});
+
+
+router.get('/:id', async (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "SELECT tag, name, `rank`, auth FROM manager WHERE tag=?";
+        const [users] = await dbPromiseConnection.query(sql, [req.params.id]);
+
+        if(!users.length)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2]
+            });
+        
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            data: users[0]
+        });
+
+    } catch(err) {
+        console.log(err);
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err : err
+        });
+    }
 });
 
 module.exports = router;
