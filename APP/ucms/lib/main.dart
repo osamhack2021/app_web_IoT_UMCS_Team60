@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucms/data/store.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
 
 import 'package:ucms/pages/page_login/login_page.dart';
@@ -14,7 +14,7 @@ import 'package:ucms/utils/beacon_test.dart';
 
 void main() async {
   startSocket();
-  storeInit();
+  await GetStorage.init();
   User.userInit();
 
   runApp(const MyApp());
@@ -43,10 +43,10 @@ class MyApp extends StatelessWidget {
       routes: {
         "/beacon_test" : (context) => const BeaconTest(),
         "/nav" : (context) => const NavPage(),
-        "/login": (context) => const LoginPage(),
+        "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/user/main": (context) => UserMain(location: "", state: ""),
-        "/user/move": (context) => UserMove(),
+        "/user/move": (context) => const UserMove(),
         "/user/assemble": (context) => UserAssemble(
             location: "막사", timestamp: DateTime.parse("2012-02-27 13:27:00")),
       },

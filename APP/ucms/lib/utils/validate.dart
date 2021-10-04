@@ -10,3 +10,11 @@ validatePw() => (String? value) {
     else if (value.length < 4) { return "패스워드의 최소 길이는 4자입니다.";} 
     else { return null;}
   };
+
+validatePwCheck({required String value, required String checkValue}) {
+    return (value==checkValue) ?null:"입력한 패스워드가 서로 다릅니다.";
+}
+
+validateNull() => (String? value) {
+  return null;
+};
