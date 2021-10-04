@@ -15,14 +15,21 @@ docker-compose up -d
 
 ### 도커 접속해서 mysql 테이블 확인
     
-도커 프로세스 번호 확인
 
-```docker ps ```
+
+```
+docker ps 
+
+[] : #(도커 프로세스 번호 확인)
+
+```
 
 docker 실행
 
 ``` docker exec -it [도커 프로세스 번호] ```
+
 or
+
 ``` docker exec -it [도커 프로세스 번호] /bin/bash ```
 
 mysql 접속
