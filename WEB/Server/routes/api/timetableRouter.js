@@ -5,12 +5,15 @@ const dbModule = require(`../../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
+function nowDateTime() {
+    return new Date().toISOString().slice(0, 19).replace('T', ' ');
+}
 
 router.post('/', managerAuth.checkLogin, (req, res) => {
     var msg = {4: 'db_error'};
 
-    var sql = "INSERT INTO doom VALUES (NULL, ?, ?)";
-    dbConnection.query(sql, [req.body.name, req.body.beacon_id], (err, result) => {
+    var sql = "SELECT doom_id FROM doomroom WHERE id=?";
+    dbConnection.query(sql, [req.body.room_id], (err, rows) => {
         if(err)
             return res.status(400).json({
                 code: 4,
@@ -18,11 +21,21 @@ router.post('/', managerAuth.checkLogin, (req, res) => {
                 err
             });
         
-        return res.status(201).json({
-            code: 1,
-            msg: "success",
-            insertId: result.insertId,
-            data: req.body,
+        sql = "INSERT INTO timetable VALUES (NULL, ?, ?, ?, ?, ?)";
+        dbConnection.query(sql, [rows[0].doom_id, req.body.room_id, req.body.facility_id, req.body.start_time, req.body.end_time], (err, result) => {
+            if(err)
+                return res.status(400).json({
+                    code: 4,
+                    msg: msg[4],
+                    err
+                });
+            
+            return res.status(201).json({
+                code: 1,
+                msg: "success",
+                insertId: result.insertId,
+                data: req.body,
+            });
         });
     });
 });
@@ -31,7 +44,7 @@ router.post('/', managerAuth.checkLogin, (req, res) => {
 router.get('/', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom";
+    var sql = "SELECT * FROM timetable";
     dbConnection.query(sql, (err, rows) => {
         if(err)
             return res.status(400).json({
@@ -58,7 +71,7 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom";
+    var sql = "SELECT * FROM timetable";
 
     if(Object.keys(req.query).length) {
         sql += " WHERE";
@@ -92,7 +105,7 @@ router.get('/search', (req, res) => {
 router.get('/:id', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom WHERE id=?";
+    var sql = "SELECT * FROM timetable WHERE id=?";
     dbConnection.query(sql,[req.params.id], (err, rows) => {
         if(err)
             return res.status(400).json({
@@ -119,7 +132,7 @@ router.get('/:id', (req, res) => {
 router.put('/:id', managerAuth.checkLogin, (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "UPDATE doom SET ";
+    var sql = "UPDATE timetable SET ";
     for(key in req.body)
         sql += ` ${key} = ?, `;
     sql = sql.substr(0, sql.length - 2);
@@ -149,7 +162,7 @@ router.put('/:id', managerAuth.checkLogin, (req, res) => {
 router.delete('/:id', managerAuth.checkLogin, (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "DELETE FROM doom WHERE id=?";
+    var sql = "DELETE FROM timetable WHERE id=?";
     dbConnection.query(sql, [req.params.id], (err, rows) => {
         if(err)
             return res.status(400).json({

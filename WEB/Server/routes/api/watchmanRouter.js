@@ -1,14 +1,19 @@
 const router = require('express').Router();
+const managerAuth = require(`../../controllers/managerAuth`);
 
 const dbModule = require(`../../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
-router.post('/', (req, res) => {
+function nowDate() {
+    return new Date().toISOString().slice(0, 10).replace('T', ' ');
+}
+
+router.post('/', managerAuth.checkLogin, (req, res) => {
     var msg = {4: 'db_error'};
 
     var sql = "INSERT INTO watchman VALUES (NULL, ?, ?, ?, NULL)";
-    dbConnection.query(sql, [req.body.manager_tags, req.body.charge_doom, req.body.responsible_date], (err, rows) => {
+    dbConnection.query(sql, [req.body.manager_tags, req.body.charge_doom, req.body.responsible_date], (err, result) => {
         if(err)
             return res.status(400).json({
                 code: 4,
@@ -19,6 +24,7 @@ router.post('/', (req, res) => {
         return res.status(201).json({
             code: 1,
             msg: "success",
+            insertId: result.insertId,
             data: req.body,
         });
     });
@@ -36,7 +42,7 @@ router.get('/', (req, res) => {
                 err
             });
         if(!rows.length)
-            return res.status(204).json({
+            return res.status(200).json({
                 code: 2,
                 msg: msg[2]
             });
@@ -46,31 +52,6 @@ router.get('/', (req, res) => {
             msg: "success",
             total: rows.length,
             data: rows
-        });
-    });
-});
-
-router.get('/:id', (req, res) => {
-    var msg = {2:'not_found', 4: 'db_error'};
-
-    var sql = "SELECT * FROM watchman WHERE id=?";
-    dbConnection.query(sql,[req.params.id], (err, rows) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
-        if(!rows.length)
-            return res.status(204).json({
-                code: 2,
-                msg: msg[2]
-            });
-
-        return res.status(200).json({
-            code: 1,
-            msg: "success",
-            data: rows[0]
         });
     });
 });
@@ -87,6 +68,7 @@ router.get('/search', (req, res) => {
             sql += ` ${key} = ? AND`;
         sql = sql.substr(0, sql.length - 3);
     }
+    console.log(sql);
     dbConnection.query(sql, Object.values(req.query), (err, rows) => {
         if(err)
             return res.status(400).json({
@@ -95,7 +77,61 @@ router.get('/search', (req, res) => {
                 err
             });
         if(!rows.length)
-            return res.status(204).json({
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            total: rows.length,
+            data: rows
+        });
+    });
+});
+
+router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
+    var msg = {2:'off_today.', 4: 'db_error'};
+    var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
+
+    dbConnection.query(sql, [req.user.tag, nowDate()], (err, rows) => {
+        console.log(rows);
+        if(err)
+            return res.status(400).json({
+                code: 4,
+                msg: msg[4],
+                err
+            });
+        if(!rows.length)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            data: rows[0]
+        });
+    });
+});
+
+
+router.get('/today', managerAuth.checkLogin, (req, res) => {
+    var msg = {2:'off_today.', 4: 'db_error'};
+    var sql = "SELECT * FROM watchman WHERE charge_doom=? AND responsible_date=? AND shift IS NULL";
+
+    dbConnection.query(sql, [req.query.doom_id, nowDate()], (err, rows) => {
+        console.log(rows);
+        if(err)
+            return res.status(400).json({
+                code: 4,
+                msg: msg[4],
+                err
+            });
+        if(!rows.length)
+            return res.status(200).json({
                 code: 2,
                 msg: msg[2],
             });
@@ -110,62 +146,7 @@ router.get('/search', (req, res) => {
 });
 
 
-
-router.put('/:id', (req, res) => {
-    var msg = {4: 'db_error'};
-
-    var sql = "UPDATE watchman SET ";
-    for(key in req.body)
-        sql += ` ${key} = ?, `;
-    sql = sql.substr(0, sql.length - 2);
-    sql += " WHERE id=? "
-
-    dbConnection.query(sql, [...Object.values(req.body), req.params.id], (err, rows) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
-        if(!rows.affectedRows)
-            return res.status(204).json({
-                code: 2,
-                msg: msg[2],
-            });
-
-        return res.status(200).json({
-            code: 1,
-            msg: "success",
-            data: req.body,
-        });
-    });
-});
-
-router.delete('/:id', (req, res) => {
-    var msg = {2:'not_found', 4: 'db_error'};
-
-    var sql = "DELETE FROM watchman WHERE id=?";
-    dbConnection.query(sql, [req.params.id], (err, rows) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
-        if(!rows.affectedRows)
-            return res.status(204).json({
-                code: 2,
-                msg: msg[2],
-            });
-
-        return res.status(200).json({
-            code: 1,
-            msg: "success",
-        });
-    });
-});
-
-router.post('/shift/:id', (req, res) => {
+router.post('/shift/:id', managerAuth.checkLogin, (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
     var sql = "SELECT * FROM watchman WHERE id=?";
@@ -177,7 +158,7 @@ router.post('/shift/:id', (req, res) => {
                 err
             });
         if(!rows.length)
-            return res.status(204).json({
+            return res.status(200).json({
                 code: 2,
                 msg: msg[2]
             });
@@ -203,14 +184,95 @@ router.post('/shift/:id', (req, res) => {
                 return res.status(201).json({
                     code: 1,
                     msg: "success",
-                    data: {...req.body, insertId: result.insertId}
+                    insertId: result.insertId,
+                    data: req.body,
                 });
             });
         });
     });
-
-    
 });
+
+
+router.get('/:id', (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+
+    var sql = "SELECT * FROM watchman WHERE id=?";
+    dbConnection.query(sql,[req.params.id], (err, rows) => {
+        if(err)
+            return res.status(400).json({
+                code: 4,
+                msg: msg[4],
+                err
+            });
+        if(!rows.length)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2]
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            data: rows[0]
+        });
+    });
+});
+
+
+router.put('/:id', managerAuth.checkLogin, (req, res) => {
+    var msg = {4: 'db_error'};
+
+    var sql = "UPDATE watchman SET ";
+    for(key in req.body)
+        sql += ` ${key} = ?, `;
+    sql = sql.substr(0, sql.length - 2);
+    sql += " WHERE id=? "
+
+    dbConnection.query(sql, [...Object.values(req.body), req.params.id], (err, rows) => {
+        if(err)
+            return res.status(400).json({
+                code: 4,
+                msg: msg[4],
+                err
+            });
+        if(!rows.affectedRows)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            data: req.body,
+        });
+    });
+});
+
+router.delete('/:id', managerAuth.checkLogin, (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+
+    var sql = "DELETE FROM watchman WHERE id=?";
+    dbConnection.query(sql, [req.params.id], (err, rows) => {
+        if(err)
+            return res.status(400).json({
+                code: 4,
+                msg: msg[4],
+                err
+            });
+        if(!rows.affectedRows)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+        });
+    });
+});
+
 
 
 module.exports = router;

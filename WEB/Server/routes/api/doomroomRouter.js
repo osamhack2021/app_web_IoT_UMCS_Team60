@@ -9,8 +9,8 @@ dbModule.db_open(dbConnection);
 router.post('/', managerAuth.checkLogin, (req, res) => {
     var msg = {4: 'db_error'};
 
-    var sql = "INSERT INTO doom VALUES (NULL, ?, ?)";
-    dbConnection.query(sql, [req.body.name, req.body.beacon_id], (err, result) => {
+    var sql = "INSERT INTO doomroom VALUES (NULL, ?, ?, ?, ?, 0, 0)";
+    dbConnection.query(sql, [req.body.beacon_id, req.body.doom_id, req.body.floor, req.body.name], (err, result) => {
         if(err)
             return res.status(400).json({
                 code: 4,
@@ -31,7 +31,7 @@ router.post('/', managerAuth.checkLogin, (req, res) => {
 router.get('/', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom";
+    var sql = "SELECT * FROM doomroom";
     dbConnection.query(sql, (err, rows) => {
         if(err)
             return res.status(400).json({
@@ -58,7 +58,7 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom";
+    var sql = "SELECT * FROM doomroom";
 
     if(Object.keys(req.query).length) {
         sql += " WHERE";
@@ -92,7 +92,7 @@ router.get('/search', (req, res) => {
 router.get('/:id', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "SELECT * FROM doom WHERE id=?";
+    var sql = "SELECT * FROM doomroom WHERE id=?";
     dbConnection.query(sql,[req.params.id], (err, rows) => {
         if(err)
             return res.status(400).json({
@@ -119,7 +119,7 @@ router.get('/:id', (req, res) => {
 router.put('/:id', managerAuth.checkLogin, (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "UPDATE doom SET ";
+    var sql = "UPDATE doomroom SET ";
     for(key in req.body)
         sql += ` ${key} = ?, `;
     sql = sql.substr(0, sql.length - 2);
@@ -149,7 +149,7 @@ router.put('/:id', managerAuth.checkLogin, (req, res) => {
 router.delete('/:id', managerAuth.checkLogin, (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "DELETE FROM doom WHERE id=?";
+    var sql = "DELETE FROM doomroom WHERE id=?";
     dbConnection.query(sql, [req.params.id], (err, rows) => {
         if(err)
             return res.status(400).json({

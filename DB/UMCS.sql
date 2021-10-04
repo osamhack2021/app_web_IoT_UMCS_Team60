@@ -4,6 +4,10 @@
 CREATE TABLE beacon
 (
     `id`  VARCHAR(45)    NOT NULL, 
+    `doom_id`    INT            NULL, 
+    `doomroom_id`    INT            NULL, 
+    `doomfacility_id`    INT            NULL,
+    `outside_facility_id`    INT            NULL,  
     CONSTRAINT PK_beacon PRIMARY KEY (id)
 );
 
@@ -14,6 +18,7 @@ CREATE TABLE doom
     `id`         INT            NOT NULL    AUTO_INCREMENT, 
     `name`       VARCHAR(45)    NULL, 
     `beacon_id`  VARCHAR(45)            NULL, 
+    `current_count`    INT            NULL, 
     CONSTRAINT PK_doom PRIMARY KEY (id)
 );
 
@@ -29,6 +34,8 @@ CREATE TABLE doomroom
     `doom_id`    INT            NULL, 
     `floor`      INT            NULL, 
     `name`       VARCHAR(45)    NULL, 
+    `total_count`      INT            NULL,
+    `current_count`    INT            NULL, 
     CONSTRAINT PK_doomroom PRIMARY KEY (id)
 );
 
@@ -47,6 +54,7 @@ CREATE TABLE outside_facility
     `id`         INT            NOT NULL    AUTO_INCREMENT, 
     `name`       VARCHAR(45)    NULL, 
     `beacon_id`  VARCHAR(45)            NULL, 
+    `current_count`    INT            NULL, 
     CONSTRAINT PK_outside_facility PRIMARY KEY (id)
 );
 
@@ -99,6 +107,7 @@ CREATE TABLE doomfacility
     `doom_id`      INT            NULL, 
     `user_number`  INT            NULL, 
     `floor`        INT            NULL, 
+    `current_count`    INT            NULL, 
     CONSTRAINT PK_doomfacility PRIMARY KEY (id)
 );
 
@@ -232,3 +241,19 @@ ALTER TABLE outside_request
 ALTER TABLE outside_request
     ADD CONSTRAINT FK_outside_request_user_tag_user_tag FOREIGN KEY (user_tag)
         REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE beacon
+    ADD CONSTRAINT FK_beacon_doom_id_id FOREIGN KEY (doom_id)
+        REFERENCES doom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE beacon
+    ADD CONSTRAINT FK_beacon_doomroom_id_id FOREIGN KEY (doomroom_id)
+        REFERENCES doomroom (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE beacon
+    ADD CONSTRAINT FK_beacon_doomfacility_id_id FOREIGN KEY (doomfacility_id)
+        REFERENCES doomfacility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE beacon
+    ADD CONSTRAINT FK_beacon_outside_facility_id_id FOREIGN KEY (outside_facility_id)
+        REFERENCES outside_facility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
