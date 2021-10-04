@@ -1,28 +1,28 @@
 const state = {
   accountDatas: {
     headers: [
-      { text: "군번", value: "number" },
+      { text: "군번", value: "tag" },
       { text: "계급", value: "rank" },
       { text: "이름", value: "name" },
     ],
     datas: [
       {
-        number: "11111",
+        tag: "11111",
         rank: "병장",
         name: "aaa",
       },
       {
-        number: "22222",
+        tag: "22222",
         rank: "상병",
         name: "bbb",
       },
       {
-        number: "44444",
+        tag: "44444",
         rank: "일병",
         name: "ddd",
       },
       {
-        number: "55555",
+        tag: "55555",
         rank: "일병",
         name: "eee",
       },

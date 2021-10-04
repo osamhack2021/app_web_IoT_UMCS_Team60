@@ -163,7 +163,7 @@
         <!-- Slot:item.name - user profile routing -->
         <template v-slot:[`item.name`]="{ item }">
           <router-link
-            to="#"
+            :to="`/user/${item.tag}`"
             class="info--text text-decoration-none"
           >
             {{ item.name }}

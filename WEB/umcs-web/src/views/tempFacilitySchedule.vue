@@ -11,8 +11,8 @@
           class="mx-4"
           inset
           vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
+        />
+        <v-spacer />
         <v-dialog
           v-model="dialog"
           max-width="500px"
@@ -40,26 +40,26 @@
                     <v-text-field
                       v-model="editedItem.room"
                       label="room"
-                    ></v-text-field>
+                    />
                   </v-col>
                   <v-col>
                     <v-text-field
                       v-model="editedItem.start"
                       label="start time"
-                    ></v-text-field>
+                    />
                   </v-col>
                   <v-col>
                     <v-text-field
                       v-model="editedItem.end"
                       label="end time"
-                    ></v-text-field>
+                    />
                   </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
 
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn
                 color="blue darken-1"
                 text
@@ -82,20 +82,26 @@
           max-width="500px"
         >
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="text-h5">
+              Are you sure you want to delete this item?
+            </v-card-title>
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn
                 color="blue darken-1"
                 text
                 @click="closeDelete"
-              >Cancel</v-btn>
+              >
+                Cancel
+              </v-btn>
               <v-btn
                 color="blue darken-1"
                 text
                 @click="deleteItemConfirm"
-              >OK</v-btn>
-              <v-spacer></v-spacer>
+              >
+                OK
+              </v-btn>
+              <v-spacer />
             </v-card-actions>
           </v-card>
         </v-dialog>

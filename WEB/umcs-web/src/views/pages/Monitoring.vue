@@ -5,7 +5,10 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "Monitoring",
+  
+};
 </script>
 
 <style scoped></style>

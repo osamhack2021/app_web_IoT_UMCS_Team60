@@ -2,7 +2,7 @@ const state = {
   selectedItems: [],
   movingDatas: {
     headers: [
-      { text: "군번", value: "number" },
+      { text: "군번", value: "tag" },
       { text: "계급", value: "rank" },
       { text: "이름", value: "name" },
       { text: "보고 시간", value: "createdTime"},
@@ -14,7 +14,7 @@ const state = {
     ],
     datas: [
       {
-        number: "11111",
+        tag: "11111",
         rank: "병장",
         name: "aaa",
         createdTime: "16:15",
@@ -23,7 +23,7 @@ const state = {
         details: "밥 먹으러 갑니다",
       },
       {
-        number: "22222",
+        tag: "22222",
         rank: "상병",
         name: "bbb",
         createdTime: "20:10",
@@ -32,7 +32,7 @@ const state = {
         details: "한국의 호날두",
       },
       {
-        number: "44444",
+        tag: "44444",
         rank: "일병",
         name: "ddd",
         createdTime: "03:00",
@@ -41,7 +41,7 @@ const state = {
         details: "종교 활동",
       },
       {
-        number: "55555",
+        tag: "55555",
         rank: "일병",
         name: "eee",
         createdTime: "5",
@@ -53,7 +53,7 @@ const state = {
   },
   usingDatas: {
     headers: [
-      { text: "군번", value: "number" },
+      { text: "군번", value: "tag" },
       { text: "계급", value: "rank" },
       { text: "이름", value: "name" },
       { text: "보고 시간", value: "createdTime"},
@@ -65,7 +65,7 @@ const state = {
     ],
     datas: [
       {
-        number: "11111",
+        tag: "11111",
         rank: "병장",
         name: "aaa",
         createdTime: "16:15",
@@ -74,7 +74,7 @@ const state = {
         details: "양치",
       },
       {
-        number: "22222",
+        tag: "22222",
         rank: "상병",
         name: "bbb",
         createdTime: "2",
@@ -83,7 +83,7 @@ const state = {
         details: "소변",
       },
       {
-        number: "44444",
+        tag: "44444",
         rank: "일병",
         name: "ddd",
         createdTime: "4",
@@ -92,7 +92,7 @@ const state = {
         details: "샤워하고 싶습니다",
       },
       {
-        number: "55555",
+        tag: "55555",
         rank: "일병",
         name: "eee",
         createdTime: "5",

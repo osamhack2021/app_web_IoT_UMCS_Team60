@@ -6,7 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    coronaSituation: false,
+    // true: 코로나 격리, false: 평시
+    coronaStatus: false,
   },
   modules
 });

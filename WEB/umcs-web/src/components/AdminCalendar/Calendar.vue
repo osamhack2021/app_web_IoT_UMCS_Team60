@@ -17,15 +17,6 @@
             >
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <v-select
-              v-model="type"
-              :items="types"
-              dense
-              outlined
-              hide-details
-              class="ma-2"
-              label="type"
-            />
             <v-btn
               icon
               class="ma-2"
@@ -50,10 +41,9 @@
           ref="calendar"
           v-model="focus"
           color="primary"
-          :type="type"
+          type="month"
           :events="events"
-          :event-overlap-mode="mode"
-          :event-overlap-threshold="30"
+          event-overlap-mode="column"
           :event-color="getEventColor"
           @click:event="showEvent"
           @change="getEvents"
@@ -61,6 +51,7 @@
         <!-- Event Popup -->
         <v-menu
           v-model="selectedOpen"
+          transition="slide-x-transition"
           :close-on-content-click="false"
           :activator="selectedElement"
           offset-x
@@ -73,17 +64,16 @@
             <v-toolbar
               :color="selectedEvent.color"
               dark
+              dense
+              flat
             >
-              <v-toolbar-title>
-                {{ selectedEvent.name }}
-              </v-toolbar-title>
               <v-spacer />
-              <v-card-actions>
+              <v-card-actions class="pa-0">
                 <v-btn icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </v-card-actions>
-              <v-card-actions>
+              <v-card-actions class="pa-0">
                 <v-btn
                   icon
                   @click="selectedOpen = false"
@@ -92,10 +82,18 @@
                 </v-btn>
               </v-card-actions>
             </v-toolbar>
-            <v-card-text>
-              <span>
-                {{ selectedEvent.details }}
-              </span>
+            <div class="d-flex justify-center mt-7 mb-2">
+              <v-avatar size="100">
+                <img
+                  src="@/assets/default-profile.svg"
+                  alt="Default Profile"
+                >
+              </v-avatar>
+            </div>
+            <v-card-text class="d-flex justify-center">
+              <div class="text-h6 font-weight-bold">
+                {{ selectedEvent.name }}
+              </div>
             </v-card-text>
           </v-card>
         </v-menu>
@@ -113,10 +111,7 @@ export default {
     AdminRegistration,
   },
   data: () => ({
-    type: "month",
-    types: ["month", "week", "day"],
     focus: "",
-    mode: "column",
     dialog: false,
     events: [],
     selectedEvent: {},
@@ -124,20 +119,7 @@ export default {
     selectedOpen: false,
     colors: ["orange"],
   }),
-  // computed: {
-  //   ...mapState("admin", [
-  //     "events",
-  //     "selectedEvent",
-  //     "selectedElement",
-  //     "selectedOpen",
-  //     "colors",
-  //   ]),
-  //   ...mapGetters("admin", ["getEvents", "getEventColor"]),
-  // },
   methods: {
-    // ...mapMutations('admin', [
-    //   "showEvent"
-    // ]),
     showEvent({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event;
@@ -158,28 +140,29 @@ export default {
     getEvents() {
       const events = [
         {
-          name: "김중위",
-          start: new Date("2021-09-27T00:00:00"),
-          end: new Date("2021-09-27T08:30:00"),
+          name: "소위 이소위",
+          start: new Date("2021-10-7"),
+          color: "orange",
+          details: ""
+        },
+        {
+          name: "중위 김중위",
+          start: new Date("2021-10-27"),
           color: "orange",
           details: "전역 D-5, 말년 중위 김중위",
-          timed: true,
         },
         {
-          name: "김하사",
-          start: "2021-09-15T15:00:00",
-          end: new Date("2021-09-15T22:00:00"),
+          name: "하사 김하사",
+          start: "2021-10-12",
           color: "orange",
           details: "",
-          timed: true,
         },
         {
-          name: "송중사",
-          start: "2021-09-28T13:30:00",
-          end: "2021-09-28T18:45:00",
+          name: "상사(진) 송중사",
+          start: "2021-10-28",
+          // end가 주어지지 않으면 start로 자동 초기화
           color: "orange",
           details: "",
-          timed: true,
         },
       ];
       this.events = events;
