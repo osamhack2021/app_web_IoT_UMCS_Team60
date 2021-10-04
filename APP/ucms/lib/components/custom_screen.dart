@@ -3,11 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:ucms/theme/size.dart';
 
-class KScreen extends StatelessWidget {
+class KScreen extends StatefulWidget {
   const KScreen({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
+  @override
+  State<KScreen> createState() => _KScreenState();
+}
+
+class _KScreenState extends State<KScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold (
@@ -18,11 +23,11 @@ class KScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Container(
-        constraints: constraintScreen(),
+        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: 800),
         padding: const EdgeInsets.all(20.0),
         child: Align(
           alignment: Alignment.center,
-          child: child,
+          child: widget.child,
           ),
         ),
       ),

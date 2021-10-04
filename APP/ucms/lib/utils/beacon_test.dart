@@ -5,7 +5,6 @@ import 'package:ucms/components/texts.dart';
 import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
-import 'package:flutter/services.dart';
 
 class BeaconTest extends StatefulWidget {
   const BeaconTest({Key? key}) : super(key: key);

@@ -56,42 +56,30 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PostButton(
-                    label: "용사 로그인",
-                    onPressed: () async {
-                      final store = GetStorage();
-                      if (_formKey.currentState!.validate()) {
-                        int result =
-                            await u.login(_tag.text.trim(),_password.text.trim());
-                        if (result == 1) {
-                          Get.to(() => UserMain(
-                                location: store.read("location"),
-                                state: store.read("state"),
-                              ));
-                        } else {
-                          Get.snackbar("로그인 시도", "로그인 실패");
-                      }
-                    }
-                  },
-                  ),
-                PostButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/user/main");
-                  },
-                  label: "간부 로그인"),
-             ],
-          ),
+              PageButton(
+              label: "용사 로그인",
+              onPressed: () async {
+                final store = GetStorage();
+                if (_formKey.currentState!.validate()) {
+                  int result =
+                      await u.login(_tag.text.trim(),_password.text.trim());
+                  if (result == 1) {
+                    Get.to(UserMain(
+                          location: store.read("location")??"location",
+                          state: store.read("state")??"location",
+                        ));
+                  } else {Get.snackbar("로그인 시도", "로그인 실패");}
+                }
+              },
+            ),
               PageButton(
                   onPressed: () {
                     Get.to(RegisterPage());
                   },
                   label: "전입 신병 가입"),
-            ],
+            ],      
           ),
-        ),
+          ),
       );
     }
   }

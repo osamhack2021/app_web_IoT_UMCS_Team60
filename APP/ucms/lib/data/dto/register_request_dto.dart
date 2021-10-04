@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegisterRequestDto {
-  const RegisterRequestDto({ 
+  RegisterRequestDto({ 
     Key? key, required this.tag, 
     required this.password, 
     required this.name, 
@@ -9,14 +9,24 @@ class RegisterRequestDto {
     required this.roomId, 
     required this.doomId, 
     required this.department,});
+
+  RegisterRequestDto.fromJson(Map<String, dynamic> json) {
+    tag = json["tag"];
+    password = json["password"];
+    name = json["name"];
+    rank = json["rank"];
+    roomId = json["roomId"];
+    doomId = json["doomId"];
+    department = json["department"];
+  }
   
-  final String? tag;
-  final String? password;
-  final String? name;
-  final String? rank;
-  final int? roomId;
-  final int? doomId;
-  final String? department;
+  String? tag;
+  String? password;
+  String? name;
+  String? rank;
+  int? roomId;
+  int? doomId;
+  String? department;
   
 
   Map<String, dynamic> toJson() => {

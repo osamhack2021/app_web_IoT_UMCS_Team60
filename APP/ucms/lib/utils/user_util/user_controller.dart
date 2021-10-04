@@ -18,7 +18,7 @@ class UserController extends GetxController {
   Future<int> login(tag, password) async {
     final loginDto = LoginRequestDto(tag: tag, password: password);
     final repository = UserRepository();
-    final newUser = await repository.login(loginDto);
+    final newUser = await repository.login(loginDto.toJson());
 
     if (newUser.tag != "") {
       isLogin.value = true;
@@ -30,17 +30,15 @@ class UserController extends GetxController {
     }
   }
 
-   Future<int> register({tag, password, name, rank, roomId, doomId, department}) async {
-    final loginDto = LoginRequestDto(tag: tag, password: password);
+   Future<String?> register(Map<String, dynamic> json) async {
+    //final registerDto = RegisterRequestDto.fromJson(json);
     final repository = UserRepository();
-    final newUser = await repository.login(loginDto);
+    final message = await repository.register(json);
 
     //TODO: implement
-    if (newUser.tag != "") {
-      return 1;
-    } else {
-      return -1;
-    }
+    if (message == "success") {
+      return null;
+    } else {return message;}
   }
 
   Future<int> move({required String where}) async {

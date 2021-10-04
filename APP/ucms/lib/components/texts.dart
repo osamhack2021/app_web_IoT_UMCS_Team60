@@ -17,15 +17,13 @@ class KTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxHeight: 30, maxWidth: 100),
-      child: TextFormField(
+    return TextFormField(
         controller: controller,
         decoration: InputDecoration(
           hintText: hint,
         ),
+        textAlign: TextAlign.right,
         validator: validator,
-      ),
     );
   }
 }

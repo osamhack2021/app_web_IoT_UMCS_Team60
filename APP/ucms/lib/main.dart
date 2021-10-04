@@ -31,13 +31,13 @@ class MyApp extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             backgroundColor: Colors.black,
-            primary: Colors.white, //글자 색.//정체성
+            primary: Colors.deepPurple, //글자 색.//정체성
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ), //RoundedRectangleBorer
             minimumSize: const Size(400, 60),
+          ),
           ), //styleFrom
-        ),
       ),
       initialRoute: "/nav",
       routes: {
