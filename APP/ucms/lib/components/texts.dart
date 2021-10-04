@@ -6,12 +6,15 @@ import 'package:ucms/theme/text_theme.dart';
 title(content) => Text(content, style: h1(), textAlign: TextAlign.center);
 
 class KTextFormField extends StatelessWidget {
-  KTextFormField({Key? key, required this.hint, required this.controller})
+  KTextFormField({Key? key, required this.hint, required this.controller, required this.validator, this.type=TextInputType.text})
       : super(key: key);
 
   final String hint;
   TextFormField field = TextFormField();
   final TextEditingController controller;
+  final String? Function(String?) validator;
+  final TextInputType type;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,6 +24,7 @@ class KTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
         ),
+        validator: validator,
       ),
     );
   }

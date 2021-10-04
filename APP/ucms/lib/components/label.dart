@@ -8,25 +8,122 @@ class LabelFormInput extends StatelessWidget {
       {Key? key,
       required this.label,
       required this.hint,
-      required this.controller})
+      required this.controller,
+      required this.validator,})
       : super(key: key);
 
   final String label;
   final String hint;
   final TextEditingController controller;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: bold()),
-        const Spacer(),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-          child: KTextFormField(hint: hint, controller: controller),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: bold()),
+          const Spacer(),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator,),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class LabelFormIntInput extends StatelessWidget {
+  const LabelFormIntInput(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller,
+      required this.validator,})
+      : super(key: key);
+
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: bold()),
+          const Spacer(),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LabelFormDropDown extends StatefulWidget {
+  const LabelFormDropDown(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller,
+      required this.validator,
+      required this.labels,
+      })
+      : super(key: key);
+
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+  final List<String> labels;
+
+  @override
+  State<LabelFormDropDown> createState() => _LabelFormDropDownState();
+}
+
+class _LabelFormDropDownState extends State<LabelFormDropDown> {
+  var dropdownValue="선택하세요";
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(widget.label, style: bold()),
+          Expanded(
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              style: const TextStyle(color: Colors.blue),
+              underline: Container(
+                height: 2,
+                color: Colors.blue,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items: <String>[...widget.labels]
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -40,16 +137,19 @@ class LabelText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-        const Spacer(),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-          child: Text(content),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Spacer(),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+            child: Text(content),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,0 +1,1 @@
+enum Ranks {private, private1st,corporal, sergeant}
