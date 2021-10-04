@@ -8,6 +8,7 @@ const doomroomRouter = require('./api/doomroomRouter');
 const doomfacilityRouter = require('./api/doomfacilityRouter');
 const timetableRouter = require('./api/timetableRouter');
 const accessRecordRouter = require('./api/accessRecordRouter');
+const currentPositionRouter = require('./api/currentPositionRouter');
 
 const dbModule = require(`../database`)();
 const dbConnection = dbModule.init();
@@ -22,6 +23,7 @@ router.use('/doomroom', doomroomRouter); // /api/doomroom
 router.use('/doomfacility', doomfacilityRouter); // /api/doomfacility
 router.use('/timetable', timetableRouter); // /api/timetable
 router.use('/access_record', accessRecordRouter); // /api/access_record
+router.use('/current_position', currentPositionRouter); // /api/current_position
 
 router.get('/tables', (req, res) => {
     var sql = 'show tables';
