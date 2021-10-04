@@ -1,0 +1,4 @@
+com/umair/beacons_plugin/BuildConfig.java
+ com.umair.beacons_plugin.BuildConfig
+com/umair/beacons_plugin/BeaconPreferences.java
+ com.umair.beacons_plugin.BeaconPreferences

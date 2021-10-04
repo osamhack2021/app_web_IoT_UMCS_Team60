@@ -1,0 +1,97 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:1:1-43:12
+INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:1:1-43:12
+INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:1:1-43:12
+	package
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:2:5-39
+		INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+		INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.BLUETOOTH
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:4:5-68
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:4:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:5:5-74
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:5:22-71
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:6:5-79
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:6:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:7:22-78
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:8:5-77
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:8:22-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:9:22-78
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:10:5-68
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:10:22-65
+uses-feature#android.hardware.bluetooth_le
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:12:5-14:35
+	android:required
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:14:9-32
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:13:9-53
+application
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:16:5-42:19
+receiver#com.umair.beacons_plugin.BeaconsBroadcastReceiver
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:17:9-20:39
+	android:enabled
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:19:13-35
+	android:exported
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:20:13-36
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:18:13-77
+receiver#com.umair.beacons_plugin.RebootBroadcastReceiver
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:22:9-28:20
+	android:enabled
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:24:13-35
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:23:13-76
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:25:13-27:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:26:17-86
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:26:25-76
+service#com.umair.beacons_plugin.BeaconsDiscoveryService
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:30:9-32:39
+	android:exported
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:32:13-36
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:31:13-76
+service#org.altbeacon.beacon.service.BeaconService
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:34:9-38:38
+	android:enabled
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:36:13-35
+	android:label
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:38:13-35
+	android:isolatedProcess
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:37:13-44
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:35:13-70
+service#org.altbeacon.beacon.BeaconIntentProcessor
+ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:39:9-41:38
+	android:enabled
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:41:13-35
+	android:name
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml:40:13-70
+uses-sdk
+INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+		ADDED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
+		INJECTED from /home/codespace/.pub-cache/hosted/pub.dartlang.org/beacons_plugin-2.0.1/android/src/main/AndroidManifest.xml
