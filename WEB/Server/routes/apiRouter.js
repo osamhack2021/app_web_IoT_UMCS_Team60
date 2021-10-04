@@ -5,6 +5,7 @@ const watchmanRouter = require('./api/watchmanRouter');
 const doomRouter = require('./api/doomRouter');
 const outsideFacilityRouter = require('./api/outsideFacilityRouter');
 const doomroomRouter = require('./api/doomroomRouter')
+const doomfacilityRouter = require('./api/doomfacilityRouter')
 
 const dbModule = require(`../database`)();
 const dbConnection = dbModule.init();
@@ -15,7 +16,8 @@ router.use('/user', userRouter); // /api/user
 router.use('/watchman', watchmanRouter); // /api/user
 router.use('/doom', doomRouter); // /api/doom
 router.use('/outside_facility', outsideFacilityRouter); // /api/outside_facility
-router.use('/doomroom', doomroomRouter); // /api/outside_facility
+router.use('/doomroom', doomroomRouter); // /api/doomroom
+router.use('/doomfacility', doomfacilityRouter); // /api/doomfacility
 
 router.get('/tables', (req, res) => {
     var sql = 'show tables';
