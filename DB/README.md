@@ -18,9 +18,7 @@ docker-compose up -d
 
 
 ```
-docker ps 
-
-[] : #(도커 프로세스 번호 확인)
+docker ps // (도커 프로세스 번호 확인)
 
 ```
 
