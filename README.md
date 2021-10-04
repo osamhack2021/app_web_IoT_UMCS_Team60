@@ -139,11 +139,12 @@
 
 
 ## 설치 안내 (Installation Process)
-```bash
-$ git clone git주소
-$ yarn or npm install
-$ yarn start or npm run start
-```
+ 
+ [Server 설치 안내](./WEB/Server/README.md)
+
+ [APP 설치 안내](./APP/README.md)
+
+ [DB 설치 안내](./DB/README.md)
 
 ## 프로젝트 사용법 (Getting Started)
 **마크다운 문법을 이용하여 자유롭게 기재**
