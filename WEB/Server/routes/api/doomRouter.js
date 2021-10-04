@@ -9,7 +9,7 @@ dbModule.db_open(dbConnection);
 router.post('/', managerAuth.checkLogin, (req, res) => {
     var msg = {4: 'db_error'};
 
-    var sql = "INSERT INTO doom VALUES (NULL, ?, ?)";
+    var sql = "INSERT INTO doom VALUES (NULL, ?, ?, 0)";
     dbConnection.query(sql, [req.body.name, req.body.beacon_id], (err, result) => {
         if(err)
             return res.status(400).json({
