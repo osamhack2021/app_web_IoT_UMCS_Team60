@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:get/get.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 
 import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
+
+import 'package:ucms/socket/socket.dart';
 
 class BeaconTest extends StatefulWidget {
   const BeaconTest({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class BeaconTest extends StatefulWidget {
 class _BeaconTestState extends State<BeaconTest> {
   String _beaconResult = "";
   var isRunning = false;
+  UserSocketClient  socket = Get.find<UserSocketClient>();
 
   final StreamController<String> beaconEventsController = StreamController<String>.broadcast();
 
@@ -44,8 +48,8 @@ class _BeaconTestState extends State<BeaconTest> {
         setState(() {
           _beaconResult = data;
         });
-
         print(data);
+        
         // data 구조
         // {
         //   "name": "testBeacon",
@@ -108,7 +112,7 @@ class _BeaconTestState extends State<BeaconTest> {
               },
               child:
                 Text(isRunning ? 'Stop Scanning' : 'Start Scanning',
-                style: TextStyle(fontSize: 20)),
+                style: const TextStyle(fontSize: 20)),
             )
           ],
         ),

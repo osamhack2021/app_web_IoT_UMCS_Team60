@@ -1,7 +1,4 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:ucms/theme/size.dart';
 
 class KScreen extends StatefulWidget {
   const KScreen({Key? key, required this.child}) : super(key: key);

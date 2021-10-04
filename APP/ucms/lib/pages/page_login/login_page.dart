@@ -24,7 +24,8 @@ class LoginPage extends StatelessWidget {
     var prefs = GetStorage();
 
     //이미 로그인 되어있을 시
-    if (prefs.read("islogin") == true) {
+    if (u.isLogin.value) {
+      Get.snackbar("자동 로그인","${prefs.read("tag")}로 로그인됨. ");
       Get.off(UserMain(
           location: prefs.read("location")!, state: prefs.read("state")!));
       return Container();
@@ -61,12 +62,12 @@ class LoginPage extends StatelessWidget {
               onPressed: () async {
                 final store = GetStorage();
                 if (_formKey.currentState!.validate()) {
-                  int result =
-                      await u.login(_tag.text.trim(),_password.text.trim());
+                  int result = await u.login(_tag.text.trim(),_password.text.trim());
                   if (result == 1) {
+                    
                     Get.to(UserMain(
-                          location: store.read("location")??"location",
-                          state: store.read("state")??"location",
+                          location: store.read("location")!,
+                          state: store.read("state")!,
                         ));
                   } else {Get.snackbar("로그인 시도", "로그인 실패");}
                 }

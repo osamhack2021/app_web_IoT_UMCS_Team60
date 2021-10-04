@@ -10,12 +10,18 @@ import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/socket/socket.dart';
+import 'package:ucms/utils/beacon_manager.dart';
 import 'package:ucms/utils/beacon_test.dart';
 
 void main() async {
-  startSocket();
   await GetStorage.init();
+
+  var client = Get.put(UserSocketClient());
+  client.startSocket();
+  
   User.userInit();
+
+  Get.put(BeaconManager());
 
   runApp(const MyApp());
 }

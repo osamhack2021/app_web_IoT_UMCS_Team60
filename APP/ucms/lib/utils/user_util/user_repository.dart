@@ -31,7 +31,7 @@ class UserRepository {
   }
 
   Future<String> register(Map<String,dynamic> json) async {
-    Response resp = await _userProvider.move(json);
+    Response resp = await _userProvider.register(json);
     dynamic body = resp.body;
     final prefs = GetStorage();
 
@@ -44,27 +44,5 @@ class UserRepository {
     } else {}
 
     return serverRespDto.msg;
-  }
-
-  Future<User> move(MoveRequestDto dto) async {
-    Response resp = await _userProvider.move(dto.toJson());
-    dynamic headers = resp.headers;
-    dynamic body = resp.body;
-    final prefs = GetStorage();
-
-    dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
-    //TODO: implement
-    if (serverRespDto.code == 1) {
-      User newUser = User.fromJson(serverRespDto.data);
-
-      String token = headers["authorization"];
-      prefs.write("token", token);
-      prefs.write("location", newUser.location);
-      return newUser;
-    } else {
-      return User();
-    }
   }
 }

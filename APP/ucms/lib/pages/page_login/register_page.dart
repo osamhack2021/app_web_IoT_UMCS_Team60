@@ -66,8 +66,8 @@ class RegisterPage extends StatelessWidget {
                       "doomId": _doomId.value, 
                       "department": _department.text.trim(),
                     };
-                    String? result =await u.register(json);
-                    if (result ==null) {
+                    String result = await u.register(json);
+                    if (result =="success") {
                       Get.snackbar("회원가입 시도", "성공");
                       Get.to(()=>LoginPage());
                     } else {Get.snackbar("회원가입 시도", result);}
