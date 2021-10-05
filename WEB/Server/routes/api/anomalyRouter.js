@@ -1,17 +1,17 @@
 const router = require('express').Router();
 const managerAuth = require(`../../controllers/managerAuth`);
-
+const userAuth = require(`../../controllers/userAuth`);
 const dbPromiseConnection = require(`../../databasePromise`);
 
 function nowDateTime() {
     return new Date().toISOString().slice(0, 19).replace('T', ' ');
 }
 
-router.post('/', async (req, res) => {
+router.post('/', userAuth.checkJWTValid, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         var sql = "INSERT INTO anomaly VALUE (NULL, ?, ?, ?, ?)"
-        var [results] = await dbPromiseConnection.query(sql, [req.body.user_tag, req.body.temperature, req.body.anomaly, nowDateTime()]);
+        var [results] = await dbPromiseConnection.query(sql, [req.user.tag, req.body.temperature, req.body.anomaly, nowDateTime()]);
         
         return res.status(201).json({
             code: 1,
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.get('/', async (req, res) => {
+router.get('/', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         var sql = "SELECT * FROM anomaly"
@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('/search', async (req, res) => {
+router.get('/search', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         var sql = "SELECT * FROM anomaly"
@@ -97,7 +97,7 @@ router.get('/search', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         var sql = "SELECT * FROM anomaly WHERE id=?"

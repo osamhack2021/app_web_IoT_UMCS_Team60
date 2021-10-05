@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const managerAuth = require(`../../controllers/managerAuth`);
-
 const dbPromiseConnection = require(`../../databasePromise`);
 
 router.get('/', async (req, res) => {

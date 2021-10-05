@@ -118,8 +118,8 @@ router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
 });
 
 
-router.get('/today', managerAuth.checkLogin, (req, res) => {
-    var msg = {2:'off_today.', 4: 'db_error'};
+router.get('/today', (req, res) => {
+    var msg = {2:'no_watchman', 4: 'db_error'};
     var sql = "SELECT * FROM watchman WHERE charge_doom=? AND responsible_date=? AND shift IS NULL";
 
     dbConnection.query(sql, [req.query.doom_id, nowDate()], (err, rows) => {

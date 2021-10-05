@@ -53,6 +53,7 @@ const login = (req, res, next) => {
         if(!user) { // 로그인 실패 시 user가 비어있음
             req.code = req.flash('code')[0]; // managerPassport의 localVerify에서 넘겨받은 flash
             req.msg = msg[req.code];
+            
             return next();
         }
         else { // 로그인 성공
@@ -66,7 +67,6 @@ const login = (req, res, next) => {
                         expiresIn: "365d"
                     } // option
                 );
-
                 req.token = token;
                 req.data = payload;
                 
@@ -103,8 +103,27 @@ const jwtLogin = (req, res, next) => {
     })(req, res, next);
 }
 
+const checkJWTValid = (req, res, next) => {
+    const msg = {2: 'token_error', 4: 'db_error'};
+
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+        if(err || !user) { // 인증 error
+            return res.status(400).json({
+                code: 9,
+                msg: 'not_login',
+            });
+        }
+        else { // 로그인 성공
+            req.login(user, { session: false }, () => {
+                next();
+            });
+        }
+    })(req, res, next);
+}
+
 module.exports = {
     login,
     jwtLogin,
-    register
+    register,
+    checkJWTValid
 }
