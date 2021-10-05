@@ -8,7 +8,7 @@ import 'package:ucms/utils/user_util/user_repository.dart';
 class UserController extends GetxController {
   final RxBool isLogin = false.obs;
   final appUser = User().obs;
-  GetStorage prefs = Get.find<GetStorage>();
+  final prefs = GetStorage();
 
   void logout() {
     isLogin.value = false;
@@ -30,6 +30,19 @@ class UserController extends GetxController {
     }
   }
 
+   Future<int> register({tag, password, name, rank, roomId, doomId, department}) async {
+    final loginDto = LoginRequestDto(tag: tag, password: password);
+    final repository = UserRepository();
+    final newUser = await repository.login(loginDto);
+
+    //TODO: implement
+    if (newUser.tag != "") {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+
   Future<int> move({required String where}) async {
     final moveDto = MoveRequestDto(where: where);
     final repository = UserRepository();
@@ -37,8 +50,6 @@ class UserController extends GetxController {
 
     //TODO: implement
     if (p.tag != "") {
-      isLogin.value = true;
-      appUser.value = p;
       return 1;
     } else {
       return -1;

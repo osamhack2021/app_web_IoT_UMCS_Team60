@@ -6,21 +6,22 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/form/form_login.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
+import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/utils/validate.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _tag = TextEditingController();
+  final UserController u = Get.put(UserController());
+  final _password = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
-    GetStorage prefs = Get.find<GetStorage>();
+    var prefs = GetStorage();
 
     //이미 로그인 되어있을 시
     if (prefs.read("islogin") == true) {
@@ -34,11 +35,55 @@ class _LoginPageState extends State<LoginPage> {
       return MaterialApp(
         home: KScreen(
           child: ListView(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               const SizedBox(height: 100),
               title("login"),
-              FormLogin(),
+               Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _tag,
+                      validator: validateId(),
+                      decoration: const InputDecoration(hintText: "군번"),
+                    ),
+                    TextFormField(
+                      controller: _password,
+                      validator: validatePw(),
+                      obscureText: true,
+                      decoration: const InputDecoration(hintText: "password"),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PostButton(
+                    label: "용사 로그인",
+                    onPressed: () async {
+                      final store = GetStorage();
+                      if (_formKey.currentState!.validate()) {
+                        int result =
+                            await u.login(_tag.text.trim(),_password.text.trim());
+                        if (result == 1) {
+                          Get.to(() => UserMain(
+                                location: store.read("location"),
+                                state: store.read("state"),
+                              ));
+                        } else {
+                          Get.snackbar("로그인 시도", "로그인 실패");
+                      }
+                    }
+                  },
+                  ),
+                PostButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/user/main");
+                  },
+                  label: "간부 로그인"),
+             ],
+          ),
               PageButton(
                   onPressed: () {
                     Get.to(RegisterPage());

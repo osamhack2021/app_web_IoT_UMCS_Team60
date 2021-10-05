@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class User {
@@ -33,7 +32,7 @@ class User {
         token = json["token"] ?? "";
 
   static void updatePrefs(User u) {
-    var store = Get.find<GetStorage>();
+    var store = GetStorage();
 
     store.write("tag", u.tag);
     store.write("name", u.name);
@@ -45,7 +44,7 @@ class User {
   }
 
   static void userInit() {
-    var store = Get.find<GetStorage>();
+    var store = GetStorage();
     updatePrefs(User(
       tag: store.read("store") ?? "",
       name: store.read("name") ?? "",
