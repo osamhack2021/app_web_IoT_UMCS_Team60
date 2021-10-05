@@ -6,7 +6,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    redirect: "/login"
+    redirect: "/authentication/login"
+  },
+  {
+    path:"/test",
+    component: () => import("@/views/Test"),
   },
   {
     path: "/main",
@@ -16,32 +20,42 @@ const routes = [
       {
         path: "/monitoring",
         name: "실시간 모니터링",
-        component: () => import("@/views/Monitoring"),
+        component: () => import("@/views/pages/Monitoring"),
       },
       {
-        path: "/approval",
-        name: "이동 결재",
-        component: () => import("@/views/MoveApproval"),
+        path: "/approval-moving",
+        name: "이동 신청",
+        component: () => import("@/views/pages/MovingApproval"),
+      },
+      {
+        path: "/approval-using",
+        name: "시설 이용 신청",
+        component: () => import("@/views/pages/UsingApproval"),
       },
       {
         path: "/health",
         name: "건강상태 조회",
-        component: () => import("@/views/HealthCare"),
+        component: () => import("@/views/pages/HealthCare"),
       },
       {
         path: "/schedule",
         name: "공용시설 시간표",
-        component: () => import("@/views/FacilitySchedule"),
+        component: () => import("@/views/pages/FacilitySchedule"),
       },
       {
-        path: "/manage",
+        path: "/manage-army",
         name: "부대 관리",
-        component: () => import("@/views/AccountManage"),
+        component: () => import("@/views/pages/ManageArmy"),
       },
       {
-        path: "/worker",
-        name: "당직근무자 관리",
-        component: () => import("@/views/Worker"),
+        path: "/manage-admin",
+        name: "날짜별 근무자 관리",
+        component: () => import("@/views/pages/ManageAdmin"),
+      },
+      {
+        path: "/user/:id",
+        name: "용사 상세정보",
+        component: () => import("@/views/UserProfile"),
       },
     ],
   },
@@ -50,7 +64,7 @@ const routes = [
     component: () => import("@/layouts/authentication/Index"),
     children: [
       {
-        path: "/login",
+        path: "login",
         name: "Login",
         component: () => import("@/views/authentication/Login"),
       },

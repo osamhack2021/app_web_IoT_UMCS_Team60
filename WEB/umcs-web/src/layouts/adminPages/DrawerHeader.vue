@@ -4,10 +4,10 @@
       <v-img src="@/assets/UMCS-icon.png" />
     </v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title class="text-h6">
+      <v-list-item-title class="text-h6-en">
         UMCS
       </v-list-item-title>
-      <v-list-item-subtitle>
+      <v-list-item-subtitle class="text-subtitle-2-en">
         Team60
       </v-list-item-subtitle>
     </v-list-item-content>

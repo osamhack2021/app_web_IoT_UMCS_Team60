@@ -1,107 +1,108 @@
-$kr-font-family: ("Noto Sans KR", sans-serif);
+$body-font-family: ("Noto Sans KR", "Roboto", sans-serif);
+$en-font-family: ("Roboto", sans-serif);
 $headings: (
-  "h1-kr": (
+  "h1-en": (
   "size": 6rem,
   "weight": 300,
     "line-height": 6rem,
     "letter-spacing": -0.015625em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "h2-kr": (
+  "h2-en": (
     "size": 3.75rem,
     "weight": 300,
     "line-height": 3.75rem,
     "letter-spacing": -0.0083333333em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "h3-kr": (
+  "h3-en": (
     "size": 3rem,
     "weight": 400,
     "line-height": 3.125rem,
     "letter-spacing": normal,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "h4-kr": (
+  "h4-en": (
     "size": 2.125rem,
     "weight": 400,
     "line-height": 2.5rem,
     "letter-spacing": 0.0073529412em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "h5-kr": (
+  "h5-en": (
     "size": 1.5rem,
     "weight": 400,
     "line-height": 2rem,
     "letter-spacing": normal,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "h6-kr": (
+  "h6-en": (
     "size": 1.25rem,
     "weight": 500,
     "line-height": 2rem,
     "letter-spacing": 0.0125em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "subtitle-1-kr": (
+  "subtitle-1-en": (
     "size": 1rem,
     "weight": normal,
     "line-height": 1.75rem,
     "letter-spacing": 0.009375em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "subtitle-2-kr": (
+  "subtitle-2-en": (
     "size": 0.875rem,
     "weight": 500,
     "line-height": 1.375rem,
     "letter-spacing": 0.0071428571em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "body-1-kr": (
+  "body-1-en": (
     "size": 1rem,
     "weight": 400,
     "line-height": 1.5rem,
     "letter-spacing": 0.03125em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "body-2-kr": (
+  "body-2-en": (
     "size": 0.875rem,
     "weight": 400,
     "line-height": 1.25rem,
     "letter-spacing": 0.0178571429em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "button-kr": (
+  "button-en": (
     "size": 0.875rem,
     "weight": 500,
     "line-height": 2.25rem,
     "letter-spacing": 0.0892857143em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": uppercase,
   ),
-  "caption-kr": (
+  "caption-en": (
     "size": 0.75rem,
     "weight": 400,
     "line-height": 1.25rem,
     "letter-spacing": 0.0333333333em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": false,
   ),
-  "overline-kr": (
+  "overline-en": (
     "size": 0.75rem,
     "weight": 500,
     "line-height": 2rem,
     "letter-spacing": 0.1666666667em,
-    "font-family": $kr-font-family,
+    "font-family": $en-font-family,
     "text-transform": uppercase,
   ),
 );

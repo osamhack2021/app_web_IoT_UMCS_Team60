@@ -1,12 +1,12 @@
 <template>
   <v-app-bar
     app
-    color="primary darken-2"
+    color="primary darken-1"
     dark
   >
     <v-app-bar-nav-icon @click="drawer = !drawer" />
     <div class="d-flex align-center">
-      <p class="text-h5-kr white--text font-weight-medium mb-0 ml-3">
+      <p class="text-h5 white--text font-weight-medium mb-0 ml-3">
         {{ $route.name }}
       </p>
     </div>
@@ -44,10 +44,10 @@ export default {
   computed: {
     drawer: {
       get() {
-        return this.$store.getters['app/getDrawer'];
+        return this.$store.getters['drawer/getDrawer'];
       },
       set(value) {
-        return this.$store.dispatch('app/toggleDrawer', value);
+        return this.$store.dispatch('drawer/toggleDrawer', value);
       }
     }
   }
