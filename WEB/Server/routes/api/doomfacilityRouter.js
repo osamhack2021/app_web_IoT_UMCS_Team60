@@ -5,28 +5,33 @@ const dbModule = require(`../../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
+const dbPromiseConnection = require(`../../databasePromise`);
 
-router.post('/', managerAuth.checkLogin, (req, res) => {
-    var msg = {4: 'db_error'};
-
-    var sql = "INSERT INTO doomfacility VALUES (NULL, ?, ?, ?, ?, 0)";
-    dbConnection.query(sql, [req.body.name, req.body.beacon_id, req.body.doom_id, req.body.floor], (err, result) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
+router.post('/', managerAuth.checkLogin, async (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "INSERT INTO doomfacility VALUES (NULL, ?, ?, ?, ?, 0, 0)";
+        var [results] = await dbPromiseConnection.query(sql, [req.body.name, req.body.beacon_id, req.body.doom_id, req.body.floor]);
         
+        sql = "UPDATE beacon SET doomfacility_id=? WHERE id=?";
+        var [beaconUpdate] = await dbPromiseConnection.query(sql, [results.insertId, req.body.beacon_id]);
+
         return res.status(201).json({
             code: 1,
             msg: "success",
-            insertId: result.insertId,
+            insertId: results.insertId,
             data: req.body,
         });
-    });
-});
 
+    } catch(err) {
+        console.log(err)
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err
+        });
+    }
+});
 
 router.get('/', (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};

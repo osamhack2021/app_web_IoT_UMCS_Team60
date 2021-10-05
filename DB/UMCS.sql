@@ -169,6 +169,8 @@ CREATE TABLE facility_request
     `request_time`  DATETIME       NULL, 
     `desired_time`  TIME           NULL, 
     `permission`    VARCHAR(45)    NULL, 
+    `manager_tag`       VARCHAR(45)    NOT NULL, 
+    `description`   TEXT           NULL,  
     CONSTRAINT PK_facility_request PRIMARY KEY (id)
 );
 
@@ -180,6 +182,9 @@ ALTER TABLE facility_request
     ADD CONSTRAINT FK_facility_request_user_tag_user_tag FOREIGN KEY (user_tag)
         REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE facility_request
+    ADD CONSTRAINT FK_facility_request_manager_tag_user_tag FOREIGN KEY (manager_tag)
+        REFERENCES manager (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- anomaly Table Create SQL
 CREATE TABLE anomaly
@@ -226,11 +231,12 @@ ALTER TABLE timetable
 CREATE TABLE outside_request
 (
     `id`            INT            NOT NULL    AUTO_INCREMENT, 
-    `user_tag`      VARCHAR(45)    NOT NULL, 
+    `user_tag`      VARCHAR(45)    NOT NULL,
     `outside_id`    INT            NOT NULL, 
     `request_time`  DATETIME       NULL, 
     `permission`    VARCHAR(45)    NULL, 
-    `description`   TEXT           NULL, 
+    `description`   TEXT           NULL,  
+    `manager_tag`    VARCHAR(45)    NOT NULL, 
     CONSTRAINT PK_outside_request PRIMARY KEY (id)
 );
 
@@ -241,6 +247,10 @@ ALTER TABLE outside_request
 ALTER TABLE outside_request
     ADD CONSTRAINT FK_outside_request_user_tag_user_tag FOREIGN KEY (user_tag)
         REFERENCES user (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE outside_request
+    ADD CONSTRAINT FK_outside_request_manager_tag_tag FOREIGN KEY (manager_tag)
+        REFERENCES manager (tag) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE beacon
     ADD CONSTRAINT FK_beacon_doom_id_id FOREIGN KEY (doom_id)

@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const managerAuth = require(`../../controllers/managerAuth`);
-
 const dbPromiseConnection = require("../../databasePromise");
 
 router.get('/logout', (req, res) => {

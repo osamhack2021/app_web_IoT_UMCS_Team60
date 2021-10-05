@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const userAuth = require(`../../controllers/userAuth`);
-
 const dbPromiseConnection = require("../../databasePromise");
 
 router.post('/register', userAuth.register, (req, res) => {
