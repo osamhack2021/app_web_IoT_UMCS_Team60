@@ -10,7 +10,7 @@ function nowDateTime() {
 router.post('/', userAuth.checkJWTValid, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "INSERT INTO anomaly VALUE (NULL, ?, ?, ?, ?)"
+        var sql = "INSERT INTO anomaly VALUE (NULL, ?, ?, ?, ?)";
         var [results] = await dbPromiseConnection.query(sql, [req.user.tag, req.body.temperature, req.body.anomaly, nowDateTime()]);
         
         return res.status(201).json({
@@ -34,7 +34,7 @@ router.post('/', userAuth.checkJWTValid, async (req, res) => {
 router.get('/', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT * FROM anomaly"
+        var sql = "SELECT a.*, u.rank, u.name FROM anomaly a, user u WHERE a.user_tag=u.tag";
         var [results] = await dbPromiseConnection.query(sql);
         
         if(!results.length)
@@ -42,7 +42,10 @@ router.get('/', managerAuth.checkLogin, async (req, res) => {
                 code: 2,
                 msg: msg[2]
             });
-
+            
+        for(let result of results) 
+            if(!result.details) result.details = '';    
+        
         return res.status(200).json({
             code: 1,
             msg: "success",
@@ -64,13 +67,12 @@ router.get('/', managerAuth.checkLogin, async (req, res) => {
 router.get('/search', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT * FROM anomaly"
-        if(Object.keys(req.query).length) {
-            sql += " WHERE";
-            for(key in req.query)
-                sql += ` ${key} = ? AND`;
-            sql = sql.substr(0, sql.length - 3);
+        var sql = "SELECT a.*, u.rank, u.name FROM anomaly a, user u WHERE a.user_tag=u.tag";
+        for(key in req.query) {
+            if(key === 'reported_date') key = 'DATE(reported_time)';
+            sql += ` AND ${key} = ?`;
         }
+        
         var [results] = await dbPromiseConnection.query(sql, Object.values(req.query));
         
         if(!results.length)
@@ -78,6 +80,9 @@ router.get('/search', managerAuth.checkLogin, async (req, res) => {
                 code: 2,
                 msg: msg[2]
             });
+        
+        for(let result of results) 
+            if(!result.details) result.details = '';  
 
         return res.status(200).json({
             code: 1,
@@ -96,11 +101,10 @@ router.get('/search', managerAuth.checkLogin, async (req, res) => {
     }
 });
 
-
 router.get('/:id', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT * FROM anomaly WHERE id=?"
+        var sql = "SELECT a.*, u.rank, u.name FROM anomaly a, user u WHERE a.user_tag=u.tag AND id=?";
         var [results] = await dbPromiseConnection.query(sql, [req.params.id]);
         
         if(!results.length)
@@ -108,6 +112,9 @@ router.get('/:id', managerAuth.checkLogin, async (req, res) => {
                 code: 2,
                 msg: msg[2]
             });
+
+        for(let result of results) 
+            if(!result.details) result.details = '';  
 
         return res.status(200).json({
             code: 1,
