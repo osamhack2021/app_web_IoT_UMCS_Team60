@@ -14,7 +14,7 @@ class UserRepository {
     Response resp = await _userProvider.login(dto.toJson());
     dynamic headers = resp.headers;
     dynamic body = resp.body;
-    GetStorage prefs = Get.find<GetStorage>(tag: "user_storage");
+    final prefs = GetStorage();
 
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
@@ -35,7 +35,7 @@ class UserRepository {
     Response resp = await _userProvider.move(dto.toJson());
     dynamic headers = resp.headers;
     dynamic body = resp.body;
-    GetStorage prefs = Get.find<GetStorage>();
+    final prefs = GetStorage();
 
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);

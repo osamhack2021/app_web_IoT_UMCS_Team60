@@ -4,7 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/hostnames.dart';
 
 void startSocket() {
-  GetStorage prefs = Get.find<GetStorage>();
+  var prefs = GetStorage();
   socket_io.Socket socket = Get.put(socket_io.io(
       socketHost,
       socket_io.OptionBuilder()
