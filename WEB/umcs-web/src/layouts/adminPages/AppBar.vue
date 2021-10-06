@@ -26,7 +26,10 @@
       </v-badge>
     </v-btn>
 
-    <v-btn color="secondary">
+    <v-btn
+      color="secondary"
+      @click="logout"
+    >
       <span class="mr-2">LogOut</span>
       <v-icon>mdi-open-in-new</v-icon>
     </v-btn>
@@ -34,6 +37,8 @@
 </template>
 
 <script>
+import { logoutAdmin } from "@/api/index.js";
+
 export default {
   name: "DefaultBar",
   data() {
@@ -49,6 +54,17 @@ export default {
       set(value) {
         return this.$store.dispatch('drawer/toggleDrawer', value);
       }
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        await logoutAdmin();
+        this.$router.push("/authentication/login");
+      } catch(error) {
+        console.log(error);
+      }
+
     }
   }
 };

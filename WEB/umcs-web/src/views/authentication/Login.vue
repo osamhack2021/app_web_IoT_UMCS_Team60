@@ -17,8 +17,8 @@
           @submit.prevent="submitForm"
         >
           <v-text-field
-            v-model="userNum"
-            :rules="userNumRules"
+            v-model="adminTag"
+            :rules="adminTagRules"
             label="군번"
             required
           />
@@ -46,13 +46,15 @@
 </template>
 
 <script>
+import { loginAdmin } from "@/api/index.js";
+
 export default {
   name: "LoginForm",
   data: () => ({
     valid: true,
-    userNum: '',
+    adminTag: '',
     // 군번 유효성 검사 필요 ('-' 포함, 숫자로만 이루어졌는지)
-    userNumRules: [
+    adminTagRules: [
       v => !!v || 'id is required',
     ],
     password: '',
@@ -62,10 +64,19 @@ export default {
   }),
 
   methods: {
-    submitForm () {
-      const isValid = this.$refs.form.validate()  // 유효성 검사
-      if (isValid) {
-        this.$router.push("/main");
+    async submitForm () {
+      try {
+        const isValid = this.$refs.form.validate()  // 유효성 검사
+        if (isValid) {
+          const adminData = {
+            tag: this.adminTag,
+            password: this.password
+          }
+          await loginAdmin(adminData);
+          this.$router.push("/main");
+        }
+      } catch(error) {
+        console.log(error);
       }
     },
   },
