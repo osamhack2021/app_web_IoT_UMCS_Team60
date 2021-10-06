@@ -67,15 +67,15 @@ module.exports = (server, session) => {
                 Object.keys(beaconInfo).forEach((k) => beaconInfo[k] == null && delete beaconInfo[k]);
 
                 let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
-                    beaconInfo.outside_doom_id ? 'doom' : 'doomroom'; 
+                    beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
 
                 // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
-                let column = 'id, name, current_count' + (table !== ('outside_facility' || 'doom') ? ', doom_id' : '');
+                let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
                 sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
-                console.log(sql);
+
                 let [facilityInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
                 facilityInfo = facilityInfo[0];
-                
+
                 if(facilityInfo?.doom_id) {
                     sql = `SELECT name FROM doom WHERE id=?`;
                     let [doomInfo] = await dbPromiseConnection.query(sql, [facilityInfo.doom_id]);

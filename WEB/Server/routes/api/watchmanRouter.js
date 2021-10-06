@@ -5,16 +5,27 @@ const dbModule = require(`../../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
+const dbPromiseConnection = require(`../../databasePromise`);
+
 function nowDate() {
     let krDate = new Date();
     krDate.setHours(krDate.getHours()+9);
     return krDate.toISOString().slice(0, 10).replace('T', ' ');
 }
 
-router.post('/', managerAuth.checkLogin, (req, res) => {
-    var msg = {4: 'db_error'};
+router.post('/', managerAuth.checkLogin, async (req, res) => {
+    var msg = {4: 'db_error', 5: 'duplicate'};
 
-    var sql = "INSERT INTO watchman VALUES (NULL, ?, ?, ?, NULL)";
+    var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=? AND charge_doom=? and shift IS NULL";
+    let [isDuplicate] = await dbPromiseConnection.query(sql, [req.body.manager_tags, req.body.responsible_date, req.body.charge_doom]);
+    
+    if(isDuplicate.length) 
+        return res.status(409).json({
+            code: 5,
+            msg: msg[5],
+        });
+    
+    sql = "INSERT INTO watchman VALUES (NULL, ?, ?, ?, NULL)";
     dbConnection.query(sql, [req.body.manager_tags, req.body.charge_doom, req.body.responsible_date], (err, result) => {
         if(err)
             return res.status(400).json({

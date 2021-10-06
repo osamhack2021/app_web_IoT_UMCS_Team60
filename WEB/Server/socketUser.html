@@ -14,8 +14,18 @@
 
   <div>
     <select id="f"></select>
-    <button id="get_in">비콘 영역으로 들어감<br>(get_in)</button>
+    <button id="ff"> 들어감(get_in)</button>
     &nbsp;&nbsp;&nbsp;
+    <select id="g"></select>
+    <button id="gg"> 들어감(get_in)</button>
+    &nbsp;&nbsp;&nbsp;
+    <select id="h"></select>
+    <button id="hh"> 들어감(get_in)</button>
+    &nbsp;&nbsp;&nbsp;
+    <select id="i"></select>
+    <button id="ii"> 들어감(get_in)</button>
+    &nbsp;&nbsp;&nbsp;
+
     <button id="get_out">비콘 영역에서 나옴<br>(get_out)</button>
   </div>
 
@@ -47,10 +57,25 @@
   <script>
     $(function () {
       jQuery(document).ready(function() {
-        axios.get('/api/beacon')
+        axios.get('/api/doom')
         .then(function(res) {
           for(b of res.data.data) 
-            $('#f').append($('<option></option>').val(b.id).html(b.id));
+            $('#f').append($('<option></option>').val(b.beacon_id).html(b.name));
+        })
+        axios.get('/api/outside_facility')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#g').append($('<option></option>').val(b.beacon_id).html(b.name));
+        })
+        axios.get('/api/doomroom')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#h').append($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
+        })
+        axios.get('/api/doomfacility')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#i').append($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
         })
       });
 
@@ -58,15 +83,30 @@
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiIyMC03MDAwMzQwOCIsIm5hbWUiOiLquYDrqoXsirkiLCJyYW5rIjoi67OR7J6lIiwicm9vbV9pZCI6MSwiZG9vbV9pZCI6MSwiaWF0IjoxNjMzNDM4NzQ3LCJleHAiOjE2NjQ5NzQ3NDd9.KpSOrHI3Q8o_PWBn79qJW7UA52xd2og4VXXd-Pa7U18"
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiIyMC0zIiwibmFtZSI6Iuy1nOuzkeyepSIsInJhbmsiOiLrs5HsnqUiLCJyb29tX2lkIjo0LCJkb29tX2lkIjoxLCJpYXQiOjE2MzM1NDMwOTEsImV4cCI6MTY2NTA3OTA5MX0.VfDT4jie3-g0b0ODxWlkFInPh3GhKIIaGE6j9b87nZ0"
             },
           }
         }
       });
 
-      $('#get_in').click(function(e) {
+      $('#ff').click(function(e) {
         e.preventDefault(); 
         socket.emit('get_in', {beacon_id: $('#f').val()});
+        return false;
+      });
+      $('#gg').click(function(e) {
+        e.preventDefault(); 
+        socket.emit('get_in', {beacon_id: $('#g').val()});
+        return false;
+      });
+      $('#hh').click(function(e) {
+        e.preventDefault(); 
+        socket.emit('get_in', {beacon_id: $('#h').val()});
+        return false;
+      });
+      $('#ii').click(function(e) {
+        e.preventDefault(); 
+        socket.emit('get_in', {beacon_id: $('#i').val()});
         return false;
       });
 
