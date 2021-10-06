@@ -6,7 +6,9 @@ const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
 function nowDateTime() {
-    return new Date().toISOString().slice(0, 19).replace('T', ' ');
+    let krDate = new Date();
+    krDate.setHours(krDate.getHours()+9);
+    return krDate.toISOString().slice(0, 19).replace('T', ' ');
 }
 
 router.post('/', managerAuth.checkLogin, (req, res) => {

@@ -8,7 +8,13 @@ const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
 const dbPromiseConnection = require(`./databasePromise`);
-    
+
+function newkrDate() {
+    let krDate = new Date();
+    krDate.setHours(krDate.getHours()+9);
+    return krDate;
+}
+
 module.exports = (server, session) => {
     const io = require('socket.io')(server); 
     const FileStore = require("session-file-store")(session);
@@ -30,9 +36,9 @@ module.exports = (server, session) => {
         accept(null, false);
     }
 
-    function nowDateTime() {return new Date().toISOString().slice(0, 19).replace('T', ' ');}
+    function nowDateTime() {return newkrDate().toISOString().slice(0, 19).replace('T', ' ');}
 
-    function nowDate() {return new Date().toISOString().slice(0, 10).replace('T', ' ')}
+    function nowDate() {return newkrDate().toISOString().slice(0, 10).replace('T', ' ')}
     
     var userio = io.of('/user'),
         managerio = io.of('/manager');
@@ -61,15 +67,15 @@ module.exports = (server, session) => {
                 Object.keys(beaconInfo).forEach((k) => beaconInfo[k] == null && delete beaconInfo[k]);
 
                 let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
-                    beaconInfo.outside_doom_id ? 'doom' : 'doomroom'; 
+                    beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
 
                 // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
-                let column = 'id, name, current_count' + (table !== ('outside_facility' || 'doom') ? ', doom_id' : '');
+                let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
                 sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
-                console.log(sql);
+
                 let [facilityInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
                 facilityInfo = facilityInfo[0];
-                
+
                 if(facilityInfo?.doom_id) {
                     sql = `SELECT name FROM doom WHERE id=?`;
                     let [doomInfo] = await dbPromiseConnection.query(sql, [facilityInfo.doom_id]);
@@ -92,7 +98,7 @@ module.exports = (server, session) => {
             managerio.to(user.doom_id).emit('cannot_assemble', {
                 user_tag: user.tag,
                 description: data.description,
-                send_time: new Date()
+                send_time: newkrDate()
             });
         });
 
@@ -173,7 +179,7 @@ module.exports = (server, session) => {
 
         // 긴급 소집 지시
         socket.on('assemble_command', () =>{
-            userio.to(manager.charge_doom).emit('assemble_command', {send_time: new Date()});
+            userio.to(manager.charge_doom).emit('assemble_command', {send_time: newkrDate()});
         });
 
         // 외부시설 이동요청 결재 완료

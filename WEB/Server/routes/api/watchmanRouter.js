@@ -5,14 +5,27 @@ const dbModule = require(`../../database`)();
 const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
+const dbPromiseConnection = require(`../../databasePromise`);
+
 function nowDate() {
-    return new Date().toISOString().slice(0, 10).replace('T', ' ');
+    let krDate = new Date();
+    krDate.setHours(krDate.getHours()+9);
+    return krDate.toISOString().slice(0, 10).replace('T', ' ');
 }
 
-router.post('/', managerAuth.checkLogin, (req, res) => {
-    var msg = {4: 'db_error'};
+router.post('/', managerAuth.checkLogin, async (req, res) => {
+    var msg = {4: 'db_error', 5: 'duplicate'};
 
-    var sql = "INSERT INTO watchman VALUES (NULL, ?, ?, ?, NULL)";
+    var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=? AND charge_doom=? and shift IS NULL";
+    let [isDuplicate] = await dbPromiseConnection.query(sql, [req.body.manager_tags, req.body.responsible_date, req.body.charge_doom]);
+    
+    if(isDuplicate.length) 
+        return res.status(409).json({
+            code: 5,
+            msg: msg[5],
+        });
+    
+    sql = "INSERT INTO watchman VALUES (NULL, ?, ?, ?, NULL)";
     dbConnection.query(sql, [req.body.manager_tags, req.body.charge_doom, req.body.responsible_date], (err, result) => {
         if(err)
             return res.status(400).json({
@@ -119,9 +132,11 @@ router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
 
 router.get('/today', (req, res) => {
     var msg = {2:'no_watchman', 4: 'db_error'};
-    var sql = "SELECT * FROM watchman WHERE charge_doom=? AND responsible_date=? AND shift IS NULL";
+    var sql = "SELECT * FROM watchman WHERE responsible_date=? AND shift IS NULL";
+    if(req.query.doom_id) 
+        sql += ' AND charge_doom=?';
 
-    dbConnection.query(sql, [req.query.doom_id, nowDate()], (err, rows) => {
+    dbConnection.query(sql, [nowDate(), req.query.doom_id], (err, rows) => {
         if(err)
             return res.status(400).json({
                 code: 4,

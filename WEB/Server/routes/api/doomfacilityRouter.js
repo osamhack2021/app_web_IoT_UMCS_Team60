@@ -10,7 +10,7 @@ const dbPromiseConnection = require(`../../databasePromise`);
 router.post('/', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "INSERT INTO doomfacility VALUES (NULL, ?, ?, ?, ?, 0, 0)";
+        var sql = "INSERT INTO doomfacility VALUES (NULL, ?, ?, ?, ?, 0)";
         var [results] = await dbPromiseConnection.query(sql, [req.body.name, req.body.beacon_id, req.body.doom_id, req.body.floor]);
         
         sql = "UPDATE beacon SET doomfacility_id=? WHERE id=?";

@@ -33,29 +33,39 @@
     <br><br>
 
     <select id="setwatchmanmanager"></select>를 <input type="date" id="setwatchmandate">에 <select id="setwatchmandoom"></select>관리자로 <button id="setwatchman">지정</button>
-
-
+    
     <br/><br/><br/>
-
+    
+    금일 근무자 명단
+    <ul class="messages" id="todaywatchman"></ul>
+    <br/>
     관리자
     <ul class="messages" id="manager"></ul>
+    <br/>
     사용자
     <ul class="messages" id="user"></ul>
+    <br/>
     생활관건물
     <ul class="messages" id="doom"></ul>
+    <br/>
     외부시설
     <ul class="messages" id="outside_facility"></ul>
     호실
+    <br/>
     <ul class="messages" id="doomroom"></ul>
     공공시설
     <ul class="messages" id="doomfacility"></ul>
+    <br/>
     외부시설 사용요청
     <ul class="messages" id="outside_request"></ul>
+    <br/>
     공공시설 사용요청
     <ul class="messages" id="facility_request"></ul>
+    <br/>
     체온 보고
     <ul class="messages" id="anomaly"></ul>
-    
+    <br/>
+
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -80,6 +90,17 @@
         })
 
 
+        axios.get('/api/watchman/today')
+        .then(function(res) {
+          for(let line of res.data.data) {
+            axios.get('/api/doom/'+line.charge_doom).then(function(doom) {
+              axios.get('/api/manager/'+line.manager_tags).then(function(manager) {
+                console.log(line)
+                $('#todaywatchman').append($('<li>').text(manager.data.data.tag+ " " + manager.data.data.rank + " " + manager.data.data.name + " -> "+ doom.data.data.name )); 
+              })
+            })
+          }
+        })
 
         axios.get('/api/manager')
         .then(function(res) {
@@ -142,6 +163,19 @@
           manager_tags: $('#setwatchmanmanager').val(),
           charge_doom: $('#setwatchmandoom').val(),
           responsible_date: $('#setwatchmandate').val()
+        }).then(()=>{
+          axios.get('/api/watchman/today')
+        .then(function(res) {
+          $("#todaywatchman").empty();
+          for(let line of res.data.data) {
+            axios.get('/api/doom/'+line.charge_doom).then(function(doom) {
+              axios.get('/api/manager/'+line.manager_tags).then(function(manager) {
+                console.log(line)
+                $('#todaywatchman').append($('<li>').text(manager.data.data.tag+ " " + manager.data.data.rank + " " + manager.data.data.name + " -> "+ doom.data.data.name )); 
+              })
+            })
+          }
+        })
         });
         return false;
       });
