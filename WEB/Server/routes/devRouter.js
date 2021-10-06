@@ -2,7 +2,9 @@ const router = require('express').Router();
 const dbPromiseConnection = require(`../databasePromise`);
 
 function nowDateTime() {
-    return new Date().toISOString().slice(0, 19).replace('T', ' ');
+    let krDate = new Date();
+    krDate.setHours(krDate.getHours()+9);
+    return krDate.toISOString().slice(0, 19).replace('T', ' ');
 }
 
 function gaussianRandom() {

@@ -8,7 +8,13 @@ const dbConnection = dbModule.init();
 dbModule.db_open(dbConnection);
 
 const dbPromiseConnection = require(`./databasePromise`);
-    
+
+function newkrDate() {
+    let krDate = new Date();
+    krDate.setHours(krDate.getHours()+9);
+    return krDate;
+}
+
 module.exports = (server, session) => {
     const io = require('socket.io')(server); 
     const FileStore = require("session-file-store")(session);
@@ -30,9 +36,9 @@ module.exports = (server, session) => {
         accept(null, false);
     }
 
-    function nowDateTime() {return new Date().toISOString().slice(0, 19).replace('T', ' ');}
+    function nowDateTime() {return newkrDate().toISOString().slice(0, 19).replace('T', ' ');}
 
-    function nowDate() {return new Date().toISOString().slice(0, 10).replace('T', ' ')}
+    function nowDate() {return newkrDate().toISOString().slice(0, 10).replace('T', ' ')}
     
     var userio = io.of('/user'),
         managerio = io.of('/manager');
@@ -92,7 +98,7 @@ module.exports = (server, session) => {
             managerio.to(user.doom_id).emit('cannot_assemble', {
                 user_tag: user.tag,
                 description: data.description,
-                send_time: new Date()
+                send_time: newkrDate()
             });
         });
 
@@ -173,7 +179,7 @@ module.exports = (server, session) => {
 
         // 긴급 소집 지시
         socket.on('assemble_command', () =>{
-            userio.to(manager.charge_doom).emit('assemble_command', {send_time: new Date()});
+            userio.to(manager.charge_doom).emit('assemble_command', {send_time: newkrDate()});
         });
 
         // 외부시설 이동요청 결재 완료
