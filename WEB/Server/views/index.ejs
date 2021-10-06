@@ -6,14 +6,12 @@
       .messages { list-style-type: none; margin: 0; padding: 0; }
       .messages li { padding: 5px 10px; }
       .messages li{ background: #eee; }
+      form{width:200px;display:inline;}
     </style>    
     <meta charset="utf-8">
     <title>Index Page</title>
   </head>
   <body>
-    <form action="/socketChat" method="get">
-        <button type="submit">채팅(socket.io)</button>
-    </form>
     <form action="/manager" method="get">
         <button type="submit">관리자 로그인(session)</button>
     </form>
@@ -27,6 +25,18 @@
       <button type="submit">소켓통신(관리자)</button>
     </form>
     
+    <br><br>
+
+    <input type="date" id="anomalydate"> <- 이 날짜로 
+    <button id="gendate">임의 체온보고데이터 생성</button>
+
+    <br><br>
+
+    <select id="setwatchmanmanager"></select>를 <input type="date" id="setwatchmandate">에 <select id="setwatchmandoom"></select>관리자로 <button id="setwatchman">지정</button>
+
+
+    <br/><br/><br/>
+
     관리자
     <ul class="messages" id="manager"></ul>
     사용자
@@ -51,8 +61,26 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
+    Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    });
     $(function () {
       jQuery(document).ready(function() {
+        axios.get('/api/manager')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#setwatchmanmanager').append($('<option></option>').val(b.tag).html(b.tag + " " + b.name));
+        })
+        axios.get('/api/doom')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#setwatchmandoom').append($('<option></option>').val(b.id).html(b.id + " " + b.name));
+        })
+
+
+
         axios.get('/api/manager')
         .then(function(res) {
           for(line of res.data.data)
@@ -98,9 +126,25 @@
           for(line of res.data.data)
           $('#anomaly').append($('<li>').text(JSON.stringify(line))); 
         })
-        
+        $('#anomalydate').val(new Date().toDateInputValue());
+        $('#setwatchmandate').val(new Date().toDateInputValue());
       });
 
+      $('#gendate').click(function(e) {
+        e.preventDefault();
+        axios.get('dev/makeAnomaly/'+$('#anomalydate').val());
+        return false;
+      });
+
+      $('#setwatchman').click(function(e) {
+        e.preventDefault();
+        axios.post('api/watchman/', {
+          manager_tags: $('#setwatchmanmanager').val(),
+          charge_doom: $('#setwatchmandoom').val(),
+          responsible_date: $('#setwatchmandate').val()
+        });
+        return false;
+      });
     });
   </script>
 </html>
