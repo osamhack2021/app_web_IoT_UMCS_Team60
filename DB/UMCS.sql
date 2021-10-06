@@ -192,7 +192,7 @@ CREATE TABLE anomaly
     `id`             INT            NOT NULL    AUTO_INCREMENT,  
     `user_tag`       VARCHAR(45)    NOT NULL, 
     `temperature`    FLOAT(7,2)        NULL, 
-    `anomaly`        TEXT           NULL, 
+    `details`        TEXT           NULL, 
     `reported_time`  DATETIME       NULL, 
     CONSTRAINT PK_anomaly PRIMARY KEY (id)
 );
@@ -267,3 +267,12 @@ ALTER TABLE beacon
 ALTER TABLE beacon
     ADD CONSTRAINT FK_beacon_outside_facility_id_id FOREIGN KEY (outside_facility_id)
         REFERENCES outside_facility (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+CREATE TABLE cohort_status
+(
+    `id`            INT            NOT NULL    AUTO_INCREMENT, 
+    `isCohort`      tinyint(1)    NOT NULL,
+    `time`  DATETIME       NULL,
+    CONSTRAINT PK_cohort_status PRIMARY KEY (id)
+);
