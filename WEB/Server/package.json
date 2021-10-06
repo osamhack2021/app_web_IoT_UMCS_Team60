@@ -9,6 +9,7 @@
   "author": "Effort",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",

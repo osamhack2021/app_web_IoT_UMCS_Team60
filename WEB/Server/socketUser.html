@@ -3,50 +3,123 @@
 <head>
   <title>user socket test</title>
 </head>
+<style>
+  form{  background: #acacac; margin:10px;}
+  li {border-width: 0 0 2px 0 ;border-style: solid; padding-bottom:10px;}
+  div {padding:10px;}
+</style>
 <body>
   <h1>user socket page</h1>
+  <div id="my_info"></div>
+
+  <div>
+    <select id="f"></select>
+    <button id="get_in">비콘 영역으로 들어감<br>(get_in)</button>
+    &nbsp;&nbsp;&nbsp;
+    <button id="get_out">비콘 영역에서 나옴<br>(get_out)</button>
+  </div>
+
+  <form action="" id="cannot_assemble">
+    긴급소집 불응 사유 제출 (cannot_assemble)
+    <input type="text" id="b" placeholder="사유" />
+    <input type="submit" />
+  </form>
+
   <form action="" id="move_request">
-    이동 요청 (move_request)
+    [평시] 외부시설 이동요청 (move_request)
     <input type="number" id="a" placeholder="outside_id" />
     <input type="submit" />
   </form>
 
-  <form action="" id="location_report">
-    위치 보고 (location_report) 
-    <input type="number" id="b" placeholder="beacon_id" />
+  <form action="" id="facility_request">
+    [코호트] 공공시설 사용요청 (facility_request)
+    <input type="number" id="c" placeholder="facility_id" />
+    <input type="text" id="d" placeholder="HH:MM:SS" />
+    <input type="text" id="e" placeholder="사유" />
     <input type="submit" />
   </form>
-  
+
+  <div id="messages"></div>
     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     $(function () {
+      jQuery(document).ready(function() {
+        axios.get('/api/beacon')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#f').append($('<option></option>').val(b.id).html(b.id));
+        })
+      });
+
       const socket = io('/user', {
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiJ0ZXN0IiwibmFtZSI6IuycoOyggO2FjOyKpO2KuCIsInJhbmsiOiJraW5nIiwicm9vbV9pZCI6bnVsbCwiZG9vbV9pZCI6bnVsbCwiaWF0IjoxNjMyOTAyNDAwLCJleHAiOjE2NjQ0Mzg0MDB9.hfKpCcJcNMk7FW8Aqn7SIabNthrgvMtJc8He0F7ZInI"
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiIyMC03MDAwMzQwOCIsIm5hbWUiOiLquYDrqoXsirkiLCJyYW5rIjoi67OR7J6lIiwicm9vbV9pZCI6MSwiZG9vbV9pZCI6MSwiaWF0IjoxNjMzNDM4NzQ3LCJleHAiOjE2NjQ5NzQ3NDd9.KpSOrHI3Q8o_PWBn79qJW7UA52xd2og4VXXd-Pa7U18"
             },
           }
         }
-       });
-      $('#move_request').submit(function(e) {
-        e.preventDefault(); 
-        socket.emit('move_request', {outside_id: $('#a').val()});
-        
-        return false;
       });
-      $('#location_report').submit(function(e) {
-        e.preventDefault();
-        socket.emit('location_report', {beacon_id: $('#b').val(), time: new Date()});
-        
+
+      $('#get_in').click(function(e) {
+        e.preventDefault(); 
+        socket.emit('get_in', {beacon_id: $('#f').val()});
         return false;
       });
 
-      socket.on('chat message', function(msg) { 
-        $('#messages').append($('<li>').text(msg)); 
+      $('#get_out').click(function(e) {
+        e.preventDefault(); 
+        socket.emit('get_out');
+        return false;
       });
+
+      $('#cannot_assemble').submit(function(e) {
+        e.preventDefault(); 
+        socket.emit('cannot_assemble', {description: $('#b').val()});
+        return false;
+      });
+
+      $('#move_request').submit(function(e) {
+        e.preventDefault(); 
+        socket.emit('move_request', {outside_id: $('#a').val()});
+        return false;
+      });
+
+      $('#facility_request').submit(function(e) {
+        e.preventDefault(); 
+        socket.emit('facility_request', {facility_id: $('#c').val(), desired_time: $('#d').val(), description: $('#e').val()});
+        return false;
+      });
+
+      socket.once('my_info', function(user) { 
+        $('#my_info').append(user.tag + " " + user.rank + " " + user.name + " 생활관id:" + user.doom_id); 
+      });
+
+      socket.on('to_cohort', function(msg) { 
+        $('#messages').append($('<li>').text("[코호트 상황으로 전환!!]"));
+      });
+
+      socket.on('to_normal', function(msg) { 
+        $('#messages').append($('<li>').text("[평시 상황으로 전환!!]"));
+      });
+
+      socket.on('assemble_command', function(msg) { 
+        $('#messages').append($('<li>').text("[긴급소집 알림!!]"));
+      });
+
+      socket.on('move_approval', function(msg) { 
+        $('#messages').append("[외부시설 사용요청 결재완료 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+
+      socket.on('facility_approval', function(msg) { 
+        $('#messages').append("[공공시설 사용요청 결재완료 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+
     });
   </script>
 </body>

@@ -3,20 +3,111 @@
 <head>
   <title>manager socket test</title>
 </head>
+<style>
+  form{  background: #acacac; margin:10px;}
+  li {border-width: 0 0 2px 0 ;border-style: solid; padding-bottom:10px;}
+  div {padding:10px; margin:5px;}
+</style>
 <body>
   <h1>manager socket page</h1>
+  <div id="my_info"></div>
+  
+  <div>
+    <button id="to_cohort">코호트 상황 전환<br>(to_cohort)</button>
+    <button id="to_normal">평시 상황 전환<br>(to_normal)</button>
+    <button id="assemble_command">긴급소집하기<br>(assemble_command)</button>
+  </div>
 
-  <ul id="messages"></ul>
+  <form action="" id="move_approval">
+    [평시] 외부시설 이동요청 결재하기 (move_approval) 
+    <input type="number" id="b" placeholder="outside_request의 id" />
+    <input type="text" id="c" placeholder="승인 여부 입력" />
+    <input type="submit" />
+  </form>
+ 
+  <form action="" id="facility_approval">
+    [코호트] 공공시설 사용요청 결재하기 (facility_approval) 
+    <input type="number" id="d" placeholder="facility_request의 id" />
+    <input type="text" id="e" placeholder="승인 여부 입력" />
+    <input type="submit" />
+  </form>
+
+  <div id="messages"></div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script>
     $(function () {
       const socket = io('/manager');
+  
+      $('#to_cohort').click(function(e) {
+        e.preventDefault();
+        socket.emit('to_cohort');
+        return false;
+      });
 
-      socket.on('user2manager', function(msg) { 
+      $('#to_normal').click(function(e) {
+        e.preventDefault();
+        socket.emit('to_normal');
+        return false;
+      });
+
+      $('#assemble_command').click(function(e) {
+        e.preventDefault();
+        socket.emit('assemble_command');
+        return false;
+      });
+
+      $('#move_approval').submit(function(e) {
+        e.preventDefault();
+        socket.emit('move_approval', {id: $('#b').val(), permission: $('#c').val()});
+        return false;
+      });
+
+      $('#facility_approval').submit(function(e) {
+        e.preventDefault();
+        socket.emit('facility_approval', {id: $('#d').val(), permission: $('#e').val()});
+        return false;
+      });
+
+
+      socket.once('my_info', function(manager) { 
+        $('#my_info').append(manager.tag + " " + manager.rank + " " + manager.name+ " 금일 담당생활관id:" + manager.charge_doom); 
+      });
+
+      socket.on('cannot_assemble', function(msg) { 
+        $('#messages').append("[긴급 소집 불응 사유 알림]")
         $('#messages').append($('<li>').text(JSON.stringify(msg))); 
       });
+
+      socket.on('move_request', function(msg) { 
+        $('#messages').append("[외부시설 사용요청 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+
+      socket.on('facility_request', function(msg) { 
+        $('#messages').append("[공공시설 사용요청 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+
+      socket.on('doom_get_in', function(msg) { 
+        $('#messages').append("[생활관건물 입장 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+      socket.on('doomfacility_get_in', function(msg) { 
+        $('#messages').append("[공공시설 입장 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+      socket.on('doomroom_get_in', function(msg) { 
+        $('#messages').append("[호실 입장 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+      socket.on('outside_facility_get_in', function(msg) { 
+        $('#messages').append("[외부시설 입장 알림]")
+        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+      });
+      
+
     });
   </script>
 </body>
