@@ -96,7 +96,6 @@ router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
     var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
 
     dbConnection.query(sql, [req.user.tag, nowDate()], (err, rows) => {
-        console.log(rows);
         if(err)
             return res.status(400).json({
                 code: 4,
@@ -123,7 +122,6 @@ router.get('/today', (req, res) => {
     var sql = "SELECT * FROM watchman WHERE charge_doom=? AND responsible_date=? AND shift IS NULL";
 
     dbConnection.query(sql, [req.query.doom_id, nowDate()], (err, rows) => {
-        console.log(rows);
         if(err)
             return res.status(400).json({
                 code: 4,

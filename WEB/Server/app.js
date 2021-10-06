@@ -54,10 +54,11 @@ managerPassportConfig();
 // router
 const apiRouter = require('./routes/apiRouter');
 const uploadRouter = require('./routes/uploadRouter');
+const devRouter = require('./routes/devRouter');
 
 app.use('/api', apiRouter);
 app.use('/upload', uploadRouter);
-
+app.use('/dev', devRouter);
 
 //setting cors 
 app.all('/*', (req, res, next) => {
@@ -75,10 +76,6 @@ app.use('/user', testUserRouter);
 
 app.get('/', (req, res) => {
     res.render(`index`);
-})
-
-app.get('/socketChat', (req, res) => {
-    res.sendFile(__dirname+'/chatTest.html');
 })
 
 app.get('/socketUser', (req, res) => {
