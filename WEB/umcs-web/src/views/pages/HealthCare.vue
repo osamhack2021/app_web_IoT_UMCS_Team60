@@ -9,6 +9,7 @@
           full-width
           show-adjacent-months
           class="pb-5"
+          @change="updateTable"
         />
       </v-col>
 
@@ -32,17 +33,31 @@
           <v-data-table
             :headers="tableHeaders"
             :items="tableDatas"
-            :items-per-page="$store.state.ITEMS_PER_PAGE"
-            :sort-by="['createdTime']"
+            item-key="tag"
+            :sort-by="['reported_time']"
             :sort-desc="[true]"
-            hide-default-footer
-            :page.sync="page"
             :search="searchInput"
+            show-expand
+            hide-default-footer
+            :items-per-page="$store.state.ITEMS_PER_PAGE"
+            :page.sync="page"
             class="elavation-1"
           >
-            <!-- Slot:item.details - Hide details -->
-            <template v-slot:[`item.details`]>
-              <p>...</p>
+            <!-- Slot:item.name - user profile routing -->
+            <template v-slot:[`item.name`]="{ item }">
+              <router-link
+                :to="`/user/${item.tag}`"
+                class="info--text text-decoration-none"
+              >
+                {{ item.name }}
+              </router-link>
+            </template>
+
+            <!-- Slot:expanded.item -->
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length">
+                {{ item.details }}
+              </td>
             </template>
           </v-data-table>
 
@@ -61,7 +76,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   data: () => ({
@@ -76,10 +91,8 @@ export default {
         return this.getPicker;
       },
       set(value) {
-        console.log("picker is updated!!");
-        // (API호출) 선택할 날짜에 해당하는 건강보고 기록 가져오기
         return this.setPickedDate(value);
-      }
+      },
     },
     searchInput: {
       get() {
@@ -87,7 +100,7 @@ export default {
       },
       set(value) {
         return this.updateSearchInput(value);
-      }
+      },
     },
     pageCount() {
       return Math.ceil(
@@ -103,9 +116,11 @@ export default {
   },
   methods: {
     ...mapMutations("health", ["setPickedDate", "updateSearchInput"]),
+    ...mapActions("health", ["FETCH_HEALTH_REPORT"]),
+    updateTable(date) {
+      // (API호출) 선택할 날짜에 해당하는 건강보고 기록 가져오기
+      this.FETCH_HEALTH_REPORT(date);
+    },
   },
 };
 </script>
-
-<style scoped>
-</style>
