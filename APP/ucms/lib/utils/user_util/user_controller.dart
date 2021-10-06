@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ucms/data/beacon_result.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/data/dto/login_request_dto.dart';
 import 'package:ucms/socket/socket.dart';
@@ -10,9 +9,9 @@ import 'package:ucms/utils/user_util/user_repository.dart';
 class UserController extends GetxController {
   final RxBool isLogin = false.obs;
   final appUser = User().obs;
-  final prefs = GetStorage();
-  UserSocketClient socket = Get.find<UserSocketClient>();
-  BeaconManager beaconManager = Get.find<BeaconManager>();
+  var prefs = GetStorage();
+  //UserSocketClient socket = Get.find<UserSocketClient>();
+  //BeaconManager beaconManager = Get.find<BeaconManager>();
 
   void logout() {
     isLogin.value=false;
@@ -21,7 +20,7 @@ class UserController extends GetxController {
     prefs.write("token", "");
   }
 
-  Future<int> login(tag, password) async {
+  Future<String> login(tag, password) async {
     final loginDto = LoginRequestDto(tag: tag, password: password);
     final repository = UserRepository();
     final newUser = await repository.login(loginDto.toJson());
@@ -29,12 +28,12 @@ class UserController extends GetxController {
     if (newUser.tag != "") {
       isLogin.value = true;
       appUser.value = newUser;
-      socket.locationReport(macAddress : beaconManager.beaconResult.macAddress!, scanTime: beaconManager.beaconResult.scanTime!);
+      //socket.locationReport(macAddress : beaconManager.beaconResult.macAddress!, scanTime: beaconManager.beaconResult.scanTime!);
       //TODO :  location 읽어온 것으로 User 다시 update 해줘야 함. 
       User.updatePrefs(newUser);
-      return 1;
+      return "success";
     } else {
-      return -1;
+      return prefs.read("loginFailureMsg")??"에러메시지in UserController";
     }
   }
 

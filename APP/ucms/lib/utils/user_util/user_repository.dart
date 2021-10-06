@@ -15,15 +15,16 @@ class UserRepository {
     dynamic body = resp.body;
     final prefs = GetStorage();
 
-    dynamic convertBody = convertUtf8ToObject(body);
+    //dynamic convertBody = convertUtf8ToObject(body);
+    dynamic convertBody = body;
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
-      String token = headers["authorization"];
-      prefs.write("token", token);
-      prefs.write("location", newUser.location);
+      newUser.token=headers["authorization"];
+      prefs.write("loginFailureMsg","error message in User repository");
+      //prefs.write("loginFailureMsg",serverRespDto.msg);
       return newUser;
     } else {
       return User();

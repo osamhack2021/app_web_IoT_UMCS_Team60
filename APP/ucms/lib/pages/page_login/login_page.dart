@@ -16,18 +16,16 @@ class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _tag = TextEditingController();
-  final UserController u = Get.put(UserController());
+  final UserController u = Get.isRegistered<UserController>()?Get.find<UserController>():Get.put(UserController());
   final _password = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
     var prefs = GetStorage();
-
     //이미 로그인 되어있을 시
     if (u.isLogin.value) {
-      Get.snackbar("자동 로그인","${prefs.read("tag")}로 로그인됨. ");
       Get.off(UserMain(
-          location: prefs.read("location")!, state: prefs.read("state")!));
+          location: prefs.read("location").value??"adsf", state: prefs.read("state").value??"asdfafsd"));
       return Container();
     }
 
@@ -62,14 +60,13 @@ class LoginPage extends StatelessWidget {
               onPressed: () async {
                 final store = GetStorage();
                 if (_formKey.currentState!.validate()) {
-                  int result = await u.login(_tag.text.trim(),_password.text.trim());
-                  if (result == 1) {
-                    
+                  String result = await u.login(_tag.text.trim(),_password.text.trim());
+                  if (result == "success") {
                     Get.to(UserMain(
-                          location: store.read("location")!,
-                          state: store.read("state")!,
+                          location: store.read("location").value??"",
+                          state: store.read("state").value??"",
                         ));
-                  } else {Get.snackbar("로그인 시도", "로그인 실패");}
+                  } else {Get.snackbar("로그인 시도", result);}
                 }
               },
             ),

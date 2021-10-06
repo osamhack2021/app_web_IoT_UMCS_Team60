@@ -54,14 +54,14 @@ class _UserMoveState extends State<UserMove> {
             PostButton(
                 onPressed: () async {
                   final store = GetStorage();
-                  UserSocketClient socket = Get.find<UserSocketClient>();
-                  socket.moveRequest( destination: btns[_value],);
+                  // UserSocketClient socket = Get.find<UserSocketClient>();
+                  // socket.moveRequest( destination: btns[_value],);
                   
-                  store.write("state","결재 대기중");
+                  // store.write("state","결재 대기중");
 
                   Get.to(() => UserMain(
-                    location: store.read("location")??"not found",
-                    state: store.read("state")??"not found",
+                    location: store.read("location").value,
+                    state: store.read("state").value,
                   ));
                 },
             label: "보고"),

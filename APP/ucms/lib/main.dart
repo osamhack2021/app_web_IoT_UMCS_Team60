@@ -11,17 +11,16 @@ import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/socket/socket.dart';
 import 'package:ucms/utils/beacon_manager.dart';
-import 'package:ucms/utils/beacon_test.dart';
 
 void main() async {
   await GetStorage.init();
 
-  var client = Get.put(UserSocketClient());
-  client.startSocket();
+   //var client = Get.put(UserSocketClient());
+  //client.startSocket();
   
   User.userInit();
 
-  Get.put(BeaconManager());
+  //Get.put(BeaconManager());
 
   runApp(const MyApp());
 }
@@ -47,11 +46,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/nav",
       routes: {
-        "/beacon_test" : (context) => const BeaconTest(),
         "/nav" : (context) => const NavPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
-        "/user/main": (context) => UserMain(location: "", state: ""),
+        "/user/main": (context) => UserMain(location: "".obs, state: "".obs),
         "/user/move": (context) => const UserMove(),
         "/user/assemble": (context) => UserAssemble(
             location: "막사", timestamp: DateTime.parse("2012-02-27 13:27:00")),
