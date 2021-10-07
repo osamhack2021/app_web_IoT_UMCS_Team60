@@ -19,14 +19,14 @@ router.get('/', async (req, res) => {
             // 비콘이 설치된 시설id key만 남기고 나머지 null key는 객체에서 지움
             Object.keys(record).forEach((k) => record[k] == null && delete record[k]);
 
-            var table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
-                record.outside_doom_id ? 'doom' : 'doomroom'; 
+            let table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
+                record.doomroom_id ? 'doomroom' : 'doom'; 
 
             // 생활관건물 호실이나 공공시설이라면 생활관건물 id도 알아야 하므로 column에 추가
-            var column = 'name' + (table !== ('outside_facility' || 'doom') ? ', doom_id' : '');
+            let column = 'name' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
             
-            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=${record.beacon_id}`;
-            var [facilityinfo] = await dbPromiseConnection.query(sql);
+            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+            var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
             console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
@@ -77,14 +77,14 @@ router.get('/search', async (req, res) => {
             // 비콘이 설치된 시설id key만 남기고 나머지 null key는 객체에서 지움
             Object.keys(record).forEach((k) => record[k] == null && delete record[k]);
 
-            var table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
-                record.outside_doom_id ? 'doom' : 'doomroom'; 
+            let table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
+                record.doomroom_id ? 'doomroom' : 'doom'; 
 
             // 생활관건물 호실이나 공공시설이라면 생활관건물 id도 알아야 하므로 column에 추가
-            var column = 'name' + (table !== ('outside_facility' || 'doom') ? ', doom_id' : '');
+            let column = 'name' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
             
-            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=${record.beacon_id}`;
-            var [facilityinfo] = await dbPromiseConnection.query(sql);
+            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+            var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
             console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
@@ -132,14 +132,14 @@ router.get('/:id', async (req, res) => {
             // 비콘이 설치된 시설id key만 남기고 나머지 null key는 객체에서 지움
             Object.keys(record).forEach((k) => record[k] == null && delete record[k]);
 
-            var table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
-                record.outside_doom_id ? 'doom' : 'doomroom'; 
+            let table = record.outside_facility_id ? 'outside_facility' : record.doomfacility_id ? 'doomfacility' :
+                record.doomroom_id ? 'doomroom' : 'doom'; 
 
             // 생활관건물 호실이나 공공시설이라면 생활관건물 id도 알아야 하므로 column에 추가
-            var column = 'name' + (table !== ('outside_facility' || 'doom') ? ', doom_id' : '');
+            let column = 'name' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
             
-            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=${record.beacon_id}`;
-            var [facilityinfo] = await dbPromiseConnection.query(sql);
+            sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+            var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
             console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
