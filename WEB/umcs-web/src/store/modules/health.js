@@ -55,10 +55,10 @@ const actions = {
           objElem.details = obj.details;
           datas.push(objElem);
         });
-        commit("updateTableDatas", datas);
       } else {
         console.log("data is empty!");
       }
+      commit("updateTableDatas", datas);
       // return Promise
       return datas;
     } catch (error) {
