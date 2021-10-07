@@ -10,8 +10,9 @@
 </style>
 <body>
   <h1>user socket page</h1>
-  <div id="my_info"></div>
+  <span id="my_info"></span>&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp내위치:<span id="my_pos"></span> &nbsp;&nbsp;&nbsp;<button id="get_out"> 나감(get_out)</button>
 
+  <br><br>
   <div>
     <select id="f"></select>
     <button id="ff"> 들어감(get_in)</button>
@@ -25,8 +26,6 @@
     <select id="i"></select>
     <button id="ii"> 들어감(get_in)</button>
     &nbsp;&nbsp;&nbsp;
-
-    <button id="get_out">비콘 영역에서 나옴<br>(get_out)</button>
   </div>
 
   <form action="" id="cannot_assemble">
@@ -37,13 +36,13 @@
 
   <form action="" id="move_request">
     [평시] 외부시설 이동요청 (move_request)
-    <input type="number" id="a" placeholder="outside_id" />
+    <select id="a"></select>
     <input type="submit" />
   </form>
 
   <form action="" id="facility_request">
     [코호트] 공공시설 사용요청 (facility_request)
-    <input type="number" id="c" placeholder="facility_id" />
+    <select id="c"></select>
     <input type="text" id="d" placeholder="HH:MM:SS" />
     <input type="text" id="e" placeholder="사유" />
     <input type="submit" />
@@ -60,59 +59,84 @@
         axios.get('/api/doom')
         .then(function(res) {
           for(b of res.data.data) 
-            $('#f').append($('<option></option>').val(b.beacon_id).html(b.name));
+            $('#f').append ($('<option></option>').val(b.beacon_id).html(b.name));
         })
         axios.get('/api/outside_facility')
         .then(function(res) {
           for(b of res.data.data) 
-            $('#g').append($('<option></option>').val(b.beacon_id).html(b.name));
+            $('#g').append ($('<option></option>').val(b.beacon_id).html(b.name));
         })
         axios.get('/api/doomroom')
         .then(function(res) {
           for(b of res.data.data) 
-            $('#h').append($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
+            $('#h').append ($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
         })
         axios.get('/api/doomfacility')
         .then(function(res) {
           for(b of res.data.data) 
-            $('#i').append($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
+            $('#i').append ($('<option></option>').val(b.beacon_id).html(b.doom_id + " / " + b.name));
+        })
+        axios.get('/api/doomfacility')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#c').append ($('<option></option>').val(b.id).html(b.doom_id + " / " + b.name));
+        })
+        axios.get('/api/outside_facility')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#a').append ($('<option></option>').val(b.id).html(b.name));
         })
       });
+
+      function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+      }
 
       const socket = io('/user', {
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YWciOiIyMC0zIiwibmFtZSI6Iuy1nOuzkeyepSIsInJhbmsiOiLrs5HsnqUiLCJyb29tX2lkIjo0LCJkb29tX2lkIjoxLCJpYXQiOjE2MzM1NDMwOTEsImV4cCI6MTY2NTA3OTA5MX0.VfDT4jie3-g0b0ODxWlkFInPh3GhKIIaGE6j9b87nZ0"
+              Authorization: "Bearer " + getCookie('jwt')
             },
           }
         }
       });
-
+      var my_pos ="";
       $('#ff').click(function(e) {
         e.preventDefault(); 
         socket.emit('get_in', {beacon_id: $('#f').val()});
+        $('#my_pos').html($('#f option:selected').text());
+        my_pos = $('#f').val();
         return false;
       });
       $('#gg').click(function(e) {
         e.preventDefault(); 
         socket.emit('get_in', {beacon_id: $('#g').val()});
+        $('#my_pos').html($('#g option:selected').text());
+        my_pos = $('#g').val();
         return false;
       });
       $('#hh').click(function(e) {
         e.preventDefault(); 
         socket.emit('get_in', {beacon_id: $('#h').val()});
+        $('#my_pos').html($('#h option:selected').text());
+        my_pos = $('#h').val();
         return false;
       });
       $('#ii').click(function(e) {
-        e.preventDefault(); 
         socket.emit('get_in', {beacon_id: $('#i').val()});
+        $('#my_pos').html($('#i option:selected').text());
+        my_pos = $('#i').val();
         return false;
       });
 
       $('#get_out').click(function(e) {
         e.preventDefault(); 
-        socket.emit('get_out');
+        socket.emit('get_out', {beacon_id: my_pos});
+        $('#my_pos').html('');
         return false;
       });
 
@@ -135,31 +159,32 @@
       });
 
       socket.once('my_info', function(user) { 
-        $('#my_info').append(user.tag + " " + user.rank + " " + user.name + " 생활관id:" + user.doom_id); 
+        $('#my_info').prepend (user.tag + " " + user.rank + " " + user.name + " 생활관id:" + user.doom_id + " 호실id:" + user.room_id); 
       });
 
       socket.on('to_cohort', function(msg) { 
-        $('#messages').append($('<li>').text("[코호트 상황으로 전환!!]"));
+        $('#messages').prepend("<li>[코호트 상황으로 전환!!]");
       });
 
       socket.on('to_normal', function(msg) { 
-        $('#messages').append($('<li>').text("[평시 상황으로 전환!!]"));
+        $('#messages').prepend('<li>[평시 상황으로 전환!!]');
       });
 
       socket.on('assemble_command', function(msg) { 
-        $('#messages').append($('<li>').text("[긴급소집 알림!!]"));
+        $('#messages').prepend('<li>[긴급소집 알림!!]');
       });
 
       socket.on('move_approval', function(msg) { 
-        $('#messages').append("[외부시설 사용요청 결재완료 알림]")
-        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+        $('#messages').prepend('[외부시설 사용요청 결재완료 알림]<br><li>'+JSON.stringify(msg)); 
       });
 
       socket.on('facility_approval', function(msg) { 
-        $('#messages').append("[공공시설 사용요청 결재완료 알림]")
-        $('#messages').append($('<li>').text(JSON.stringify(msg))); 
+        $('#messages').prepend('[공공시설 사용요청 결재완료 알림]<br><li>'+JSON.stringify(msg)); 
       });
 
+      socket.on('contact_alert', function(msg) { 
+        $('#messages').prepend('<li>[입장한 곳에 다른 호실원이 있습니다. 빨리 이동하세요]'); 
+      });
     });
   </script>
 </body>

@@ -15,14 +15,22 @@
     <form action="/manager" method="get">
         <button type="submit">관리자 로그인(session)</button>
     </form>
-    <form action="/user" method="get">
-        <button type="submit">사용자 로그인(jwt)</button>
+    &nbsp; 후 &nbsp;
+     <form action="/socketManager" method="get">
+      <button type="submit">소켓통신(관리자)</button>
     </form>
-    <form action="/socketUser" method="get">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <br>
+    <br>
+
+    <form action="/dev/userLogin" method="post" id="socketuser">
+      <input type="text" name="tag" placeholder="사용자 군번" />
+      &nbsp; <- 이 사용자로 &nbsp;
       <button type="submit">소켓통신(사용자)</button>
     </form>
-    <form action="/socketManager" method="get">
-      <button type="submit">소켓통신(관리자)</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <form action="/user" method="get">
+      <button type="submit">사용자 로그인하여 jwt 발급</button>
     </form>
     
     <br><br>
@@ -32,7 +40,8 @@
 
     <br><br>
 
-    <select id="setwatchmanmanager"></select>를 <input type="date" id="setwatchmandate">에 <select id="setwatchmandoom"></select>관리자로 <button id="setwatchman">지정</button>
+    <select id="setwatchmanmanager"></select>를 <input type="date" id="setwatchmandate">에 <select id="setwatchmandoom"></select>근무자로 <button id="setwatchman">지정</button>
+    <br><br><input type="date" id="deletewatchmandate"> <- 이날 근무자 <button id="deletewatchman">모두 해제</button>
     
     <br/><br/><br/>
     
@@ -149,7 +158,13 @@
         })
         $('#anomalydate').val(new Date().toDateInputValue());
         $('#setwatchmandate').val(new Date().toDateInputValue());
+        $('#deletewatchmandate').val(new Date().toDateInputValue())
       });
+
+      // $('#socketuser').attr('action', '/dev/userLogin').attr('password', '12345').submit(function() {
+      //   //document.cookie = "jwt="+$('#token').val();
+
+      // });
 
       $('#gendate').click(function(e) {
         e.preventDefault();
@@ -178,6 +193,11 @@
         })
         });
         return false;
+      });
+      $('#deletewatchman').click(function(e) {
+        e.preventDefault();
+        $('#todaywatchman').html('');
+        axios.get('dev/deleteWatchman/'+$('#deletewatchmandate').val());
       });
     });
   </script>
