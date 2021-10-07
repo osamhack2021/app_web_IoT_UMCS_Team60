@@ -2,7 +2,7 @@
   <v-container class="mt-5">
     <v-row class="fill-height">
       <!-- Calendar -->
-      <v-col cols="5">
+      <v-col cols="4">
         <v-date-picker
           v-model="picker"
           elevation="15"
@@ -15,7 +15,7 @@
 
       <v-spacer />
 
-      <v-col cols="6">
+      <v-col cols="7">
         <v-card>
           <!-- Search Bar -->
           <v-card-title>
@@ -109,10 +109,14 @@ export default {
     },
   },
   created() {
+    // 현재 날짜 저장
     const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10);
-    this.setPickedDate(today); // YYYY-MM-DD
+      // YYYY-MM-DD
+    this.setPickedDate(today);
+    // data Table init
+    this.updateTable(this.picker);
   },
   methods: {
     ...mapMutations("health", ["setPickedDate", "updateSearchInput"]),

@@ -9,8 +9,8 @@ const state = {
 
   // Data Table
   tableHeaders: [
-    { text: "군번", value: "tag", width: "20%" },
-    { text: "관등성명", value: "name", width: "25%" },
+    { text: "군번", value: "tag", width: "25%" },
+    { text: "관등성명", value: "name", width: "20%" },
     { text: "체온", value: "temperature", width: "15%" },
     { text: "보고 시간", value: "reported_time", width: "25%" },
     { text: "특이사항", value: "data-table-expand", width: "15%" },
