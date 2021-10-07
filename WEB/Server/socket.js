@@ -47,6 +47,7 @@ module.exports = (server, session) => {
         try { // jwt가 header로 왔는지 확인하여 user 인증
             var user = decodeToken(socket.handshake.headers.authorization.split('Bearer ')[1]);
             socket.join(user.doom_id);
+            user.socket_id = socket.id;
             userio.emit('my_info', user);
             console.log('user connected to socket:', user);
         }
@@ -54,11 +55,14 @@ module.exports = (server, session) => {
             socket.disconnect(0);
         }
 
-        // 비콘 영역에 들어감
-        socket.on('get_in', async (data) => {
+        async function get_out(data) {
             try {
-                let sql = "INSERT INTO access_record VALUE (NULL, ?, ?, ?, NULL)";
-                await dbPromiseConnection.query(sql, [user.tag, data.beacon_id, nowDateTime()]);
+                let sql = "SELECT id FROM access_record WHERE user_tag=? AND beacon_id=? AND out_time IS NULL ORDER BY id DESC LIMIT 1";
+                let [target] = await dbPromiseConnection.query(sql, [user.tag, data.beacon_id]);
+                target = target[0];
+
+                sql = "UPDATE access_record SET out_time=? WHERE id=?";
+                await dbPromiseConnection.query(sql, [nowDateTime(), target.id]);
 
                 sql = "SELECT * FROM beacon WHERE id=?";
                 let [beaconInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
@@ -68,6 +72,10 @@ module.exports = (server, session) => {
 
                 let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
                     beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
+
+                // 현 인원 감소
+                sql = `UPDATE ${table} SET current_count=current_count-1 WHERE beacon_id=?`;
+                await dbPromiseConnection.query(sql, [data.beacon_id]);
 
                 // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
                 let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
@@ -82,16 +90,94 @@ module.exports = (server, session) => {
                     facilityInfo.doom_name = doomInfo[0].name;
                 }
                 
-                managerio.to(user.doom_id).emit(`${table}_get_in`, {
+                managerio.to(user.doom_id).emit(`${table}_get_out`, {
                     user_tag: user.tag,
-                    in_time: nowDateTime(),
+                    out_time: nowDateTime(),
                     ...facilityInfo
                 });
             }
             catch(err) {
                 console.log(err);
             }
+        }
+
+        // 비콘 영역에서 나옴
+        socket.on('get_out', async(data)=>await get_out(data));
+
+        // 비콘 영역에 들어감
+        socket.on('get_in', async (data) => {
+            try {
+                // 이전에 비콘 오류로 인해 나가는 것을 감지 못했을 경우
+                let sql = "SELECT id, beacon_id FROM access_record WHERE user_tag=? AND out_time IS NULL";
+                let [checks] = await dbPromiseConnection.query(sql, [user.tag]);
+                if(checks.length) 
+                    for(let check of checks) await get_out(check);
+                
+
+                sql = "INSERT INTO access_record VALUE (NULL, ?, ?, ?, NULL)";
+                await dbPromiseConnection.query(sql, [user.tag, data.beacon_id, nowDateTime()]);
+
+                sql = "SELECT * FROM beacon WHERE id=?";
+                let [beaconInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                beaconInfo = beaconInfo[0];
+                
+                Object.keys(beaconInfo).forEach((k) => beaconInfo[k] == null && delete beaconInfo[k]);
+
+                let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
+                    beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
+
+                // 현 인원 증가
+                sql = `UPDATE ${table} SET current_count=current_count+1 WHERE beacon_id=?`;
+                await dbPromiseConnection.query(sql, [data.beacon_id]);
+
+                // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
+                let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
+                sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+                let [facilityInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                facilityInfo = facilityInfo[0];
+
+                if(facilityInfo?.doom_id) {
+                    sql = `SELECT name FROM doom WHERE id=?`;
+                    let [doomInfo] = await dbPromiseConnection.query(sql, [facilityInfo.doom_id]);
+                    facilityInfo.doom_name = doomInfo[0].name;
+                }
+                
+                managerio.to(user.doom_id).emit(`${table}_get_in`, {
+                    user_tag: user.tag,
+                    in_time: nowDateTime(),
+                    ...facilityInfo
+                });
+
+                // 타 호실원과 접촉이 생겼는지 확인
+                if(table === 'doomfacility' || table === 'doomroom') {
+                    sql = 'SELECT a.beacon_id, u.tag, u.name, u.rank, u.doom_id, u.room_id FROM access_record a, user u WHERE a.user_tag=u.tag AND a.out_time IS NULL;'
+                    let [currentPositions] = await dbPromiseConnection.query(sql);
+                    
+                    let isContact = false;
+                    for(let currentPosition of currentPositions) 
+                        if(currentPosition.beacon_id == data.beacon_id) // 동일한 위치에 있고
+                            if(currentPosition.doom_id != user.doom_id || currentPosition.room_id != user.room_id) // 다른 호실이라면
+                                isContact = true;
+                    
+                    if(isContact) {
+                        managerio.to(user.doom_id).emit(`${table}_contact`, {
+                            contact_time: nowDateTime(),
+                            contact_users: [
+                                ...currentPositions
+                            ],
+                            ...facilityInfo
+                        });
+
+                        userio.to(user.socket_id).emit(`contact_alert`);
+                    }
+                }
+            }
+            catch(err) {
+                console.log(err);
+            }
         });
+
+
 
         // 긴급 소집 지시 불응
         socket.on('cannot_assemble', (data) =>{
@@ -105,8 +191,8 @@ module.exports = (server, session) => {
         // 외부시설 이동요청
         socket.on('move_request', async (data) => {
             try {
-                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, NULL, NULL)";
-                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime()]);
+                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, NULL, NULL, ?)";
+                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime(), user.socket_id]);
                 
                 managerio.to(user.doom_id).emit('move_request', {
                     id: result.insertId,
@@ -123,8 +209,8 @@ module.exports = (server, session) => {
         // 공공시설 이동요청
         socket.on('facility_request', async (data) => {
             try {
-                let sql = "INSERT INTO facility_request VALUE (NULL, ?, ?, ?, ?, NULL, NULL, ?)";
-                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.facility_id, nowDateTime(), data.desired_time, data.description]);
+                let sql = "INSERT INTO facility_request VALUE (NULL, ?, ?, ?, ?, NULL, NULL, ?, ?)";
+                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.facility_id, nowDateTime(), data.desired_time, data.description, user.socket_id]);
                 // 금일 생활관 근무자에게만 보내기 위해 중간 과정을 거침
                 managerio.to(user.doom_id).emit('facility_request', {
                     id: result.insertId,
@@ -188,10 +274,10 @@ module.exports = (server, session) => {
                 let sql = "UPDATE outside_request SET permission=?, manager_tag=? WHERE id=?";
                 await dbPromiseConnection.query(sql, [data.permission, manager.tag, data.id]);
                 
-                sql = "SELECT outside_id, request_time, permission FROM outside_request WHERE id=?";
+                sql = "SELECT outside_id, request_time, permission, socket_id FROM outside_request WHERE id=?";
                 let [results] = await dbPromiseConnection.query(sql, [data.id]);
 
-                userio.to(manager.charge_doom).emit('move_approval', {id: data.id, ...results[0]});
+                userio.to(results[0].socket_id).emit('move_approval', {id: data.id, ...results[0]});
             } 
             catch(err) {
                 console.log(err);
@@ -204,10 +290,10 @@ module.exports = (server, session) => {
                 let sql = "UPDATE facility_request SET permission=?, manager_tag=? WHERE id=?";
                 await dbPromiseConnection.query(sql, [data.permission, manager.tag, data.id]);
                 
-                sql = "SELECT facility_id, request_time, permission FROM facility_request WHERE id=?";
+                sql = "SELECT facility_id, request_time, permission, socket_id FROM facility_request WHERE id=?";
                 let [results] = await dbPromiseConnection.query(sql, [data.id]);
 
-                userio.to(manager.charge_doom).emit('facility_approval', {id: data.id, ...results[0]});
+                userio.to(results[0].socket_id).emit('facility_approval', {id: data.id, ...results[0]});
             } 
             catch(err) {
                 console.log(err);
