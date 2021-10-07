@@ -129,6 +129,64 @@ router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
     });
 });
 
+router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
+    var msg = {2:'off_today.', 4: 'db_error'};
+    try {
+        let sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
+        let [chargeDooms] = await dbPromiseConnection.query(sql, [req.user.tag, nowDate()]);
+
+        if(!chargeDooms.length)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+        
+        let results = [];
+        
+        for(let chargeDoom of chargeDooms){
+            let doomResults = [];
+            sql ="SELECT name FROM doom WHERE id=?";
+            let [doomname] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
+
+            sql ="SELECT * FROM doomroom WHERE doom_id=? ORDER BY floor";
+            let [doomrooms] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
+            for(let doomroom of doomrooms) {
+                let found = doomResults.find(d => d.name === doomroom.floor+"층");
+                if(!found) 
+                    doomResults.push({name: doomroom.floor+"층", items: [{...doomroom}]});
+                else 
+                    found.items.push({...doomroom});
+            }
+
+            sql ="SELECT * FROM doomfacility WHERE doom_id=? ORDER BY floor";
+            let [doomfacilities] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
+            for(let doomfacility of doomfacilities) {
+                let found = doomResults.find(d => d.name === doomfacility.floor+"층");
+                if(!found) 
+                    doomResults.push({name: doomroom.floor+"층", items: [{...doomfacility}]});
+                else 
+                    found.items.push({...doomfacility});
+            }
+
+            results.push({doom_id: chargeDoom.charge_doom, doom_name: doomname[0].name, items:[...doomResults]});
+        }
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+            total: results.length,
+            data: results
+        });
+    }
+    catch(err) {
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err: err
+        });
+    }
+});
+
 
 router.get('/today', (req, res) => {
     var msg = {2:'no_watchman', 4: 'db_error'};
