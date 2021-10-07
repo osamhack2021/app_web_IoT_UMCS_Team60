@@ -7,7 +7,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
-import 'package:ucms/socket/socket.dart';
+import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserMove extends StatefulWidget {

@@ -1,46 +1,80 @@
 // ignore_for_file: prefer_initializing_formals, must_be_immutable
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ucms/background/background_manager.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/utils/user_util/user_controller.dart';
 
-class UserMain extends StatelessWidget {
+class UserMain extends StatefulWidget {
   UserMain({Key? key, this.location, this.state}) : super(key: key);
 
-  RxString? location="location uninitialized".obs;
-  RxString? state="state uninitialized".obs;
+  String? location = "location uninitialized";
+  String? state = "state uninitialized";
+
+  @override
+  State<UserMain> createState() => _UserMainState();
+}
+
+class _UserMainState extends State<UserMain> {
+  final store = GetStorage();
+  UserController u = Get.find<UserController>();
+  BackgroundManager backMan = Get.find<BackgroundManager>();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final store = GetStorage();
-    String name = store.read("name")??"모름";
-    location = store.read("location");
-    state = store.read("state");
+    String name = store.read("name") ?? "모름";
+    String location = store.read("location");
+    String state = store.read("state");
     Get.snackbar("로그인 성공", "$name 으로 로그인됨");
+
+    backMan.man.registerPeriodicTask("1", "refresh_beacon");
+
+    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+        GlobalKey<RefreshIndicatorState>();
+    Future<Null> _refresh() {
+      setState(() {
+        location = store.read("location");
+        state = store.read("state");
+      });
+    }
 
     return MaterialApp(
       home: KScreen(
-          child: Obx(
-            ()=>ListView(
-              children: [
-                const SizedBox(height: 100),
-                title("용사 메인"),
-                const SizedBox(height: 20),
-                LabelText(label: "현 위치", content: location!.value),
-                LabelText(label: "현 상태", content: state!.value),
-                PageButton(onPressed:(){
-                  Navigator.pushNamed(context, "/user/move");
-                },label:"이동 보고 하기"),
-              ],
-            ),
+        child: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: _refresh,
+          color: Colors.white,
+          backgroundColor: Colors.purple,
+          child: ListView(
+            children: [
+              const SizedBox(height: 100),
+              title("용사 메인"),
+              const SizedBox(height: 20),
+              LabelText(label: "현 위치", content: widget.location!),
+              LabelText(label: "현 상태", content: widget.state!),
+              PageButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/user/move");
+                  },
+                  label: "이동 보고 하기"),
+            ],
           ),
         ),
+      ),
     );
   }
 }
