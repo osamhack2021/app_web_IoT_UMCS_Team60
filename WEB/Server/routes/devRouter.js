@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const dbPromiseConnection = require(`../databasePromise`);
+const userAuth = require(`../controllers/userAuth`);
 
 function nowDateTime() {
     let krDate = new Date();
@@ -45,6 +46,19 @@ router.get('/makeAnomaly/:date', async (req, res) => {
         sql = "INSERT INTO anomaly value (NULL, ?, ?, ?, ?)";
         var [results] = await dbPromiseConnection.query(sql, [user.tag, temperature, details, req.params.date+ " " + timeGen()]);        
     }
+});
+
+
+router.post('/userLogin', (req, res, next)=>{req.body.password = '12345'; next()}, userAuth.login, (req, res) => {
+    console.log(req.body);
+    res.cookie('jwt', req.token);
+    console.log(req.token);
+    res.redirect('/socketUser');
+});
+
+router.get('/deleteWatchman/:date', async (req, res) => {
+    let sql = "DELETE from watchman where responsible_date=?";
+    await dbPromiseConnection.query(sql, [req.params.date]);
 });
 
 module.exports = router;
