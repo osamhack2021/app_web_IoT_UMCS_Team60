@@ -14,6 +14,7 @@ const facilityRequestRouter = require('./api/facilityRequestRouter');
 const anomalyRouter = require('./api/anomalyRouter');
 const beaconRouter = require('./api/beaconRouter');
 const cohortStatusRouter = require('./api/cohortStatusRouter');
+const roomPickerRouter = require('./api/roomPickerRouter');
 
 router.use('/manager', managerRouter); // /api/manager
 router.use('/user', userRouter); // /api/user
@@ -30,5 +31,6 @@ router.use('/facility_request', facilityRequestRouter); // /api/facility_request
 router.use('/anomaly', anomalyRouter); // /api/anomaly
 router.use('/beacon', beaconRouter); // /api/beacon
 router.use('/cohort_status', cohortStatusRouter); // /api/cohort_status
+router.use('/room_picker', roomPickerRouter); // /api/room_picker
 
 module.exports = router;
