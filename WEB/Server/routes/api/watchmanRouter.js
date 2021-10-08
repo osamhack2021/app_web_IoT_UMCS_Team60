@@ -151,9 +151,9 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
             sql ="SELECT * FROM doomroom WHERE doom_id=? ORDER BY floor";
             let [doomrooms] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
             for(let doomroom of doomrooms) {
-                let found = doomResults.find(d => d.name === doomroom.floor+"층");
+                let found = doomResults.find(d => d.floor === doomroom.floor);
                 if(!found) 
-                    doomResults.push({name: doomroom.floor+"층", items: [{...doomroom}]});
+                    doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomroom}]});
                 else 
                     found.items.push({...doomroom});
             }
@@ -161,9 +161,9 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
             sql ="SELECT * FROM doomfacility WHERE doom_id=? ORDER BY floor";
             let [doomfacilities] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
             for(let doomfacility of doomfacilities) {
-                let found = doomResults.find(d => d.name === doomfacility.floor+"층");
+                let found = doomResults.find(d => d.floor === doomfacility.floor);
                 if(!found) 
-                    doomResults.push({name: doomroom.floor+"층", items: [{...doomfacility}]});
+                    doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomfacility}]});
                 else 
                     found.items.push({...doomfacility});
             }
