@@ -7,6 +7,7 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
+import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
@@ -33,8 +34,8 @@ class RegisterPage extends StatelessWidget {
         child: ListView(
           // ignore: prefer_const_literals_to_create_immutables
           children: [
-            const SizedBox(height: 100),
-            title("Register"),
+            topMargin(),
+            title("회원가입"),
             Form(
               key: _formKey,
               child: Column(
@@ -74,6 +75,7 @@ class RegisterPage extends StatelessWidget {
                   }                  
                 },
               label: "전입 등록 신청"),
+            footer(),
           ],
         ),
       ),

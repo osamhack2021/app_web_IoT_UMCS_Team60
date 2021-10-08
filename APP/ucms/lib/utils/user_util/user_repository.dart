@@ -23,8 +23,8 @@ class UserRepository {
       User newUser = User.fromJson(serverRespDto.data);
 
       newUser.token=headers["authorization"];
-      prefs.write("loginFailureMsg","error message in User repository");
-      //prefs.write("loginFailureMsg",serverRespDto.msg);
+      //prefs.write("loginFailureMsg","error message in User repository");
+      prefs.write("loginFailureMsg",serverRespDto.msg);
       return newUser;
     } else {
       return User();

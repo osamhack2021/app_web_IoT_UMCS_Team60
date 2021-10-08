@@ -8,6 +8,7 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
+import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
@@ -25,7 +26,7 @@ class LoginPage extends StatelessWidget {
     //이미 로그인 되어있을 시
     if (u.isLogin.value) {
       Get.off(UserMain(
-          location: prefs.read("location").value??"adsf", state: prefs.read("state").value??"asdfafsd"));
+          location: prefs.read("location")??"adsf", state: prefs.read("state")??"asdfafsd"));
       return Container();
     }
 
@@ -35,22 +36,22 @@ class LoginPage extends StatelessWidget {
         home: KScreen(
           child: ListView(
             children: [
-              const SizedBox(height: 100),
-              title("login"),
+              topMargin(),
+              title("로그인"),
                Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
+                    KTextFormField(
                       controller: _tag,
                       validator: validateId(),
-                      decoration: const InputDecoration(hintText: "군번"),
+                      hint: "군번",
                     ),
-                    TextFormField(
+                    KTextFormField(
                       controller: _password,
                       validator: validatePw(),
                       obscureText: true,
-                      decoration: const InputDecoration(hintText: "password"),
+                      hint: "password",
                     ),
                   ],
                 ),
@@ -63,8 +64,8 @@ class LoginPage extends StatelessWidget {
                   String result = await u.login(_tag.text.trim(),_password.text.trim());
                   if (result == "success") {
                     Get.to(UserMain(
-                          location: store.read("location").value??"",
-                          state: store.read("state").value??"",
+                          location: store.read("location")??"",
+                          state: store.read("state")??"",
                         ));
                   } else {Get.snackbar("로그인 시도", result);}
                 }
@@ -75,6 +76,7 @@ class LoginPage extends StatelessWidget {
                     Get.to(RegisterPage());
                   },
                   label: "전입 신병 가입"),
+            footer(),
             ],      
           ),
           ),

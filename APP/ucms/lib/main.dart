@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ucms/background/background_manager.dart';
 import 'package:ucms/data/user.dart';
 
@@ -12,6 +13,7 @@ import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/beacon/beacon_manager.dart';
+import 'package:ucms/theme/color_theme.dart';
 
 
 void main() async {
@@ -42,16 +44,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.black,
-            primary: Colors.deepPurple, //글자 색.//정체성
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ), //RoundedRectangleBorer
-            minimumSize: const Size(400, 60),
+        textTheme: GoogleFonts.nanumGothicTextTheme(
+             Theme.of(context).textTheme,
           ),
-          ), //styleFrom
+        primaryTextTheme: GoogleFonts.nanumGothicTextTheme(
+             Theme.of(context).textTheme,
+          ),
+        primaryColor : mainTextColor(),
+        backgroundColor: backgroundColor(),
       ),
       initialRoute: "/nav",
       routes: {

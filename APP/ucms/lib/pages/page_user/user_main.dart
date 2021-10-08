@@ -12,6 +12,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserMain extends StatefulWidget {
@@ -37,31 +38,30 @@ class _UserMainState extends State<UserMain> {
   @override
   Widget build(BuildContext context) {
     String name = store.read("name") ?? "모름";
-    String location = store.read("location");
-    String state = store.read("state");
+    widget.location = store.read("location");
+    widget.state = store.read("state");
     Get.snackbar("로그인 성공", "$name 으로 로그인됨");
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
-    Future<Null> _refresh() {
-      setState(() {
-        location = store.read("location");
-        state = store.read("state");
-      });
-    }
 
     return MaterialApp(
       home: KScreen(
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
-          onRefresh: _refresh,
-          color: Colors.white,
-          backgroundColor: Colors.purple,
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() {
+              widget.location = store.read("location");
+              widget.state = store.read("state");
+            });
+          },
+
           child: ListView(
             children: [
-              const SizedBox(height: 100),
+              topMargin(),
               title("용사 메인"),
               const SizedBox(height: 20),
               LabelText(label: "현 위치", content: widget.location!),
@@ -71,6 +71,7 @@ class _UserMainState extends State<UserMain> {
                     Navigator.pushNamed(context, "/user/move");
                   },
                   label: "이동 보고 하기"),
+              footer(),
             ],
           ),
         ),

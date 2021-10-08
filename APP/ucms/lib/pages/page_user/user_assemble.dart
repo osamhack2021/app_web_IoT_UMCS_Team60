@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 class UserAssemble extends StatelessWidget {
@@ -18,7 +19,7 @@ class UserAssemble extends StatelessWidget {
       home: KScreen(
           child: ListView(
             children: [
-              const SizedBox(height: 100),
+              topMargin(),
               title("소집 지시"),
               const SizedBox(height: 20),
               const Image( image: AssetImage('assets/undraw_Notify.png'),fit : BoxFit.cover,),
@@ -27,6 +28,7 @@ class UserAssemble extends StatelessWidget {
               const SizedBox(height: 20),
               Text("빠르게 모이십시오", style : warning(), textAlign : TextAlign.center),
               PageButton(onPressed:(){},label:"소집 불가합니다."),
+              footer(),
             ],
           ),
       ),
