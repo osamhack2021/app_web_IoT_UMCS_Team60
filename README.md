@@ -103,9 +103,6 @@
    <div align="center"> <img src="https://seeklogo.com/images/E/eslint-logo-DDFB6EBCF6-seeklogo.com.png" height="40"/> <br>Eslint</div>
   </td>
   <td>
-   <div align="center"><img src="https://seeklogo.com/images/J/jest-logo-F9901EBBF7-seeklogo.com.png" height="40"/><br>Jest</div>
-  </td>
-  <td>
    <div align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" height="40"/><br>socket.io</div>
   </td>      
   <td>
@@ -165,11 +162,11 @@
  
 ## 팀 정보 (Team Information)
 |이름|역할|소개|github|이메일
-|:-------:|:---:|:---:|:---:|:---:|
+|:-------:|:---:|:---------:|:---:|:---:|
 |박재형<br>중위|팀장,infra 담당(DB,AWS)|아주대 졸, 무선통신 전공|<a href="https://github.com/namingsense"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/>|<a href="mailto:skyvieweye@gmail.com"> <img src="https://img.shields.io/badge/skyvieweye@gmail.com-green?logo=gmail&style=social">
 |김명승<br>병장|IoT,backend 담당<br>(Arduino, Node.js)|중앙대학교 2학년 휴학,<br> 소프트웨어학부|<a href="https://github.com/mskim9967"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:mskim9967@gmail.com"> <img src="https://img.shields.io/badge/mskim9967@gmail.com-green?logo=gmail&style=social"> |
 |최경민<br>상병|app-frontend 담당(Flutter)| 광주과학기술원 1학년 휴학,<br>기초교육학부(자유전공)  |<a href="https://github.com/2ood"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> |<a href="mailto:kyungmin.official0@gmail.com"> <img src="https://img.shields.io/badge/kyungmin.official0@gmail.com-green?logo=gmail&style=social"> |
-|정재욱<br>상병|web-frontend 담당(Vue.js)| 아주대 소프트웨어학과 1학년<br>휴학,자동차SW전공 복수전공 |<a href="https://github.com/Wo-ogie"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> | <a href="mailto:siwall0105@gmail.com"> <img src="https://img.shields.io/badge/siwall0105@gmail.com-green?logo=gmail&style=social">| 
+|정재욱<br>상병|web-frontend 담당(Vue.js)| 아주대 소프트웨어학과 2학년 휴학<br>자동차SW전공 복수전공 |<a href="https://github.com/Wo-ogie"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> | <a href="mailto:siwall0105@gmail.com"> <img src="https://img.shields.io/badge/siwall0105@gmail.com-green?logo=gmail&style=social">| 
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
  * [MIT](https://github.com/osam2020-WEB/Sample-ProjectName-TeamName/blob/master/license.md)
