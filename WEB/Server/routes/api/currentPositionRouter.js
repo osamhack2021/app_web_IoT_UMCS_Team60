@@ -4,9 +4,9 @@ const dbPromiseConnection = require(`../../databasePromise`);
 router.get('/', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id "
-        sql += "FROM access_record a, beacon b "
-        sql += "WHERE a.beacon_id=b.id AND a.out_time IS NULL";
+        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id, u.name as user_name, u.rank as user_rank, u.doom_id as user_doom_id, u.room_id as user_room_id "
+        sql += "FROM access_record a, beacon b, user u "
+        sql += "WHERE a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL";
         var [results] = await dbPromiseConnection.query(sql);
         
         if(!results.length)
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
                 sql = `SELECT name FROM doom WHERE id=${facilityinfo[0].doom_id}`;
                 var [doominfo] = await dbPromiseConnection.query(sql);
                 record.doom_id = facilityinfo[0].doom_id;
-                record.fullname = doominfo[0].name + " " + record.name;
+                record.doom_name = doominfo[0].name;
             }
         }
 
@@ -58,9 +58,9 @@ router.get('/', async (req, res) => {
 router.get('/search', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id "
-        sql += "FROM access_record a, beacon b "
-        sql += "WHERE a.beacon_id=b.id AND a.out_time IS NULL";
+        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id, u.name as user_name, u.rank as user_rank, u.doom_id as user_doom_id, u.room_id as user_room_id "
+        sql += "FROM access_record a, beacon b, user u "
+        sql += "WHERE a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL";
         if(Object.keys(req.query).length) 
             for(key in req.query) {
                 if(key === 'doom_id' || key === 'outside_facility_id' || key === 'doomfacility_id' || key === 'doomroom_id') {
@@ -98,7 +98,7 @@ router.get('/search', async (req, res) => {
                 sql = `SELECT name FROM doom WHERE id=${facilityinfo[0].doom_id}`;
                 let [doominfo] = await dbPromiseConnection.query(sql);
                 record.doom_id = facilityinfo[0].doom_id;
-                record.fullname = doominfo[0].name + " " + record.name;
+                record.doom_name = doominfo[0].name;
             }
         }
 
@@ -123,9 +123,9 @@ router.get('/search', async (req, res) => {
 router.get('/:id', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id "
-        sql += "FROM access_record a, beacon b "
-        sql += "WHERE a.beacon_id=b.id AND a.out_time IS NULL AND a.id=?";
+        var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id, u.name as user_name, u.rank as user_rank, u.doom_id as user_doom_id, u.room_id as user_room_id "
+        sql += "FROM access_record a, beacon b, user u "
+        sql += "WHERE a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL";
         var [results] = await dbPromiseConnection.query(sql, req.params.id);
         
         if(!results.length)
@@ -153,7 +153,7 @@ router.get('/:id', async (req, res) => {
                 sql = `SELECT name FROM doom WHERE id=${facilityinfo[0].doom_id}`;
                 var [doominfo] = await dbPromiseConnection.query(sql);
                 record.doom_id = facilityinfo[0].doom_id;
-                record.fullname = doominfo[0].name + " " + record.name;
+                record.doom_name = doominfo[0].name;
             }
         }
  
@@ -174,3 +174,4 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
