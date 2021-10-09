@@ -15,4 +15,9 @@ function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
 }
 
-export { loginAdmin, logoutAdmin, fetchHealthReport };
+// UserProfile
+function fetchUserProfile(tag) {
+  return axios.get(`${BASE_URL}user/${tag}`);
+}
+
+export { loginAdmin, logoutAdmin, fetchHealthReport, fetchUserProfile };
