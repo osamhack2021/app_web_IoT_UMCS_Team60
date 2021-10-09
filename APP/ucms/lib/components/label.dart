@@ -139,9 +139,9 @@ class LabelText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom : 3.0),
+      padding: const EdgeInsets.only(bottom : 10.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           Container(

@@ -49,4 +49,14 @@ class UserSocketClient extends GetxService {
 
     socket.emit("location_report", json);
   }
+
+  void cannotAssemble({required String description}) {
+    startSocket();
+    Map<String, dynamic> json = {
+      "tag": prefs.read("tag"),
+      "description" : description
+    };
+
+    socket.emit("cannot_assemble", json);
+  }
 }

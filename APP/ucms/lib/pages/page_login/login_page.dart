@@ -8,6 +8,7 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
+import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
@@ -63,11 +64,12 @@ class LoginPage extends StatelessWidget {
                 if (_formKey.currentState!.validate()) {
                   String result = await u.login(_tag.text.trim(),_password.text.trim());
                   if (result == "success") {
+                    store.write("state", "정상");
                     Get.to(UserMain(
                           location: store.read("location")??"",
                           state: store.read("state")??"",
                         ));
-                  } else {Get.snackbar("로그인 시도", result);}
+                  } else {Get.snackbar("로그인 시도", result,backgroundColor: snackbarBackColor(),);}
                 }
               },
             ),

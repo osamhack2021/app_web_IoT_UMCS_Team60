@@ -65,8 +65,10 @@ class _UserMoveState extends State<UserMove> {
                   socket.moveRequest( destination: btns[_value],);
                   
                   store.write("state","결재 대기중");
-
                   Get.back();
+                  Get.snackbar("새로고침 필요", "화면을 끌어내려주세요",
+                    backgroundColor: snackbarBackColor(),
+                  );
                 },
             label: "보고"),
             footer(),

@@ -6,6 +6,7 @@ import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 title(content) => Text(content, style: h1(), textAlign: TextAlign.center);
+quote(content) => Text(content, style: body(), textAlign: TextAlign.center);
 
 class KTextFormField extends StatelessWidget {
   KTextFormField({Key? key, required this.hint, required this.controller, this.obscureText=false, required this.validator, this.type=TextInputType.text})
@@ -24,6 +25,8 @@ class KTextFormField extends StatelessWidget {
         style: GoogleFonts.nanumGothic(color : mainTextColor()),
         controller: controller,
         obscureText: obscureText,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
         decoration: InputDecoration(
           hintText: hint,
           enabledBorder: UnderlineInputBorder(      

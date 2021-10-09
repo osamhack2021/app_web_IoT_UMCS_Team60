@@ -7,6 +7,7 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
+import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
@@ -69,9 +70,9 @@ class RegisterPage extends StatelessWidget {
                     };
                     String result = await u.register(json);
                     if (result =="success") {
-                      Get.snackbar("회원가입 시도", "성공");
+                      Get.snackbar("회원가입 시도", "성공", backgroundColor: snackbarBackColor(),);
                       Get.to(()=>LoginPage());
-                    } else {Get.snackbar("회원가입 시도", result);}
+                    } else {Get.snackbar("회원가입 시도", result, backgroundColor: snackbarBackColor(),);}
                   }                  
                 },
               label: "전입 등록 신청"),

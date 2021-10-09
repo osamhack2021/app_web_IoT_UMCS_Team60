@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ucms/theme/button_theme.dart';
+import 'package:ucms/theme/color_theme.dart';
 
 class PageButton extends StatelessWidget {
   const PageButton({Key? key, required this.onPressed, required this.label})

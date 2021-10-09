@@ -12,6 +12,8 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/pages/page_user/user_assemble.dart';
+import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
@@ -44,6 +46,8 @@ class _UserMainState extends State<UserMain> {
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
+    bool assembleVisible =false;
+
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
 
@@ -62,13 +66,20 @@ class _UserMainState extends State<UserMain> {
           child: ListView(
             children: [
               topMargin(),
-              title("용사 메인"),
+              title("UMCS"),
+              quote("Untact Movement Control System"),
               const SizedBox(height: 20),
               LabelText(label: "현 위치", content: widget.location!),
               LabelText(label: "현 상태", content: widget.state!),
+              Visibility(
+                visible: assembleVisible,
+                child: PageButton(onPressed: (){
+                  Get.to(UserAssemble(location: store.read("assemble_location"), timestamp: store.read("assemble_time")));
+                }, label: "소집 지시 페이지"),
+              ),
               PageButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/user/move");
+                    Get.to(const UserMove());
                   },
                   label: "이동 보고 하기"),
               footer(),
