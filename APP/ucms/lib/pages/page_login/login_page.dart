@@ -6,10 +6,12 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/user.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
+import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
@@ -65,11 +67,17 @@ class LoginPage extends StatelessWidget {
                   String result = await u.login(_tag.text.trim(),_password.text.trim());
                   if (result == "success") {
                     store.write("state", "정상");
+                    var userJson = await u.userInfo(_tag.text.trim());
+                    User user = User.fromJson(userJson);
+                    User.updatePrefs(user);
+                    
                     Get.to(UserMain(
                           location: store.read("location")??"",
                           state: store.read("state")??"",
                         ));
-                  } else {Get.snackbar("로그인 시도", result,backgroundColor: snackbarBackColor(),);}
+                  } else {
+                    Snack.top("로그인 시도", result);
+                  }
                 }
               },
             ),

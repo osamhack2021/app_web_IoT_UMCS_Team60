@@ -12,10 +12,9 @@ import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/validate.dart';
 
 class UserAssemble extends StatefulWidget {
-  UserAssemble({Key? key, required this.location, required this.timestamp}) : super(key: key);
+  UserAssemble({Key? key, required this.location}) : super(key: key);
 
   String location;
-  DateTime timestamp;
 
   @override
   State<UserAssemble> createState() => _UserAssembleState();

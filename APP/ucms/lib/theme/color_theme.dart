@@ -14,6 +14,8 @@ Color buttonbackColor() => Colors.green;
 
 Color snackbarBackColor() => Colors.green.shade100;
 
+Color warningColor() => Colors.red.shade300;
+
 
 
 Color chipBackcolor() => Colors.green.shade200;

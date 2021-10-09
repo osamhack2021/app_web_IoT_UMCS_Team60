@@ -53,3 +53,27 @@ class PostButton extends StatelessWidget {
   }
 }
 
+class WarnButton extends StatelessWidget {
+  const WarnButton({Key? key, required this.onPressed, required this.label})
+      : super(key: key);
+
+  final Function() onPressed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(label, textAlign: TextAlign.center),
+        style : TextButton.styleFrom(
+            backgroundColor: warningColor(),
+            primary: buttonTextColor(),
+            textStyle: GoogleFonts.nanumGothic(),
+          ),
+      ),
+    );
+  }
+}
+

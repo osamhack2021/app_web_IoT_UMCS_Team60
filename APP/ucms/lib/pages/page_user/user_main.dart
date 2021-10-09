@@ -14,7 +14,9 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
+import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
+import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserMain extends StatefulWidget {
@@ -42,11 +44,11 @@ class _UserMainState extends State<UserMain> {
     String name = store.read("name") ?? "모름";
     widget.location = store.read("location");
     widget.state = store.read("state");
-    Get.snackbar("로그인 성공", "$name 으로 로그인됨");
+    Snack.top("로그인 성공", "$name 으로 로그인됨");
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
-    bool assembleVisible =false;
+    bool assembleVisible =store.read("assemble_visible")??false;
 
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
@@ -60,6 +62,7 @@ class _UserMainState extends State<UserMain> {
             setState(() {
               widget.location = store.read("location");
               widget.state = store.read("state");
+              assembleVisible = store.read("assemble_visible");
             });
           },
 
@@ -73,9 +76,9 @@ class _UserMainState extends State<UserMain> {
               LabelText(label: "현 상태", content: widget.state!),
               Visibility(
                 visible: assembleVisible,
-                child: PageButton(onPressed: (){
-                  Get.to(UserAssemble(location: store.read("assemble_location"), timestamp: store.read("assemble_time")));
-                }, label: "소집 지시 페이지"),
+                child: WarnButton(onPressed: (){
+                  Get.to(UserAssemble(location: store.read("assemble_location")));
+                }, label: "소집 지시가 내려왔습니다."),
               ),
               PageButton(
                   onPressed: () {
