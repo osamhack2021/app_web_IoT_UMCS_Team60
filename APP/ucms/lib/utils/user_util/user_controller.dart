@@ -48,6 +48,9 @@ class UserController extends GetxController {
     //final registerDto = RegisterRequestDto.fromJson(json);
     final repository = UserRepository();
     final data = await repository.userInfo(tag);
+
+    User.updatePrefs(User.fromJson(data));
+
     return data;
   }
 }

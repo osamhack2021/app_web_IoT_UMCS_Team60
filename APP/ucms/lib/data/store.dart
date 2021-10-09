@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+
+@Deprecated("no longer uses this for shared preferences.")
 class Store extends GetXState {
   String? tag;
   String? name;
@@ -9,5 +11,4 @@ class Store extends GetXState {
   String? state;
   String? token;
   bool? isLogin;
-   
 }

@@ -9,11 +9,11 @@ import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
-import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
+
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);

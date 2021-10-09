@@ -14,7 +14,6 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
-import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';

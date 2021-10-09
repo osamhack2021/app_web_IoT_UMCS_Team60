@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
-import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/user_util/user_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
@@ -50,11 +49,9 @@ class UserRepository {
   Future<Map<String,dynamic>> userInfo(String tag) async {
     Response resp = await _userProvider.userInfo(tag);
     dynamic body = resp.body;
-    final prefs = GetStorage();
 
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
 
     Map<String, dynamic> data = serverRespDto.data;
       return data;
