@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class LoginRequestDto {
-  const LoginRequestDto({ Key? key, required this.tag, required this.password });
+  LoginRequestDto({ Key? key, required this.tag, required this.password });
   
-  final String? tag;
-  final String? password;
+  String? tag;
+  String? password;
+
+  LoginRequestDto.fromJson(Map<String, dynamic> json) {
+    tag = json["tag"];
+    password = json["password"];
+  }
 
   Map<String, dynamic> toJson() => {
         "tag": tag,

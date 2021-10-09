@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/theme/size.dart';
 
 class NavPage extends StatelessWidget {
   const NavPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class NavPage extends StatelessWidget {
             // ignore: prefer_const_literals_to_create_immutables
             children : [
               const SizedBox(height:100),
-                title("navigation - dev"),
+                title("NAVIGATION [DEV]"),
 
                 PageButton(onPressed: (){
                   Navigator.pushNamed(context, "/beacon_test");
@@ -37,6 +38,7 @@ class NavPage extends StatelessWidget {
                 PageButton(onPressed: (){
                   Navigator.pushNamed(context, "/user/assemble");
                 }, label: "소집 지시 페이지"),
+                footer(),
             ],
           ),
         ),

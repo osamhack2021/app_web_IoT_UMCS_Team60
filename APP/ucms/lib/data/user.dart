@@ -6,7 +6,7 @@ class User {
   int roomId;
   int doomId;
 
-  String location;
+  String location; //beaconId 랑 매칭
   String state;
 
   String token;

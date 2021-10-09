@@ -25,7 +25,6 @@ class LabelFormInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: bold()),
-          const Spacer(),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
             child: KTextFormField(hint: hint, controller: controller, validator: validator,),
@@ -57,7 +56,6 @@ class LabelFormIntInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: bold()),
-          const Spacer(),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
             child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number),
@@ -90,7 +88,7 @@ class LabelFormDropDown extends StatefulWidget {
 }
 
 class _LabelFormDropDownState extends State<LabelFormDropDown> {
-  var dropdownValue="선택하세요";
+  var dropdownValue="";
 
   @override
   Widget build(BuildContext context) {
@@ -100,27 +98,30 @@ class _LabelFormDropDownState extends State<LabelFormDropDown> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(widget.label, style: bold()),
-          Expanded(
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
             child: DropdownButton<String>(
-              value: dropdownValue,
-              style: const TextStyle(color: Colors.blue),
-              underline: Container(
-                height: 2,
-                color: Colors.blue,
+                value: dropdownValue,
+                hint: const Text("선택하세요"),
+                style: const TextStyle(color: Colors.blue),
+                alignment: AlignmentDirectional.centerEnd,
+                underline: Container(
+                  height: 2,
+                  color: Colors.blue,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: <String>[...widget.labels]
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
-              items: <String>[...widget.labels]
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
           ),
         ],
       ),
@@ -143,7 +144,6 @@ class LabelText extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const Spacer(),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
             child: Text(content),

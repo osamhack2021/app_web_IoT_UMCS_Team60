@@ -11,8 +11,8 @@ validatePw() => (String? value) {
     else { return null;}
   };
 
-validatePwCheck({required String value, required String checkValue}) {
-    return (value==checkValue) ?null:"입력한 패스워드가 서로 다릅니다.";
+validatePwCheck(String? value, String? checkValue) {
+    return (value==checkValue)?null:"입력한 패스워드가 서로 다릅니다.";
 }
 
 validateNull() => (String? value) {

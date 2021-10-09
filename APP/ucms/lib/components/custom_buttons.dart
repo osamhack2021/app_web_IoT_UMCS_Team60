@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:ucms/theme/button_theme.dart';
 
 class PageButton extends StatelessWidget {
   const PageButton({Key? key, required this.onPressed, required this.label})
@@ -14,9 +16,14 @@ class PageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
-      child: ElevatedButton(
+      child: TextButton(
         onPressed: onPressed,
         child: Text(label, textAlign: TextAlign.center),
+        style : TextButton.styleFrom(
+            backgroundColor: buttonbackColor(),
+            primary: buttonTextColor(), //글자 색.//정체성
+            textStyle: GoogleFonts.nanumGothic(),
+          ),
       ),
     );
   }
@@ -36,6 +43,11 @@ class PostButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         child: Text(label, textAlign: TextAlign.center),
+        style : TextButton.styleFrom(
+            backgroundColor: buttonbackColor(),
+            primary: buttonTextColor(),
+            textStyle: GoogleFonts.nanumGothic(),
+          ),
       ),
     );
   }

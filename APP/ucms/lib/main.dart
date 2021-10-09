@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:ucms/background/background_manager.dart';
 import 'package:ucms/data/user.dart';
 
 import 'package:ucms/pages/page_login/login_page.dart';
@@ -9,12 +11,26 @@ import 'package:ucms/nav.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
-import 'package:ucms/socket/socket.dart';
-import 'package:ucms/utils/beacon_test.dart';
+import 'package:ucms/socket/user_socket_client.dart';
+import 'package:ucms/beacon/beacon_manager.dart';
+import 'package:ucms/theme/color_theme.dart';
+
 
 void main() async {
-  startSocket();
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  var client = Get.put(UserSocketClient());
+  client.startSocket();
+  
+  Get.put(BeaconManager());
+
+  var backMan = Get.put(BackgroundManager());
+  backMan.man.initialize(
+    backMan.callbackDispatcher,
+      isInDebugMode: true 
+  );
+   
   User.userInit();
 
   runApp(const MyApp());
@@ -28,20 +44,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.black,
-            primary: Colors.white, //글자 색.//정체성
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ), //RoundedRectangleBorer
-            minimumSize: const Size(400, 60),
-          ), //styleFrom
-        ),
+        textTheme: GoogleFonts.nanumGothicTextTheme(
+             Theme.of(context).textTheme,
+          ),
+        primaryTextTheme: GoogleFonts.nanumGothicTextTheme(
+             Theme.of(context).textTheme,
+          ),
+        primaryColor : mainTextColor(),
+        backgroundColor: backgroundColor(),
       ),
       initialRoute: "/nav",
       routes: {
-        "/beacon_test" : (context) => const BeaconTest(),
         "/nav" : (context) => const NavPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),

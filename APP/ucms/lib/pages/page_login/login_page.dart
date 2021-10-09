@@ -8,6 +8,7 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
+import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
@@ -16,17 +17,16 @@ class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _tag = TextEditingController();
-  final UserController u = Get.put(UserController());
+  final UserController u = Get.isRegistered<UserController>()?Get.find<UserController>():Get.put(UserController());
   final _password = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
     var prefs = GetStorage();
-
     //이미 로그인 되어있을 시
-    if (prefs.read("islogin") == true) {
+    if (u.isLogin.value) {
       Get.off(UserMain(
-          location: prefs.read("location")!, state: prefs.read("state")!));
+          location: prefs.read("location")??"adsf", state: prefs.read("state")??"asdfafsd"));
       return Container();
     }
 
@@ -36,62 +36,50 @@ class LoginPage extends StatelessWidget {
         home: KScreen(
           child: ListView(
             children: [
-              const SizedBox(height: 100),
-              title("login"),
+              topMargin(),
+              title("로그인"),
                Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
+                    KTextFormField(
                       controller: _tag,
                       validator: validateId(),
-                      decoration: const InputDecoration(hintText: "군번"),
+                      hint: "군번",
                     ),
-                    TextFormField(
+                    KTextFormField(
                       controller: _password,
                       validator: validatePw(),
                       obscureText: true,
-                      decoration: const InputDecoration(hintText: "password"),
+                      hint: "password",
                     ),
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PostButton(
-                    label: "용사 로그인",
-                    onPressed: () async {
-                      final store = GetStorage();
-                      if (_formKey.currentState!.validate()) {
-                        int result =
-                            await u.login(_tag.text.trim(),_password.text.trim());
-                        if (result == 1) {
-                          Get.to(() => UserMain(
-                                location: store.read("location"),
-                                state: store.read("state"),
-                              ));
-                        } else {
-                          Get.snackbar("로그인 시도", "로그인 실패");
-                      }
-                    }
-                  },
-                  ),
-                PostButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/user/main");
-                  },
-                  label: "간부 로그인"),
-             ],
-          ),
+              PageButton(
+              label: "용사 로그인",
+              onPressed: () async {
+                final store = GetStorage();
+                if (_formKey.currentState!.validate()) {
+                  String result = await u.login(_tag.text.trim(),_password.text.trim());
+                  if (result == "success") {
+                    Get.to(UserMain(
+                          location: store.read("location")??"",
+                          state: store.read("state")??"",
+                        ));
+                  } else {Get.snackbar("로그인 시도", result);}
+                }
+              },
+            ),
               PageButton(
                   onPressed: () {
                     Get.to(RegisterPage());
                   },
                   label: "전입 신병 가입"),
-            ],
+            footer(),
+            ],      
           ),
-        ),
+          ),
       );
     }
   }
