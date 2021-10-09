@@ -11,6 +11,7 @@ import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserMove extends StatefulWidget {
@@ -27,7 +28,7 @@ class _UserMoveState extends State<UserMove> {
 
   final u = Get.find<UserController>();
 
-  List<String> btns = ["막사", "체단실" , "노래방", "지통실", "사지방",];
+  List<String> btns = ["막사", "체단실" , "노래방", "지통실", "사지방","샤워실", "통신과"];
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class _UserMoveState extends State<UserMove> {
           children: [
             topMargin(),
             title("이동 보고"),
+            const SizedBox(height: 20),
             Wrap(children: List<Widget>.generate(btns.length,(int index) {
                 return Padding(
                   padding: const EdgeInsets.all(3.0),
@@ -58,17 +60,19 @@ class _UserMoveState extends State<UserMove> {
               },
             ).toList(),
             ),
+            const SizedBox(height: 15),
             PostButton(
                 onPressed: () async {
                   final store = GetStorage();
                   UserSocketClient socket = Get.find<UserSocketClient>();
                   socket.moveRequest( destination: btns[_value],);
                   
-                  store.write("state","결재 대기중");
-
+                  store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${btns[_value]} )");
                   Get.back();
+                  Snack.top("새로고침 필요", "화면을 끌어내려주세요");
                 },
             label: "보고"),
+            const SizedBox(height: 20),
             footer(),
           ],
         ),

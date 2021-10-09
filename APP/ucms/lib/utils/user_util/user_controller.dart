@@ -10,8 +10,8 @@ class UserController extends GetxController {
   final RxBool isLogin = false.obs;
   final appUser = User().obs;
   var prefs = GetStorage();
-  //UserSocketClient socket = Get.find<UserSocketClient>();
-  //BeaconManager beaconManager = Get.find<BeaconManager>();
+  UserSocketClient socket = Get.find<UserSocketClient>();
+  BeaconManager beaconManager = Get.find<BeaconManager>();
 
   void logout() {
     isLogin.value=false;
@@ -42,5 +42,12 @@ class UserController extends GetxController {
     final repository = UserRepository();
     final message = await repository.register(json);
     return message;
+  }
+
+  Future<Map<String,dynamic>> userInfo(String tag) async {
+    //final registerDto = RegisterRequestDto.fromJson(json);
+    final repository = UserRepository();
+    final data = await repository.userInfo(tag);
+    return data;
   }
 }

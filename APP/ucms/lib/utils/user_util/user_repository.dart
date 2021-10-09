@@ -46,4 +46,18 @@ class UserRepository {
 
     return serverRespDto.msg;
   }
+
+  Future<Map<String,dynamic>> userInfo(String tag) async {
+    Response resp = await _userProvider.userInfo(tag);
+    dynamic body = resp.body;
+    final prefs = GetStorage();
+
+    dynamic convertBody = convertUtf8ToObject(body);
+    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+
+
+    Map<String, dynamic> data = serverRespDto.data;
+      return data;
+  }
+
 }

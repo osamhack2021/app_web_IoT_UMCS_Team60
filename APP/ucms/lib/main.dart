@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         "/user/main": (context) => UserMain(location: "", state: ""),
         "/user/move": (context) => const UserMove(),
         "/user/assemble": (context) => UserAssemble(
-            location: "막사", timestamp: DateTime.parse("2012-02-27 13:27:00")),
+            location: "막사"),
       },
     );
   }

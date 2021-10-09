@@ -6,4 +6,6 @@ class UserProvider extends GetConnect {
   Future<Response> login(Map data) => post("$restAPIHost/user/login", data);
 
   Future<Response> register(Map data)=> post("$restAPIHost/user/register", data);
+
+  Future<Response> userInfo(String tag) => get("$restAPIHost/user/:$tag");
 }
