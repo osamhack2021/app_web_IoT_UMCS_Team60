@@ -10,9 +10,25 @@ function logoutAdmin() {
   return axios.get(`${BASE_URL}manager/logout`);
 }
 
-// HealthCare.vue
+// Monitoring
+function fetchCurrentPositionInfo(beaconId) {
+  return axios.get(`${BASE_URL}current_position/search?beacon_id=${beaconId}`);
+}
+
+// HealthCare
 function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
 }
 
-export { loginAdmin, logoutAdmin, fetchHealthReport };
+// UserProfile
+function fetchUserProfile(tag) {
+  return axios.get(`${BASE_URL}user/${tag}`);
+}
+
+export {
+  loginAdmin,
+  logoutAdmin,
+  fetchCurrentPositionInfo,
+  fetchHealthReport,
+  fetchUserProfile,
+};

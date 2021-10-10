@@ -7,5 +7,6 @@ module.exports = {
       },
     }
   },
+  outputDir: '../Server/build',
   transpileDependencies: ["vuetify"],
 };
