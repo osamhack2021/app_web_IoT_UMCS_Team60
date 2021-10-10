@@ -178,20 +178,3 @@ This project is licensed under the terms of the MIT license.
 ※ [Github 내 라이선스 키워드(클릭)](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/licensing-a-repository)
 
 ※ [\[참조\] Github license의 종류와 나에게 맞는 라이선스 선택하기(클릭)](https://flyingsquirrel.medium.com/github-license%EC%9D%98-%EC%A2%85%EB%A5%98%EC%99%80-%EB%82%98%EC%97%90%EA%B2%8C-%EB%A7%9E%EB%8A%94-%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0-ae29925e8ff4)
-
-## Flutter 프로젝트 생성 및 테스트
-
-아래 명령으로 `myapp` 프로젝트를 생성하고, 테스트를 위해 웹 앱 형태로 실행합니다.
-```bash
-flutter create myapp
-cd myapp
-flutter run -d web-server --web-hostname=0.0.0.0 
-``` 
-
-본 저장소를 활용하여 생성된 Codespace 에는 Android SDK 도 같이 설정되어 있습니다.
-별도 추가적인 절차 없이, 아래 명령줄로 Android 앱 APK 파일을 빌드할 수 있습니다.
-```bash
-flutter build apk
-```
-
-Flutter 프로젝트 개발환경 구축, 앱 개발, 빌드 테스트 등에 관한 자세한 사항은, 별도로 전달 받으신 가이드 문서와 [Flutter 공식 문서](https://flutter.dev/)를 참고해 주시기 바랍니다.
