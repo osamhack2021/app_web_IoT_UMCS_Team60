@@ -19,7 +19,7 @@ class BackgroundManager extends GetxService {
             int min15 = 900;
 
             beaconMan.startListeningBeacons();
-            Timer t = Timer.periodic(const Duration(minutes: 2), (timer) {
+            Timer.periodic(const Duration(minutes: 2), (timer) {
               if (min15 >= 0) {
                 socketClient.locationReport(
                     macAddress: beaconResult.macAddress,

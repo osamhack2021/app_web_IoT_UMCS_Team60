@@ -9,7 +9,6 @@ import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
-import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
@@ -20,16 +19,19 @@ class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _tag = TextEditingController();
-  final UserController u = Get.isRegistered<UserController>()?Get.find<UserController>():Get.put(UserController());
+  final UserController u = Get.isRegistered<UserController>()
+      ? Get.find<UserController>()
+      : Get.put(UserController());
   final _password = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     var prefs = GetStorage();
     //이미 로그인 되어있을 시
     if (u.isLogin.value) {
       Get.off(UserMain(
-          location: prefs.read("location")??"adsf", state: prefs.read("state")??"asdfafsd"));
+          location: prefs.read("location") ?? "adsf",
+          state: prefs.read("state") ?? "asdfafsd"));
       return Container();
     }
 
@@ -41,7 +43,7 @@ class LoginPage extends StatelessWidget {
             children: [
               topMargin(),
               title("로그인"),
-               Form(
+              Form(
                 key: _formKey,
                 child: Column(
                   children: [
@@ -60,36 +62,38 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               PageButton(
-              label: "용사 로그인",
-              onPressed: () async {
-                final store = GetStorage();
-                if (_formKey.currentState!.validate()) {
-                  String result = await u.login(_tag.text.trim(),_password.text.trim());
-                  if (result == "success") {
-                    store.write("state", "정상");
-                    var userJson = await u.userInfo(_tag.text.trim());
-                    User user = User.fromJson(userJson);
-                    User.updatePrefs(user);
-                    
-                    Get.to(UserMain(
-                          location: store.read("location")??"",
-                          state: store.read("state")??"",
-                        ));
-                  } else {
-                    Snack.top("로그인 시도", result);
+                label: "용사 로그인",
+                onPressed: () async {
+                  final store = GetStorage();
+                  if (_formKey.currentState!.validate()) {
+                    String result =
+                        await u.login(_tag.text.trim(), _password.text.trim());
+                    if (result == "success") {
+                      store.write("state", "정상");
+                      
+                      await u.userInfo(_tag.text.trim());
+
+                      Snack.top("로그인 시도", "성공");
+                      Get.to(UserMain(
+                        location: store.read("recent_place_name") ??
+                            "error in LoginPage",
+                        state: store.read("state") ?? "",
+                      ));
+                    } else {
+                      Snack.top("로그인 시도", result);
+                    }
                   }
-                }
-              },
-            ),
+                },
+              ),
               PageButton(
                   onPressed: () {
                     Get.to(RegisterPage());
                   },
                   label: "전입 신병 가입"),
-            footer(),
-            ],      
+              footer(),
+            ],
           ),
-          ),
+        ),
       );
     }
   }

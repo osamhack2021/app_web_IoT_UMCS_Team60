@@ -12,9 +12,9 @@ class BeaconManager extends GetxService {
     initPlatformState();
   }
 
-  late BeaconResult beaconResult;
+  late BeaconResult beaconResult = BeaconResult();
   var isRunning = false;
-  //UserSocketClient socket = Get.find<UserSocketClient>();
+  UserSocketClient socket = Get.find<UserSocketClient>();
   final StreamController<String> beaconEventsController = StreamController<String>.broadcast();
 
 void startListeningBeacons() {
