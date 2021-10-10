@@ -1,7 +1,4 @@
 module.exports = {
-  chainWebPack: config => {
-    config.resolve.alias.set('@', path.resolve(__dirname, 'src/'))
-  },
   devServer: {
     disableHostCheck: true,
     proxy: {
