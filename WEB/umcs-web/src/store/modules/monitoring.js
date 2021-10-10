@@ -26,7 +26,7 @@ const state = {
     },
   ],
 
-  // Room Picker Create 할 때 시설 선택
+  // 관리할 장소(room) data
   roomList: [
     {
       doomId: "1",

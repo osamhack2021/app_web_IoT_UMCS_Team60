@@ -1,10 +1,9 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center align-center">
+    <v-row class="d-flex justify-center align-center mt-5">
       <v-col cols="6">
         <v-img
           src="@/assets/UMCS.png"
-          max-height="330"
         />
       </v-col>
     </v-row>
