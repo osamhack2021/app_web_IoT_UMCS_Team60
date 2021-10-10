@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ucms/data/position.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/data/dto/login_request_dto.dart';
 import 'package:ucms/socket/user_socket_client.dart';
@@ -18,6 +19,8 @@ class UserController extends GetxController {
     prefs.write("location","");
     prefs.write("state","");
     prefs.write("token", "");
+     User.updatePrefs(User());
+
   }
 
   Future<String> login(tag, password) async {
@@ -45,12 +48,10 @@ class UserController extends GetxController {
   }
 
   Future<Map<String,dynamic>> userInfo(String tag) async {
-    //final registerDto = RegisterRequestDto.fromJson(json);
     final repository = UserRepository();
     final data = await repository.userInfo(tag);
 
-    User.updatePrefs(User.fromJson(data));
-
+    Position.updatePrefs(Position.fromJson(data));
     return data;
   }
 }

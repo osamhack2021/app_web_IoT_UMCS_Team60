@@ -23,10 +23,10 @@ class User {
   // 통신을 위해서 json 처럼 생긴 문자열 {"id":1} => Dart 오브젝트
 
   User.fromJson(Map<String, dynamic> json)
-      : tag = json["tag"] ?? "",
-        name = json["name"] ?? "",
-        roomId = json["room_id"] ?? -1,
-        doomId = json["doom_id"] ?? -1,
+      : tag = json["tag"] ??"",
+        name = json["name"] ??"",
+        roomId = json["room_id"] ??-1,
+        doomId = json["doom_id"] ??-1,
         location = json["location"] ?? "",
         state = json["state"] ?? "",
         token = json["token"] ?? "";

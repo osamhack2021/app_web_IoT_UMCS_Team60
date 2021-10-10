@@ -64,7 +64,7 @@ class RegisterPage extends StatelessWidget {
                       "password": _pw.text.trim(), 
                       "name": _name.text.trim(), 
                       "rank": _rank.text.trim(), 
-                     "roomId": int.parse(_roomId.text),
+                      "roomId": int.parse(_roomId.text),
                       "doomId": int.parse(_doomId.text), 
                       "department": _department.text.trim(),
                     };

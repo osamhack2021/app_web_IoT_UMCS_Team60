@@ -13,16 +13,16 @@ class BeaconResult extends GetxService {
   late int txPower;
 
   BeaconResult({
-    required this.name,
-    required this.uuid,
-    required this.macAddress,
-    required this.major,
-    required this.minor,
-    required this.distance,
-    required this.proximity,
-    required this.scanTime,
-    required this.rssi,
-    required this.txPower
+    this.name="testname",
+    this.uuid="testuuid",
+    this.macAddress="testmacAddress",
+    this.major=-1,
+    this.minor=-1,
+    this.distance=-1,
+    this.proximity="testproximity",
+    this.scanTime="testscantime",
+    this.rssi=-1,
+    this.txPower=-1
     });
 
   BeaconResult.fromJson(Map<String,dynamic> json) {

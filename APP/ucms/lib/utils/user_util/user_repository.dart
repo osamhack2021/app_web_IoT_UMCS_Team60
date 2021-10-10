@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
@@ -13,19 +14,20 @@ class UserRepository {
     dynamic headers = resp.headers;
     dynamic body = resp.body;
     final prefs = GetStorage();
-
-    //dynamic convertBody = convertUtf8ToObject(body);
-    dynamic convertBody = body;
+    
+    dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
       newUser.token=headers["authorization"];
-      //prefs.write("loginFailureMsg","error message in User repository");
-      prefs.write("loginFailureMsg",serverRespDto.msg);
+      
+      //prefs.write("loginFailureMsg",serverRespDto.msg);
       return newUser;
     } else {
+      prefs.write("loginFailureMsg","error message in User repository");
       return User();
     }
   }
@@ -37,6 +39,7 @@ class UserRepository {
 
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+
 
     if (serverRespDto.code == 1) {
       Map<String, dynamic> data = serverRespDto.data;
@@ -50,7 +53,7 @@ class UserRepository {
     Response resp = await _userProvider.userInfo(tag);
     dynamic body = resp.body;
 
-    dynamic convertBody = convertUtf8ToObject(body);
+    Map<String, dynamic> convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
     Map<String, dynamic> data = serverRespDto.data;

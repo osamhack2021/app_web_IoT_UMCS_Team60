@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
@@ -35,7 +37,7 @@ class UserSocketClient extends GetxService {
     });
 
     socket.on("assemble_command", (data) {
-      dynamic json = convertUtf8ToObject(data);
+      dynamic json = jsonDecode(utf8.decode(data));
 
       prefs.write("assemble_location", json["beacon_id"]);
       prefs.write("assemble_visible",true);
@@ -43,7 +45,7 @@ class UserSocketClient extends GetxService {
       Snack.warn("소집 지시", "소집 지시가 내려왔습니다.");
     });
     socket.on("to_cohort", (data) {
-      dynamic json = convertUtf8ToObject(data);
+      dynamic json = jsonDecode(utf8.decode(data));
       bool flag =false;
       String tag = prefs.read("tag");
       for(int i=0; i<json["tag"].length;i++) {
