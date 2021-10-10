@@ -6,7 +6,6 @@ import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/hostnames.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
-import 'package:ucms/utils/convert_utf8.dart';
 import 'package:ucms/utils/snackbar.dart';
 
 class UserSocketClient extends GetxService {
