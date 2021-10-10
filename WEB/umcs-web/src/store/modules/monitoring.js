@@ -1,43 +1,48 @@
 const state = {
-  // display할 floor 구분
-  floorList: [
+  editMode: false,
+  focusRoom: "",
+
+  // Data Table
+  tableHeaders: [
+    { text: "군번", value: "tag" },
+    { text: "관등성명", value: "name" },
+  ],
+  peopleList: [
     {
-      doomId: "1",
-      doomName: "통신대대",
-      items: [
-        {
-          name: "1층",
-          floor: 1,
-        },
-        {
-          name: "2층",
-          floor: 2,
-        },
-      ],
+      tag: "20-70000001",
+      name: "상병 엄복걸",
+    },
+    {
+      tag: "20-70000002",
+      name: "병장 손박타",
+    },
+    {
+      tag: "20-70000003",
+      name: "상병 유분조",
+    },
+    {
+      tag: "20-70000004",
+      name: "일병 진환이",
     },
   ],
 
-  // Room Picker
-  roomPicker: {
-    x: 325,
-    y: 50,
-    size: "normal",
-    name: "화장실",
-    // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
-    beaconId: "aa:aa:aa:aa",
-  },
   // Room Picker Create 할 때 시설 선택
   roomList: [
     {
       doomId: "1",
-      doomName: "통신대대",
+      doomName: "1생활관",
       items: [
         {
           name: "1층",
+          floor: 1,
           items: [
             {
+              id: 1,
               beaconId: "aa:aa:aa:aa:aa:aa",
+              doom_id: 1,
+              floor: 1,
               name: "101호",
+              current_count: 2,
             },
             {
               beaconId: "bb:bb:bb:bb:bb:bb",
@@ -55,6 +60,7 @@ const state = {
         },
         {
           name: "2층",
+          floor: 2,
           items: [
             {
               beaconId: "ee:ee:ee:ee:ee:ee",
@@ -73,9 +79,71 @@ const state = {
       ],
     },
   ],
+
+  // Room Picker
+  roomPickers: [
+    {
+      floor: 1,
+      items: [
+        {
+          x: 320,
+          y: 60,
+          size: "normal",
+          name: "화장실",
+          current_count: 1,
+          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
+          beaconId: "34:14:B5:41:A2:7E",
+        },
+        {
+          x: 100,
+          y: 82,
+          size: "normal",
+          name: "102호",
+          current_count: 4,
+          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
+          beaconId: "aa:aa:aa:aa:aa:aa",
+        },
+      ],
+    },
+    {
+      floor: 2,
+      items: [
+        {
+          x: 297,
+          y: 60,
+          size: "normal",
+          name: "화장실",
+          current_count: 2,
+          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
+          beaconId: "bb:bb:bb:bb:bb:bb",
+        },
+        {
+          x: 666,
+          y: 8,
+          size: "normal",
+          name: "PX",
+          current_count: 5,
+          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
+          beaconId: "aa:aa:aa:aa:aa:aa",
+        },
+      ],
+    },
+  ],
 };
-const getters = {};
-const mutations = {};
+const getters = {
+  getEditText(state) {
+    if (state.editMode) return "저장";
+    else return "편집";
+  },
+};
+const mutations = {
+  changeEditMode(state) {
+    state.editMode = !state.editMode;
+  },
+  setFocusRoom(state, value) {
+    state.focusRoom = value;
+  },
+};
 const actions = {};
 
 export default {

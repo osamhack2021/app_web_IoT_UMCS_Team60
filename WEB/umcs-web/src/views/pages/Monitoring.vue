@@ -1,85 +1,155 @@
 <template>
   <v-container>
-    <v-row
-      v-for="doom in floorList"
-      :key="doom.doomId"
-      dense
-    >
-      <!-- v-for 사용하여 나열 -->
-      <v-col
-        v-for="floor in doom.items"
-        :key="floor.name"
-        cols="12"
-        class="mt-6"
-      >
+    <v-row class="mt-5">
+      <v-col cols="9">
+        <div
+          v-for="doom in roomList"
+          :key="doom.doomId"
+        >
+          <!-- v-for 사용하여 나열 -->
+          <v-card
+            v-for="floor in doom.items"
+            :key="floor.floor"
+            elevation="7"
+            class="mt-5"
+          >
+            <!-- Toolbar -->
+            <v-card-title class="py-2">
+              {{ floor.name }}
+              <v-spacer />
+
+              <v-card-actions>
+                <!-- Dialog for Create Icon -->
+                <v-dialog
+                  v-model="dialog"
+                  max-width="600px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      추가
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">관리할 장소 추가</span>
+                    </v-card-title>
+                    <v-form>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-select
+                                v-model="formData.doom"
+                                label="건물"
+                              />
+                            </v-col>
+                            <v-col cols="4">
+                              <v-select
+                                v-model="formData.floor"
+                                label="층"
+                              />
+                            </v-col>
+                            <v-col cols="4">
+                              <v-select
+                                v-model="formData.name"
+                                label="장소"
+                              />
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer />
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="dialog = false"
+                        >
+                          Close
+                        </v-btn>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="dialog = false"
+                        >
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-form>
+                  </v-card>
+                </v-dialog>
+
+                <v-btn
+                  class="ml-2"
+                  @click="changeEditMode"
+                >
+                  {{ getEditText }}
+                </v-btn>
+              </v-card-actions>
+            </v-card-title>
+
+            <v-img :src="require(`@/assets/doom${doom.doomId}-floor${floor.floor}-drawing.png`)">
+              <vue-draggable-resizable
+                v-for="picker in roomPickers[floor.floor-1].items"
+                :key="picker.beaconId"
+                :w="50"
+                :h="50"
+                :x="picker.x"
+                :y="picker.y"
+                :draggable="editMode"
+                :resizable="false"
+                class-name="box-content"
+                @dragging="onDrag"
+              >
+                <v-btn
+                  fab
+                  class="info text-body-1 font-weight-medium white--text"
+                  @click="test($event, picker.name, picker.beaconId)"
+                >
+                  {{ picker.current_count }}
+                </v-btn>
+              </vue-draggable-resizable>
+            </v-img>
+          </v-card>
+        </div>
+      </v-col>
+
+      <!-- People list -->
+      <v-col cols="3">
         <v-card>
           <v-card-title>
-            {{ floor.name }}
+            {{ focusRoom }}
+
+            <v-text-field
+              v-model="searchValue"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+              clearable
+            />
           </v-card-title>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn>
-              추가
-            </v-btn>
-            <v-btn>
-              편집
-            </v-btn>
-          </v-card-actions>
-          <v-img src="@/assets/doom-drawing.png">
-            <vue-draggable-resizable
-              class-name="box-content"
-              :w="56"
-              :h="56"
-              :x="325"
-              :y="50"
-              :draggable="true"
-              :resizable="true"
-              @dragging="onDrag"
-              @resizing="onResize"
-            >
-              <v-btn
-                color="rgba(1, 87, 155, 0.8)"
-                fab
-                class="white--text"
+          <v-data-table
+            :headers="tableHeaders"
+            :items="peopleList"
+            :search="searchValue"
+            :items-per-page="$store.state.ITEMS_PER_PAGE"
+          >
+            Slot:item.name - user profile routing
+            <template v-slot:[`item.name`]="{ item }">
+              <router-link
+                :to="`/user/${item.tag}`"
+                class="info--text text-decoration-none"
               >
-                5
-              </v-btn>
-            </vue-draggable-resizable>
-          </v-img>
+                {{ item.name }}
+              </router-link>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
-      <!-- <v-col
-        cols="12"
-        class="mt-6"
-      >
-        <v-card>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn>
-              추가
-            </v-btn>
-            <v-btn>
-              편집
-            </v-btn>
-          </v-card-actions>
-          <v-img src="@/assets/doom-drawing.png">
-            <vue-draggable-resizable
-              class-name="box-content"
-              :w="150"
-              :h="150"
-              :x="176"
-              :y="96"
-              :draggable="false"
-              :resizable="false"
-            >
-              <p>
-                X: {{ x }} / Y: {{ y }}<br>
-                Width: {{ width }} / Height: {{ height }}
-              </p>
-            </vue-draggable-resizable>
-          </v-img>
-        </v-card>
-      </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -93,6 +163,7 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VueDraggableResizable from "vue-draggable-resizable";
+import { fetchCurrentPositionInfo } from "@/api/index.js";
 
 export default {
   name: "Monitoring",
@@ -101,32 +172,45 @@ export default {
   },
   data() {
     return {
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0,
+      editedX: 0,
+      editedY: 0,
+      searchValue: "",
+      dialog: false,
+      formData: {
+        doom: "",
+        floor: "",
+        name: "",
+      },
     };
   },
   computed: {
     ...mapState("monitoring", [
-      "floorList",
-    ])
+      "editMode",
+      "focusRoom",
+      "tableHeaders",
+      "peopleList",
+      "roomList",
+      "roomPickers",
+    ]),
+    ...mapGetters("monitoring", ["getEditText"]),
   },
   methods: {
-    onResize(x, y, width, height) {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-    },
+    ...mapMutations("monitoring", ["changeEditMode", "setFocusRoom"]),
     onDrag(x, y) {
-      this.x = x;
-      this.y = y;
+      this.editedX = x;
+      this.editedY = y;
+    },
+    test(event, name, beaconId) {
+      console.log("test is called!");
+      console.log("event", event);
+      console.log("beaconId", beaconId);
+      this.setFocusRoom(name);
+      // beaconId에 해당하는 시설에 있는 인원 목록
+      fetchCurrentPositionInfo(beaconId)
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
     },
   },
-  mounted() {
-    console.log(this.floorList[0].items);
-  }
 };
 </script>
 
