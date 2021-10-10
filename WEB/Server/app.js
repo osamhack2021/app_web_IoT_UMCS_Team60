@@ -78,6 +78,11 @@ app.get('/', (req, res) => {
     res.render(`index`);
 })
 
+
+app.get('/admin_page', (req, res) => {
+    res.sendFile(path.resolve(__dirname+'/build/index.html'));
+})
+
 app.get('/socketUser', (req, res) => {
     res.sendFile(__dirname+'/socketUser.html');
 })
