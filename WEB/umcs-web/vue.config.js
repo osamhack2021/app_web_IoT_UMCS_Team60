@@ -8,6 +8,6 @@ module.exports = {
     }
   },
   publicPath: process.env.NODE_ENV === "production" ? "./" : "",
-  outputDir: '../Server/build',
+  outputDir: '../Server/public',
   transpileDependencies: ["vuetify"],
 };
