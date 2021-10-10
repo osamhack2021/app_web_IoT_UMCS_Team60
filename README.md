@@ -8,7 +8,12 @@
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/osamhack2021/app_web_IoT_UMCS_Team60?color=success"></a>
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/osamhack2021/app_web_IoT_UMCS_Team60"></a>
 </p>
-
+</p>
+<p align="center">
+	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/VIDEO-blue?style=for-the-badge'></a>
+	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/HOMEPAGE-gray?style=for-the-badge'></a>
+	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/DOCUMENT-blue?style=for-the-badge'></a>
+</p>
 
 ## UMCS 프로젝트 소개
 ### :mask: 배경
