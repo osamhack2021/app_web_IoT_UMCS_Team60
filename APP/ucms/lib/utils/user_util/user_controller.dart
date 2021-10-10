@@ -31,8 +31,6 @@ class UserController extends GetxController {
     if (newUser.tag != "") {
       isLogin.value = true;
       appUser.value = newUser;
-      //socket.locationReport(macAddress : beaconManager.beaconResult.macAddress!, scanTime: beaconManager.beaconResult.scanTime!);
-      //TODO :  location 읽어온 것으로 User 다시 update 해줘야 함. 
       User.updatePrefs(newUser);
       return "success";
     } else {
