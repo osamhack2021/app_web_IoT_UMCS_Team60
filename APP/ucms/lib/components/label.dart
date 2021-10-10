@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 class LabelFormInput extends StatelessWidget {
@@ -102,12 +103,12 @@ class _LabelFormDropDownState extends State<LabelFormDropDown> {
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
             child: DropdownButton<String>(
                 value: dropdownValue,
-                hint: const Text("선택하세요"),
-                style: const TextStyle(color: Colors.blue),
+                hint: const Text("선택하세요", textAlign:TextAlign.end),
+                style: TextStyle(color: enabledColor()),
                 alignment: AlignmentDirectional.centerEnd,
                 underline: Container(
                   height: 2,
-                  color: Colors.blue,
+                  color: enabledColor(),
                 ),
                 onChanged: (String? newValue) {
                   setState(() {

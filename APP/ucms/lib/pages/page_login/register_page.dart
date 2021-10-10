@@ -7,7 +7,6 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
-import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
@@ -65,7 +64,7 @@ class RegisterPage extends StatelessWidget {
                       "password": _pw.text.trim(), 
                       "name": _name.text.trim(), 
                       "rank": _rank.text.trim(), 
-                     "roomId": int.parse(_roomId.text),
+                      "roomId": int.parse(_roomId.text),
                       "doomId": int.parse(_doomId.text), 
                       "department": _department.text.trim(),
                     };

@@ -17,5 +17,5 @@ validatePwCheck(String? value, String? checkValue) {
 
 validateNull() => (String? value) {
    if (value!.isEmpty) {return "내용을 입력하세요.";}
-   else return null;
+   else {return null;}
 };

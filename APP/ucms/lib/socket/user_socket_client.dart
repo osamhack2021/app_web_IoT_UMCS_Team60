@@ -6,7 +6,6 @@ import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/hostnames.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
-import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/utils/convert_utf8.dart';
 import 'package:ucms/utils/snackbar.dart';
 
@@ -29,23 +28,24 @@ class UserSocketClient extends GetxService {
 
     socket.onConnect((_) {});
 
-    socket.on("permission", (_) {
+    socket.on("move_approval", (_) {
+      //TODO:  impelment
     });
 
-    socket.on("your_status", (_) {
-
+    socket.on("facility_approval", (_){
+      //TODO:  impelment
     });
-    socket.on("refresh_status", (_) {});
-    socket.on("assemble", (data) {
-      dynamic json = convertUtf8ToObject(data);
+
+    socket.on("assemble_command", (data) {
+      dynamic json = jsonDecode(utf8.decode(data));
 
       prefs.write("assemble_location", json["beacon_id"]);
       prefs.write("assemble_visible",true);
       Get.to(UserAssemble(location: prefs.read("assemble_location")));
       Snack.warn("소집 지시", "소집 지시가 내려왔습니다.");
     });
-    socket.on("cohort_start", (data) {
-      dynamic json = convertUtf8ToObject(data);
+    socket.on("to_cohort", (data) {
+      dynamic json = jsonDecode(utf8.decode(data));
       bool flag =false;
       String tag = prefs.read("tag");
       for(int i=0; i<json["tag"].length;i++) {
@@ -58,12 +58,25 @@ class UserSocketClient extends GetxService {
         //TODO:  Cohort 페이지로 Get.offAll()
       }
     });
-    socket.on("cohort_stop", (_) {});
+    socket.on("to_normal", (_) {
+      //TODO:  impelment
+    });
   }
 
   void moveRequest({required String destination}) {
     MoveRequestDto dto = MoveRequestDto(destination: destination);
     socket.emit("move_request", dto.toJson());
+    //TODO : outside_id 로 바꿔야 함.
+  }
+
+  void getIn() {
+    //TODO : impelment
+    //beacon_id
+  }
+
+  void getOut() {
+    //TODO : impelment 
+    //beacon_id
   }
 
   void locationReport({required String macAddress, required String scanTime}) {

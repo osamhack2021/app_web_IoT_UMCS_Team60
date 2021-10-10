@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';

@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
-import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/user_util/user_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
@@ -14,19 +14,20 @@ class UserRepository {
     dynamic headers = resp.headers;
     dynamic body = resp.body;
     final prefs = GetStorage();
-
-    //dynamic convertBody = convertUtf8ToObject(body);
-    dynamic convertBody = body;
+    
+    dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
       newUser.token=headers["authorization"];
-      //prefs.write("loginFailureMsg","error message in User repository");
-      prefs.write("loginFailureMsg",serverRespDto.msg);
+      
+      //prefs.write("loginFailureMsg",serverRespDto.msg);
       return newUser;
     } else {
+      prefs.write("loginFailureMsg","error message in User repository");
       return User();
     }
   }
@@ -39,6 +40,7 @@ class UserRepository {
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
+
     if (serverRespDto.code == 1) {
       Map<String, dynamic> data = serverRespDto.data;
       prefs.write("beacon_id", data["beacon_id"]);
@@ -50,11 +52,9 @@ class UserRepository {
   Future<Map<String,dynamic>> userInfo(String tag) async {
     Response resp = await _userProvider.userInfo(tag);
     dynamic body = resp.body;
-    final prefs = GetStorage();
 
-    dynamic convertBody = convertUtf8ToObject(body);
+    Map<String, dynamic> convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
 
     Map<String, dynamic> data = serverRespDto.data;
       return data;
