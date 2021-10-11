@@ -36,10 +36,11 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var prefs = GetStorage();
     //이미 로그인 되어있을 시
-    if (u.isLogin.value) {
+    if (u.isLogin.value)  {
       Get.off(UserMain(
           location: prefs.read("location") ?? "adsf",
-          state: prefs.read("state") ?? "asdfafsd"));
+          state: prefs.read("state") ?? "asdfafsd",
+      ));
       return Container();
     }
 
@@ -79,8 +80,9 @@ class LoginPage extends StatelessWidget {
                     if (result == "success") {
                       store.write("state", "정상");
                       
-                      await u.userInfo(_tag.text.trim());
+                      await u.currentPosition(_tag.text.trim());
                       positions = await p.positionAllInfo();
+                      debugPrint("포지션 갯수  : ${positions.list.length}");
 
 
                       Snack.top("로그인 시도", "성공");
@@ -88,6 +90,7 @@ class LoginPage extends StatelessWidget {
                         location: store.read("recent_place_name") ??
                             "error in LoginPage",
                         state: store.read("state") ?? "",
+                        positions : positions,
                       ));
                     } else {
                       Snack.top("로그인 시도", result);

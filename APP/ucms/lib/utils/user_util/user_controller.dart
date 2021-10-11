@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/position.dart';
+import 'package:ucms/data/position_list.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/data/dto/login_request_dto.dart';
 import 'package:ucms/socket/user_socket_client.dart';
@@ -45,11 +46,27 @@ class UserController extends GetxController {
     return message;
   }
 
-  Future<Map<String,dynamic>> userInfo(String tag) async {
+  Future<Map<String,dynamic>> currentPosition(String tag) async {
     final repository = UserRepository();
-    final data = await repository.userInfo(tag);
+    final data = await repository.currentPosition(tag);
 
     Position.updatePrefs(Position.fromJson(data));
     return data;
+  }
+
+  Future<PositionList> currentPositionAll() async {
+    final repository = UserRepository();
+    final l = await repository.currentPositionAll();
+
+    List<Position> positionList =[];
+
+    for(Map<String,dynamic> json in l) {
+      positionList.add(Position.fromJson(json));
+    }
+    
+    PositionList list = PositionList.fromList(positionList);
+
+     return list;
+    
   }
 }
