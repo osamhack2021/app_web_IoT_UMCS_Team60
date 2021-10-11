@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ucms/components/texts.dart';
 
 class Position {
   String userTag;
@@ -69,5 +71,13 @@ class Position {
         userDoomId :store.read("recent_user_doom_id"),
         name :store.read("recent_place_name"),
     ));
+  }
+
+  ListTile toListTile() {
+    return ListTile(
+              leading: FlutterLogo(),
+              title: title("$userRank $userName : in $name"),
+              subtitle: quote("last in : $inTime"),
+  );
   }
 }

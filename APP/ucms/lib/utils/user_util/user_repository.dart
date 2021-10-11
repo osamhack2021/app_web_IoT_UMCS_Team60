@@ -24,10 +24,10 @@ class UserRepository {
 
       newUser.token=headers["authorization"];
       
-      //prefs.write("loginFailureMsg",serverRespDto.msg);
+      
       return newUser;
     } else {
-      prefs.write("loginFailureMsg","error message in User repository");
+      prefs.write("loginFailureMsg",serverRespDto.msg);
       return User();
     }
   }
