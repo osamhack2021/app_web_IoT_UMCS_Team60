@@ -1,0 +1,276 @@
+// ignore_for_file: prefer_initializing_formals, must_be_immutable
+
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:ucms/background/background_manager.dart';
+import 'package:ucms/beacon/beacon_manager.dart';
+import 'package:ucms/components/custom_buttons.dart';
+import 'package:ucms/components/custom_screen.dart';
+import 'package:ucms/components/label.dart';
+import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/position.dart';
+import 'package:ucms/data/position_list.dart';
+import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
+import 'package:ucms/pages/page_cohort/cohort_move.dart';
+import 'package:ucms/pages/page_login/login_page.dart';
+import 'package:ucms/pages/page_user/user_assemble.dart';
+import 'package:ucms/pages/page_user/user_move.dart';
+import 'package:ucms/socket/user_socket_client.dart';
+import 'package:ucms/theme/color_theme.dart';
+import 'package:ucms/theme/size.dart';
+import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/utils/cohort_util/cohort_controller.dart';
+import 'package:ucms/utils/place_util/place_controller.dart';
+import 'package:ucms/utils/snackbar.dart';
+import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/utils/validate.dart';
+
+class CohortMain extends StatefulWidget {
+  CohortMain({Key? key, this.location, this.state, this.positions})
+      : super(key: key);
+
+  String? location = "location uninitialized";
+  String? state = "state uninitialized";
+  PositionList? positions = PositionList();
+  @override
+  State<CohortMain> createState() => _CohortMainState();
+}
+
+class _CohortMainState extends State<CohortMain> {
+  final store = GetStorage();
+  UserController u = Get.find<UserController>();
+  BackgroundManager backMan = Get.find<BackgroundManager>();
+  PlaceController p = Get.find<PlaceController>();
+  CohortController c = Get.isRegistered<CohortController>()? Get.find<CohortController>():Get.put(CohortController());
+  
+  GlobalKey<FormState> formKey=GlobalKey<FormState>();
+  final nameCon = TextEditingController(); 
+  final rankCon= TextEditingController();
+  final timeCon= TextEditingController();
+  final tempCon= TextEditingController(); 
+  final descCon= TextEditingController();
+
+  int selectedIndex = 1;
+  bool firstSnack = true;
+
+  @override
+  void initState() {
+    super.initState();
+    var beaconMan = Get.find<BeaconManager>();
+    var socketClient = Get.find<UserSocketClient>();
+    var beaconResult = beaconMan.beaconResult;
+    int min15 = 900;
+
+    beaconMan.startListeningBeacons();
+    Timer.periodic(const Duration(minutes: 2), (timer) {
+      if (min15 >= 0) {
+        socketClient.locationReport(
+            macAddress: beaconResult.macAddress,
+            scanTime: beaconResult.scanTime);
+        min15 -= 120;
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String name = store.read("name") ?? "모름";
+    widget.location = store.read("recent_place_name") ?? "위치 모름";
+    widget.state = store.read("state");
+    if (firstSnack) Snack.top("로그인 성공", "$name 으로 로그인됨");
+    firstSnack = false;
+    bool assembleVisible = store.read("assemble_visible") ?? false;
+    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+        GlobalKey<RefreshIndicatorState>();
+    List<bool> _expanded =List<bool>.generate(widget.positions!.list.length, (index) {return false;});
+    
+    List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
+         rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
+
+    backMan.man.registerPeriodicTask("1", "refresh_beacon");
+
+    return MaterialApp(
+      home: KScreen(
+        child: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() async {
+              await u.currentPosition(store.read("tag"));
+              await p.positionAllInfo();
+
+              name = store.read("name") ?? "모름";
+              widget.location = store.read("location");
+              widget.state = store.read("state");
+              assembleVisible = store.read("assemble_visible");
+              widget.positions = await p.positionAllInfo();
+              _expanded =
+                  List<bool>.generate(widget.positions!.list.length, (index) {
+                return true;
+              });
+              widgetOptions = _buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
+         rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
+            });
+          },
+          child: widgetOptions.elementAt(selectedIndex),
+        ),
+        bottomBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.remove_red_eye),
+              label: '사용 인원 조회',
+            ),
+             BottomNavigationBarItem(
+              icon: Icon(Icons.event_busy),
+              label: '사용 시간표',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '홈',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.thermostat),
+              label: '체온 보고',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: '내 프로필',
+            ),
+          ],
+          currentIndex: selectedIndex,
+          unselectedItemColor: Colors.grey,
+          selectedItemColor: warningColor(),
+          onTap: _onItemTapped,
+          elevation: 5,
+        ),
+      ),
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  List<Widget> _buildPages(CohortController c, {required positions, required expanded, 
+        required assembleVisible, required name, required nameCon, required GlobalKey<FormState> formKey,  
+        required rankCon, required timeCon, required tempCon, required descCon}) {
+    return <Widget>[
+      ListView(
+        children: [
+          topMargin(),
+          title("공공시설 사용 인원 조회"),
+          quote("사용자들의 위치를 파악합니다"),
+         
+          const SizedBox(height: 20),
+          footer(),
+        ],
+      ),
+       ListView(
+        children: [
+          topMargin(),
+          title("공공시설 사용 시간표 조회"),
+          quote("사용할 수 있는 시간을 파악합니다"),
+          footer(),
+        ],
+      ),
+      ListView(
+        children: [
+          topMargin(),
+          title("UMCS"),
+          quote("Untact Movement Control System"),
+          const SizedBox(height: 20),
+          LabelText(label: "현 위치", content: widget.location!),
+          LabelText(label: "현 상태", content: widget.state!),
+          Visibility(
+            visible: assembleVisible,
+            child: WarnButton(
+                onPressed: () {
+                  Get.to(
+                      CohortAssemble(location: store.read("assemble_location")));
+                },
+                label: "소집 지시가 내려왔습니다."),
+          ),
+          WarnButton(
+              onPressed: () {
+                Get.to(const CohortMove());
+              },
+              label: "공공시설 사용 요청 하기"),
+          footer(),
+        ],
+      ),
+      ListView(
+        children: [
+          topMargin(),
+          title("체온측정 및 이상유무 보고"),
+          quote("내 건강상태를 보고합니다."),
+          const SizedBox(height: 20),
+          quote("$name 님 환영합니다."),
+           Form(
+              key: formKey,
+              child: Column(
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  LabelFormDropDown(label: "계급", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: rankCon, validator: validateNull(),),
+                  LabelFormInput(label: "이름", hint: "이름",controller: nameCon, validator: validateNull(),),
+                  LabelFormDateTimeInput(label: "현재 시간", hint: "time", controller: timeCon, validator: validateTime()),
+                  LabelFormFloatInput(label: "현재 체온", hint: "체온",controller: tempCon, validator: validateNull(),),
+                  LabelFormInput(label: "이상 유무", hint: "자유롭게 입력",controller: descCon, validator: validateNull(),),
+                ],
+              ),
+            ),
+            PostButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    //TODO : implement
+                    var json = {
+                      "temperature" : tempCon.text.trim(),
+                      "details" : descCon.text.trim(),
+                    };
+                    dynamic result = await c.anomaly(json);
+                    if (result =="success") {
+                      Get.back();
+                      Snack.top("이상 유무 보고 시도", "성공");
+                    } else {Snack.bottom("이상 유무 보고 시도", result);}
+                  }                  
+                },
+              label: "이상 유무 보고"),
+
+
+          footer(),
+        ],
+      ),
+      ListView(
+        children: [
+          topMargin(),
+          title("프로필"),
+          quote("내 사용자 정보"),
+          const SizedBox(height: 20),
+          quote("$name 님 환영합니다."),
+          WarnButton(
+              onPressed: () {
+                u.logout();
+                Get.to(LoginPage());
+              },
+              label: "로그아웃하기"),
+          footer(),
+        ],
+      ),
+    ];
+  }
+}

@@ -15,6 +15,7 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
+import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
@@ -100,7 +101,7 @@ class _UserMainState extends State<UserMain> {
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
           onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 1));
             setState(() async {
               await u.currentPosition(store.read("tag"));
               await p.positionAllInfo();
@@ -227,6 +228,22 @@ class _UserMainState extends State<UserMain> {
                 Get.to(LoginPage());
               },
               label: "로그아웃하기"),
+          WarnButton(
+              onPressed: () async{
+                store.write("state", "정상");
+                      
+                await u.currentPosition(store.read("tag"));
+                positions = await p.positionAllInfo();
+
+                Snack.top("로그인 시도", "성공");
+                Get.to(CohortMain(
+                  location: store.read("recent_place_name") ??
+                      "error in LoginPage",
+                  state: store.read("state") ?? "",
+                  positions : positions,
+                ));
+              },
+              label: "코호트 상황 메인 가기"),
           footer(),
         ],
       ),
