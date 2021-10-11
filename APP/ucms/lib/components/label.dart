@@ -67,6 +67,70 @@ class LabelFormIntInput extends StatelessWidget {
   }
 }
 
+class LabelFormFloatInput extends StatelessWidget {
+  const LabelFormFloatInput(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller,
+      required this.validator,})
+      : super(key: key);
+
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: bold()),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LabelFormDateTimeInput extends StatelessWidget {
+  const LabelFormDateTimeInput(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller,
+      required this.validator,})
+      : super(key: key);
+
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: bold()),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.datetime),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class LabelFormDropDown extends StatefulWidget {
   const LabelFormDropDown(
       {Key? key,

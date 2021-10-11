@@ -15,7 +15,8 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
-import 'package:ucms/pages/page_cohort/cohort_main.dart';
+import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
+import 'package:ucms/pages/page_cohort/cohort_move.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
@@ -23,26 +24,36 @@ import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/utils/cohort_util/cohort_controller.dart';
 import 'package:ucms/utils/place_util/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/utils/validate.dart';
 
-class UserMain extends StatefulWidget {
-  UserMain({Key? key, this.location, this.state, this.positions})
+class CohortMain extends StatefulWidget {
+  CohortMain({Key? key, this.location, this.state, this.positions})
       : super(key: key);
 
   String? location = "location uninitialized";
   String? state = "state uninitialized";
   PositionList? positions = PositionList();
   @override
-  State<UserMain> createState() => _UserMainState();
+  State<CohortMain> createState() => _CohortMainState();
 }
 
-class _UserMainState extends State<UserMain> {
+class _CohortMainState extends State<CohortMain> {
   final store = GetStorage();
   UserController u = Get.find<UserController>();
   BackgroundManager backMan = Get.find<BackgroundManager>();
   PlaceController p = Get.find<PlaceController>();
+  CohortController c = Get.isRegistered<CohortController>()? Get.find<CohortController>():Get.put(CohortController());
+  
+  GlobalKey<FormState> formKey=GlobalKey<FormState>();
+  final nameCon = TextEditingController(); 
+  final rankCon= TextEditingController();
+  final timeCon= TextEditingController();
+  final tempCon= TextEditingController(); 
+  final descCon= TextEditingController();
 
   int selectedIndex = 1;
   bool firstSnack = true;
@@ -80,21 +91,16 @@ class _UserMainState extends State<UserMain> {
     widget.state = store.read("state");
     if (firstSnack) Snack.top("로그인 성공", "$name 으로 로그인됨");
     firstSnack = false;
-
-    backMan.man.registerPeriodicTask("1", "refresh_beacon");
-
     bool assembleVisible = store.read("assemble_visible") ?? false;
-
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
+    List<bool> _expanded =List<bool>.generate(widget.positions!.list.length, (index) {return false;});
+    
+    List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon ,  GlobalKey<FormState> formKey : formKey,  
+         rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
 
-    List<bool> _expanded =
-        List<bool>.generate(widget.positions!.list.length, (index) {
-      return false;
-    });
-
-    List<Widget> widgetOptions =
-        _buildPages(widget.positions!.list, _expanded, assembleVisible, name);
+    backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
     return MaterialApp(
       home: KScreen(
@@ -115,8 +121,9 @@ class _UserMainState extends State<UserMain> {
                   List<bool>.generate(widget.positions!.list.length, (index) {
                 return true;
               });
-              widgetOptions = _buildPages(
-                  widget.positions!.list, _expanded, assembleVisible, name);
+              widgetOptions = _buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon ,  GlobalKey<FormState> formKey : formKey,  
+         rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
             });
           },
           child: widgetOptions.elementAt(selectedIndex),
@@ -125,19 +132,27 @@ class _UserMainState extends State<UserMain> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.remove_red_eye),
-              label: 'Monitoring',
+              label: '사용 인원 조회',
+            ),
+             BottomNavigationBarItem(
+              icon: Icon(Icons.event_busy),
+              label: '사용 시간표',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Home',
+              label: '홈',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.thermostat),
+              label: '체온 보고',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
-              label: 'My Profile',
+              label: '내 프로필',
             ),
           ],
           currentIndex: selectedIndex,
-          selectedItemColor: selectedColor(),
+          selectedItemColor: warningColor(),
           onTap: _onItemTapped,
           elevation: 5,
         ),
@@ -151,12 +166,14 @@ class _UserMainState extends State<UserMain> {
     });
   }
 
-  List<Widget> _buildPages(positions, _expanded, assembleVisible, name) {
+  List<Widget> _buildPages(CohortController c, {required positions, required expanded, 
+        required assembleVisible, required name, required nameCon, required GlobalKey<FormState> formKey,  
+        required rankCon, required timeCon, required tempCon, required descCon}) {
     return <Widget>[
       ListView(
         children: [
           topMargin(),
-          title("모니터링"),
+          title("공공시설 사용 인원 조회"),
           quote("사용자들의 위치를 파악합니다"),
           quote("갯수 : ${positions.length}"),
           const SizedBox(height: 20),
@@ -175,7 +192,7 @@ class _UserMainState extends State<UserMain> {
                   },
                   //body: positions[index].toListTile(),
                   body : const Text("Weeee"),
-                  isExpanded: _expanded[index],
+                  isExpanded: expanded[index],
                   canTapOnHeader: true,
                 );
               }),
@@ -183,7 +200,7 @@ class _UserMainState extends State<UserMain> {
             dividerColor: Colors.grey,
             expansionCallback: (panelIndex, isExpanded) {
               setState(() {
-                _expanded[panelIndex] = !isExpanded;
+                expanded[panelIndex] = !isExpanded;
               });
             },
           ),
@@ -203,15 +220,56 @@ class _UserMainState extends State<UserMain> {
             child: WarnButton(
                 onPressed: () {
                   Get.to(
-                      UserAssemble(location: store.read("assemble_location")));
+                      CohortAssemble(location: store.read("assemble_location")));
                 },
                 label: "소집 지시가 내려왔습니다."),
           ),
-          PageButton(
+          WarnButton(
               onPressed: () {
-                Get.to(const UserMove());
+                Get.to(const CohortMove());
               },
-              label: "이동 보고 하기"),
+              label: "공공시설 사용 요청 하기"),
+          footer(),
+        ],
+      ),
+      ListView(
+        children: [
+          topMargin(),
+          title("체온측정 및 이상유무 보고"),
+          quote("내 건강상태를 보고합니다."),
+          const SizedBox(height: 20),
+          quote("$name 님 환영합니다."),
+           Form(
+              key: formKey,
+              child: Column(
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  LabelFormDropDown(label: "계급", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: rankCon, validator: validateNull(),),
+                  LabelFormInput(label: "이름", hint: "이름",controller: nameCon, validator: validateNull(),),
+                  LabelFormDateTimeInput(label: "현재 시간", hint: "time", controller: timeCon, validator: validateTime()),
+                  LabelFormFloatInput(label: "현재 체온", hint: "체온",controller: tempCon, validator: validateNull(),),
+                  LabelFormInput(label: "이상 유무", hint: "자유롭게 입력",controller: descCon, validator: validateNull(),),
+                ],
+              ),
+            ),
+            PostButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    //TODO : implement
+                    var json = {
+                      "temperature" : tempCon.text.trim(),
+                      "details" : descCon.text.trim(),
+                    };
+                    dynamic result = await c.anomaly(json);
+                    if (result =="success") {
+                      Get.back();
+                      Snack.top("이상 유무 보고 시도", "성공");
+                    } else {Snack.bottom("이상 유무 보고 시도", result);}
+                  }                  
+                },
+              label: "이상 유무 보고"),
+
+
           footer(),
         ],
       ),
@@ -222,18 +280,12 @@ class _UserMainState extends State<UserMain> {
           quote("내 사용자 정보"),
           const SizedBox(height: 20),
           quote("$name 님 환영합니다."),
-          PageButton(
+          WarnButton(
               onPressed: () {
                 u.logout();
                 Get.to(LoginPage());
               },
               label: "로그아웃하기"),
-          WarnButton(
-              onPressed: () {
-                u.logout();
-                Get.to(CohortMain());
-              },
-              label: "코호트 상황 메인 가기"),
           footer(),
         ],
       ),

@@ -19,3 +19,8 @@ validateNull() => (String? value) {
    if (value!.isEmpty) {return "내용을 입력하세요.";}
    else {return null;}
 };
+
+validateTime() => (String? value) {
+   if (value!.isEmpty) {return "내용을 입력하세요.";}
+   else {return null;}
+};
