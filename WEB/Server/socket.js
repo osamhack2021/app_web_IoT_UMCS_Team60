@@ -177,8 +177,6 @@ module.exports = (server, session) => {
             }
         });
 
-
-
         // 긴급 소집 지시 불응
         socket.on('cannot_assemble', (data) =>{
             managerio.to(user.doom_id).emit('cannot_assemble', {
