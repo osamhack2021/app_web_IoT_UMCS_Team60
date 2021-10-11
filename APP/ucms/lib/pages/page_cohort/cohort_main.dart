@@ -97,7 +97,7 @@ class _CohortMainState extends State<CohortMain> {
     List<bool> _expanded =List<bool>.generate(widget.positions!.list.length, (index) {return false;});
     
     List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
-         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon ,  GlobalKey<FormState> formKey : formKey,  
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
          rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
@@ -122,7 +122,7 @@ class _CohortMainState extends State<CohortMain> {
                 return true;
               });
               widgetOptions = _buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
-         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon ,  GlobalKey<FormState> formKey : formKey,  
+         assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
          rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
             });
           },
@@ -152,6 +152,7 @@ class _CohortMainState extends State<CohortMain> {
             ),
           ],
           currentIndex: selectedIndex,
+          unselectedItemColor: Colors.grey,
           selectedItemColor: warningColor(),
           onTap: _onItemTapped,
           elevation: 5,
@@ -175,35 +176,16 @@ class _CohortMainState extends State<CohortMain> {
           topMargin(),
           title("공공시설 사용 인원 조회"),
           quote("사용자들의 위치를 파악합니다"),
-          quote("갯수 : ${positions.length}"),
+         
           const SizedBox(height: 20),
-          ExpansionPanelList(
-            animationDuration: const Duration(milliseconds: 2000),
-            children: [
-              ...List<ExpansionPanel>.generate(positions.length, (index) {
-                return ExpansionPanel(
-                  headerBuilder: (context, isExpanded) {
-                    return ListTile(
-                      title: Text(
-                        positions[index].name,
-                        style: body(),
-                      ),
-                    );
-                  },
-                  //body: positions[index].toListTile(),
-                  body : const Text("Weeee"),
-                  isExpanded: expanded[index],
-                  canTapOnHeader: true,
-                );
-              }),
-            ],
-            dividerColor: Colors.grey,
-            expansionCallback: (panelIndex, isExpanded) {
-              setState(() {
-                expanded[panelIndex] = !isExpanded;
-              });
-            },
-          ),
+          footer(),
+        ],
+      ),
+       ListView(
+        children: [
+          topMargin(),
+          title("공공시설 사용 시간표 조회"),
+          quote("사용할 수 있는 시간을 파악합니다"),
           footer(),
         ],
       ),
