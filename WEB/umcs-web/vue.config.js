@@ -10,4 +10,5 @@ module.exports = {
   // publicPath: process.env.NODE_ENV === "production" ? "./" : "",
   outputDir: '../Server/public',
   transpileDependencies: ["vuetify"],
+  indexPath: 'index_build.html',
 };
