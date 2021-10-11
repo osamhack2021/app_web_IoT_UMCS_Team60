@@ -3,3 +3,6 @@ os: linux
 files:
   - source:  /WEB
     destination: /home/ubuntu/build/
+hooks:    
+  AfterInstall:
+    - location: /home/ubuntu/build/vuebuild.sh
