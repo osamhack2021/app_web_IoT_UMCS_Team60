@@ -21,14 +21,22 @@
   <form action="" id="move_approval">
     [평시] 외부시설 이동요청 결재하기 (move_approval) 
     <input type="number" id="b" placeholder="outside_request의 id" />
-    <input type="text" id="c" placeholder="승인 여부 입력" />
+    <select id="c">
+      <option value=1>승인</option>
+      <option value=0>거절</option>
+    </select>
+    
+    
     <input type="submit" />
   </form>
  
   <form action="" id="facility_approval">
     [코호트] 공공시설 사용요청 결재하기 (facility_approval) 
     <input type="number" id="d" placeholder="facility_request의 id" />
-    <input type="text" id="e" placeholder="승인 여부 입력" />
+    <select id="e">
+      <option value=1>승인</option>
+      <option value=0>거절</option>
+    </select>
     <input type="submit" />
   </form>
 
