@@ -235,7 +235,7 @@ module.exports = (server, session) => {
             var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
             let [results] = await dbPromiseConnection.query(sql, [manager.tag, nowDate()]);
             if(results.length) { // 금일 근무가 있을 시에만 담당 생활관 room에 참여
-                manager.charge_doom = results[0].charge_doom;
+                manager.charge_doom = results;
                 socket.join(manager.charge_doom);
             }
             
