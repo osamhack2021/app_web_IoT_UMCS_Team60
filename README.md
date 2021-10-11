@@ -160,9 +160,6 @@
   <td>
    <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" width="40" height="40"/> <br>Arduino</div>
   </td>
-  <td>
-<div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-plain-wordmark.svg" alt="MySQL" width="40" height="40"/><br>MySQL</div>
-  </td>
  </tr>
  </tbody></table>
 
