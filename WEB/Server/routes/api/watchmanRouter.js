@@ -152,6 +152,8 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
             let [doomrooms] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
             for(let doomroom of doomrooms) {
                 let found = doomResults.find(d => d.floor === doomroom.floor);
+                doomroom.doomroom_id = doomroom.id;
+                delete doomroom.id;
                 if(!found) 
                     doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomroom}]});
                 else 
@@ -162,6 +164,8 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
             let [doomfacilities] = await dbPromiseConnection.query(sql, [chargeDoom.charge_doom]);
             for(let doomfacility of doomfacilities) {
                 let found = doomResults.find(d => d.floor === doomfacility.floor);
+                doomfacility.doomfacility_id = doomfacility.id;
+                delete doomfacility.id;
                 if(!found) 
                     doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomfacility}]});
                 else 
@@ -179,6 +183,7 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
         });
     }
     catch(err) {
+        console.log(err)
         return res.status(400).json({
             code: 4,
             msg: msg[4],
