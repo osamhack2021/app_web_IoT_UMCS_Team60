@@ -168,7 +168,7 @@ CREATE TABLE facility_request
     `facility_id`   INT            NULL, 
     `request_time`  DATETIME       NULL, 
     `desired_time`  TIME           NULL, 
-    `permission`    VARCHAR(45)    NULL, 
+    `permission`    tinyint(1)     NULL, 
     `manager_tag`       VARCHAR(45)    NOT NULL, 
     `description`   TEXT           NULL,  
     CONSTRAINT PK_facility_request PRIMARY KEY (id)
@@ -234,7 +234,7 @@ CREATE TABLE outside_request
     `user_tag`      VARCHAR(45)    NOT NULL,
     `outside_id`    INT            NOT NULL, 
     `request_time`  DATETIME       NULL, 
-    `permission`    VARCHAR(45)    NULL, 
+    `permission`    tinyint(1)     NULL, 
     `description`   TEXT           NULL,  
     `manager_tag`    VARCHAR(45)    NOT NULL, 
     CONSTRAINT PK_outside_request PRIMARY KEY (id)
