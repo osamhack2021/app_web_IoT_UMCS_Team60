@@ -6,9 +6,12 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/position.dart';
+import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/theme/size.dart';
+import 'package:ucms/utils/place_util/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
@@ -22,6 +25,12 @@ class LoginPage extends StatelessWidget {
       ? Get.find<UserController>()
       : Get.put(UserController());
   final _password = TextEditingController();
+
+  final PlaceController p = Get.isRegistered<PlaceController>()
+      ? Get.find<PlaceController>()
+      : Get.put(PlaceController());
+  
+  PositionList positions = Get.put(PositionList());
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +80,8 @@ class LoginPage extends StatelessWidget {
                       store.write("state", "정상");
                       
                       await u.userInfo(_tag.text.trim());
+                      positions = await p.positionAllInfo();
+
 
                       Snack.top("로그인 시도", "성공");
                       Get.to(UserMain(
