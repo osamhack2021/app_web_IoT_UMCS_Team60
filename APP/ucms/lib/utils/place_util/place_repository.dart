@@ -137,11 +137,37 @@ class PlaceRepository {
     }
 
   }
-  
-  //TODO : implement
+
+  Future<List<Map<String,dynamic>>> positionAll() async {
+     Response resp = await _placeProvider.positionAllInfo();
+    dynamic body = resp.body;
+
+    dynamic convertBody = convertUtf8ToObject(body);
+    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
 
-  // //positions
-  // Future<Response> positionAllInfo() => get("$restAPIHost/current_position", headers: {"charset" : "utf-8"});
-  // Future<Response> positionInfo(String id) => get("$restAPIHost/current_position/$id", headers: {"charset" : "utf-8"});
+    if (serverRespDto.code == 1) {
+      List<Map<String,dynamic>> data = serverRespDto.data;
+      return data;
+    } else {
+      return [];
+    }
+
+  }
+  Future<Map<String,dynamic>> position(int id) async {
+     Response resp = await _placeProvider.positionInfo(id);
+    dynamic body = resp.body;
+
+    dynamic convertBody = convertUtf8ToObject(body);
+    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+
+
+    if (serverRespDto.code == 1) {
+      Map<String,dynamic> data = serverRespDto.data;
+      return data;
+    } else {
+      return {};
+    }
+
+  }
 }

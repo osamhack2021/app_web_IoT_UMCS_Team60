@@ -12,11 +12,14 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/position.dart';
+import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
+import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
@@ -79,13 +82,40 @@ class _UserMainState extends State<UserMain> {
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
 
+    List<Position> positions = Get.find<PositionList>().list;
+    bool _expanded = false;
+
     List<Widget> widgetOptions = <Widget>[
-      ListView(
+      Column(
         children: [
           topMargin(),
           title("모니터링"),
           quote("사용자들의 위치를 파악합니다"),
           const SizedBox(height: 20),
+          ExpansionPanelList(
+            animationDuration: const Duration(milliseconds: 2000),
+            children: [
+              ...List<ExpansionPanel>.generate(positions.length, (index){
+                return ExpansionPanel(
+                  headerBuilder: (context, isExpanded) {
+                    return ListTile(
+                      title: Text(positions[index].name, style: body(),),
+                    );
+                  },
+                  body: positions[index].toListTile(),
+                  isExpanded: _expanded,
+                  canTapOnHeader: true,
+                );
+              }),
+            ],
+            dividerColor: Colors.grey,
+            expansionCallback: (panelIndex, isExpanded) {
+              _expanded = !_expanded;
+              setState(() {
+ 
+              });
+            },
+        ),
           footer(),
         ],
       ),
