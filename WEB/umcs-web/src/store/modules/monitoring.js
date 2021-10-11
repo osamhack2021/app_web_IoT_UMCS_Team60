@@ -45,12 +45,20 @@ const state = {
               current_count: 2,
             },
             {
+              id: 2,
               beaconId: "bb:bb:bb:bb:bb:bb",
+              doom_id: 1,
+              floor: 1,
               name: "102호",
+              current_count: 2,
             },
             {
+              id: 3,
               beaconId: "cc:cc:cc:cc:cc:cc",
+              doom_id: 1,
+              floor: 1,
               name: "화장실",
+              current_count: 4,
             },
             {
               beaconId: "dd:dd:dd:dd:dd:dd",

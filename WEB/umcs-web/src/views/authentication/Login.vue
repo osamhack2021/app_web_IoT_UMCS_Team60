@@ -71,7 +71,8 @@ export default {
             tag: this.adminTag,
             password: this.password
           }
-          await loginAdmin(adminData);
+          const response = await loginAdmin(adminData);
+          console.log(response);
           this.$router.push("/main");
         }
       } catch(error) {

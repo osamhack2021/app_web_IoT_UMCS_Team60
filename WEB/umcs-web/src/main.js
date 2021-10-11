@@ -6,7 +6,11 @@ import axios from "axios";
 import vuetify from "./plugins/vuetify";
 import VueDraggableResizable from "vue-draggable-resizable";
 import "vue-draggable-resizable/dist/VueDraggableResizable.css";
+import io from "socket.io-client";
 
+const socket = io("/manager");
+
+Vue.prototype.$socket = socket;
 Vue.config.productionTip = false;
 
 new Vue({

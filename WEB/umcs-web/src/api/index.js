@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "/api/";
 
-// AUthentication
+// Authentication
 function loginAdmin(adminData) {
   return axios.post(`${BASE_URL}manager/login`, adminData);
 }
@@ -24,6 +24,8 @@ function fetchHealthReport(date) {
 function fetchUserProfile(tag) {
   return axios.get(`${BASE_URL}user/${tag}`);
 }
+
+//
 
 export {
   loginAdmin,

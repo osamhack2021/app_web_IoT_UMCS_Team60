@@ -6,6 +6,79 @@
           v-for="doom in roomList"
           :key="doom.doomId"
         >
+          <v-card>
+            <v-card-actions>
+              <!-- Dialog for Create Icon -->
+              <v-dialog
+                v-model="dialog"
+                max-width="600px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    추가
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">관리할 장소 추가</span>
+                  </v-card-title>
+                  <v-form>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="4">
+                            <v-select
+                              v-model="formInput.doom"
+                              label="건물"
+                            />
+                          </v-col>
+                          <v-col cols="4">
+                            <v-select
+                              v-model="formInput.floor"
+                              label="층"
+                            />
+                          </v-col>
+                          <v-col cols="4">
+                            <v-select
+                              v-model="formInput.name"
+                              label="장소"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer />
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="dialog = false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="createRoomIcon(floor)"
+                      >
+                        Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-form>
+                </v-card>
+              </v-dialog>
+
+              <v-btn
+                class="ml-2"
+                @click="changeEditMode"
+              >
+                {{ getEditText }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
           <!-- v-for 사용하여 나열 -->
           <v-card
             v-for="floor in doom.items"
@@ -16,79 +89,6 @@
             <!-- Toolbar -->
             <v-card-title class="py-2">
               {{ floor.name }}
-              <v-spacer />
-
-              <v-card-actions>
-                <!-- Dialog for Create Icon -->
-                <v-dialog
-                  v-model="dialog"
-                  max-width="600px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      추가
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">관리할 장소 추가</span>
-                    </v-card-title>
-                    <v-form>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="4">
-                              <v-select
-                                v-model="formInput.doom"
-                                label="건물"
-                              />
-                            </v-col>
-                            <v-col cols="4">
-                              <v-select
-                                v-model="formInput.floor"
-                                label="층"
-                              />
-                            </v-col>
-                            <v-col cols="4">
-                              <v-select
-                                v-model="formInput.name"
-                                label="장소"
-                              />
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="dialog = false"
-                        >
-                          Close
-                        </v-btn>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="createRoomIcon(floor.floor)"
-                        >
-                          Save
-                        </v-btn>
-                      </v-card-actions>
-                    </v-form>
-                  </v-card>
-                </v-dialog>
-
-                <v-btn
-                  class="ml-2"
-                  @click="changeEditMode"
-                >
-                  {{ getEditText }}
-                </v-btn>
-              </v-card-actions>
             </v-card-title>
 
             <v-img :src="require(`@/assets/doom${doom.doomId}-floor${floor.floor}-drawing.png`)">
@@ -138,7 +138,7 @@
             :search="searchValue"
             :items-per-page="$store.state.ITEMS_PER_PAGE"
           >
-            Slot:item.name - user profile routing
+            <!-- Slot:item.name - user profile routing -->
             <template v-slot:[`item.name`]="{ item }">
               <router-link
                 :to="`/user/${item.tag}`"
@@ -176,6 +176,11 @@ export default {
       editedY: 0,
       searchValue: "",
       dialog: false,
+
+      // Create Form
+      selectFromItems: {
+
+      },
       formInput: {
         doom: "",
         floor: "",
@@ -201,8 +206,8 @@ export default {
       this.editedY = y;
     },
     createRoomIcon(floor) {
-      this.dialog = false;
       console.log(floor);
+      this.dialog = false;
     },
     test(event, name, beaconId) {
       console.log("test is called!");
@@ -214,7 +219,7 @@ export default {
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
     },
-  },
+  }
 };
 </script>
 
