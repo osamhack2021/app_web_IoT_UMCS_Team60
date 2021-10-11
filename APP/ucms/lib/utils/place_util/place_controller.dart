@@ -1,5 +1,6 @@
 //TODO: implement
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ucms/data/hostnames.dart';
 import 'package:ucms/data/position.dart';
@@ -68,10 +69,12 @@ class PlaceController extends GetxController {
 
     for(Map<String,dynamic> json in l) {
       positionList.add(Position.fromJson(json));
+      debugPrint("${json["user_name"]}");
     }
     
     PositionList list = PositionList.fromList(positionList);
-
+    debugPrint("헤이 ${positionList.length}");
+    debugPrint("듀드 ${list.list.length}");
      return list;
   }
 

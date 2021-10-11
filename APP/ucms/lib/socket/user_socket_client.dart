@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/notification/noti_manager.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/utils/snackbar.dart';
 
@@ -13,22 +16,22 @@ class UserSocketClient extends GetxService {
   late socket_io.Socket socket;
 
   void startSocket() {
-    socket = Get.put(socket_io.io(
-        socketHost,
-        socket_io.OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({
-          'authorization': prefs.read("token") == null
-              ? ""
-              : ("Bearer " + prefs.read("token")!)
-        }) // optional
-            .build()));
+    socket = Get.put(socket_io.io(socketHost, <String, dynamic>{
+            'transports': ['websocket'],
+            'Authorization' : "Bearer ${prefs.read("token")}"
+      }));
+    debugPrint("Socket on");
     socket.connect();
 
     socket.onConnect((_) {});
 
-    socket.on("move_approval", (_) {
+    socket.on("move_approval", (_) async {
       //TODO:  impelment
+
+      NotiManager n = Get.find<NotiManager>();
+
+      await n.flutterLocalNotificationsPlugin.show(
+    1,"test", "testBody",n.platformChannelSpecifics);
     });
 
     socket.on("facility_approval", (_){
@@ -37,9 +40,10 @@ class UserSocketClient extends GetxService {
 
     socket.on("assemble_command", (data) {
       dynamic json = jsonDecode(utf8.decode(data));
-
+      
       prefs.write("assemble_location", json["beacon_id"]);
       prefs.write("assemble_visible",true);
+      debugPrint("assemble");
       Get.to(UserAssemble(location: prefs.read("assemble_location")));
       Snack.warn("소집 지시", "소집 지시가 내려왔습니다.");
     });
@@ -54,7 +58,7 @@ class UserSocketClient extends GetxService {
         }
       }
       if(flag) {
-        //TODO:  Cohort 페이지로 Get.offAll()
+        
       }
     });
     socket.on("to_normal", (_) {

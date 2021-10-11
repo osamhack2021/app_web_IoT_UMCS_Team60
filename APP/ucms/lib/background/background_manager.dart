@@ -8,6 +8,8 @@ import 'package:workmanager/workmanager.dart';
 class BackgroundManager extends GetxService {
   Workmanager man = Workmanager();
 
+  
+
   void callbackDispatcher() {
     man.executeTask((task, inputData) async {
       switch (task) {

@@ -1,13 +1,15 @@
-import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
+import 'package:get/get.dart';
 import 'package:ucms/data/position.dart';
 
 class PositionList extends GetxService {
 
-  PositionList();
+  PositionList() : list=[];
 
-  List<Position> list=[];
+  List<Position> list;
 
-  PositionList.fromList(List<Position> l) 
-    : list =l;
+  PositionList.fromList(List<Position> l) :list=[] {
+    for(Position p in l) {
+      list.add(p);
+    }} 
   
 }

@@ -78,6 +78,6 @@ class Position {
               leading: FlutterLogo(),
               title: title("$userRank $userName : in $name"),
               subtitle: quote("last in : $inTime"),
-  );
+    );
   }
 }

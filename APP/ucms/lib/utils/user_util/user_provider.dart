@@ -7,5 +7,7 @@ class UserProvider extends GetConnect {
 
   Future<Response> register(Map data)=> post("$restAPIHost/user/register", data, headers: {"charset" : "utf-8"});
 
-  Future<Response> userInfo(String tag) => get("$restAPIHost/user/$tag/recent_position", headers: {"charset" : "utf-8"});
+  Future<Response> currentPosition(String tag) => get("$restAPIHost/current_position/$tag", headers: {"charset" : "utf-8"});
+
+  Future<Response> currentPositionAll() => get("$restAPIHost/current_position", headers: {"charset" : "utf-8"});
 }
