@@ -18,12 +18,6 @@ export default {
       response: {},
     }
   },
-  methods: {
-    btnEvent() {
-      console.log("btn Clicked!!");
-      this.$socket.emit('to_cohort');
-    }
-  },
   mounted() {
     this.$socket.on('doom_get_in', (data) => {
       console.log(data);
@@ -37,6 +31,12 @@ export default {
       console.log(data);
       this.response = data;
     })
+  },
+  methods: {
+    btnEvent() {
+      console.log("btn Clicked!!");
+      this.$socket.emit('to_cohort');
+    }
   }
 };
 </script>
