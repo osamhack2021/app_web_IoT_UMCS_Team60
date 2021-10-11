@@ -5,4 +5,4 @@ files:
     destination: /home/ubuntu/build/
 hooks:    
   AfterInstall:
-    - location: /vuebuild.sh
+    - location: build/vuebuild.sh
