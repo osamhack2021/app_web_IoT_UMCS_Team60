@@ -42,19 +42,19 @@
                           <v-row>
                             <v-col cols="4">
                               <v-select
-                                v-model="formData.doom"
+                                v-model="formInput.doom"
                                 label="건물"
                               />
                             </v-col>
                             <v-col cols="4">
                               <v-select
-                                v-model="formData.floor"
+                                v-model="formInput.floor"
                                 label="층"
                               />
                             </v-col>
                             <v-col cols="4">
                               <v-select
-                                v-model="formData.name"
+                                v-model="formInput.name"
                                 label="장소"
                               />
                             </v-col>
@@ -73,7 +73,7 @@
                         <v-btn
                           color="blue darken-1"
                           text
-                          @click="dialog = false"
+                          @click="createRoomIcon(floor.floor)"
                         >
                           Save
                         </v-btn>
@@ -176,7 +176,7 @@ export default {
       editedY: 0,
       searchValue: "",
       dialog: false,
-      formData: {
+      formInput: {
         doom: "",
         floor: "",
         name: "",
@@ -199,6 +199,10 @@ export default {
     onDrag(x, y) {
       this.editedX = x;
       this.editedY = y;
+    },
+    createRoomIcon(floor) {
+      this.dialog = false;
+      console.log(floor);
     },
     test(event, name, beaconId) {
       console.log("test is called!");
