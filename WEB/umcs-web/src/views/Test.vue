@@ -31,6 +31,8 @@ export default {
       console.log(data);
       this.response = data;
     })
+
+    console.log(this.$socket.connect().connected);
   },
   methods: {
     btnEvent() {
