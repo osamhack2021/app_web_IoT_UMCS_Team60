@@ -159,7 +159,10 @@
  <tr>
   <td>
    <div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" width="40" height="40"/> <br>Arduino</div>
-  </td> 
+  </td>
+  <td>
+<div align="center"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="jwt" width="40" height="40"/><br>JWT</div>
+  </td>
  </tr>
  </tbody></table>
 
