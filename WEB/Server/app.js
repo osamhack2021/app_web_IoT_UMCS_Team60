@@ -80,7 +80,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/admin_page', (req, res) => {
-    res.sendFile(path.resolve(__dirname+'/public/index.html'));
+    res.sendFile(path.resolve(__dirname+'/public/index_build.html'));
 })
 
 app.get('/socketUser', (req, res) => {
