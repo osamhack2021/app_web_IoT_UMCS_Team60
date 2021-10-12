@@ -16,15 +16,8 @@ export default {
     const tag = this.$route.params.id;
     // userTag를 이용하여 User Data 불러오기
     fetchUserProfile(tag)
-      .then(({data}) => this.resData = data.data)
+      .then((response) => this.resData = response.data.data)
       .catch((error) => console.log(error));
-    // axios.get("http://militaryumcs.com/api/manager")
-    //   .then(response => {
-    //     console.log("Calling success!!");
-    //     console.log(response);
-    //     this.response = response.data;
-    //   })
-    //   .catch(error => console.log(error));
   },
 };
 </script>
