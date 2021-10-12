@@ -5,7 +5,6 @@ class MoveRequestDto {
 
   final String? destination;
   
-  //TODO : implement
   Map<String, dynamic> toJson() => {
         "destination": destination,
       };

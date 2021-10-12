@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,9 +50,9 @@ class _CohortMoveState extends State<CohortMove> {
                   padding: const EdgeInsets.all(3.0),
                   child: ChoiceChip(
                     label: Text(widget.btns[index], style:body(fontSize: 15)),
-                    selectedColor: selectedColor(),
+                    selectedColor: warningColor(),
                     disabledColor: disabledColor(),
-                    backgroundColor: chipBackcolor(),
+                    backgroundColor: warningEnabledColor(),
                     elevation :5,
                     selected: _value == index,
                     onSelected: (bool selected) {
@@ -72,7 +74,7 @@ class _CohortMoveState extends State<CohortMove> {
                   
                   store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${widget.btns[_value]} )");
                   Get.back();
-                  Snack.top("새로고침 필요", "화면을 끌어내려주세요");
+                  Snack.warnTop("새로고침 필요", "화면을 끌어내려주세요");
                 },
             label: "보고"),
             const SizedBox(height: 20),
