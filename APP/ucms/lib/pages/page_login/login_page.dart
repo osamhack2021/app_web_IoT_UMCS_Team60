@@ -8,9 +8,11 @@ import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
+import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/theme/size.dart';
+import 'package:ucms/utils/cohort_util/cohort_controller.dart';
 import 'package:ucms/utils/place_util/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
@@ -29,6 +31,10 @@ class LoginPage extends StatelessWidget {
   final PlaceController p = Get.isRegistered<PlaceController>()
       ? Get.find<PlaceController>()
       : Get.put(PlaceController());
+
+  final CohortController c = Get.isRegistered<CohortController>()
+      ? Get.find<CohortController>()
+      : Get.put(CohortController());
   
   PositionList positions = Get.put(PositionList());
 
@@ -82,16 +88,26 @@ class LoginPage extends StatelessWidget {
                       
                       await u.currentPosition(_tag.text.trim());
                       positions = await p.positionAllInfo();
-                      debugPrint("포지션 갯수  : ${positions.list.length}");
+                      bool isCohort = await c.cohortStatusNow();
 
-
-                      Snack.top("로그인 시도", "성공");
-                      Get.to(UserMain(
-                        location: store.read("recent_place_name") ??
-                            "error in LoginPage",
-                        state: store.read("state") ?? "",
-                        positions : positions,
-                      ));
+                      if(isCohort) {
+                        Snack.top("로그인 시도", "성공");
+                        Get.to(CohortMain(
+                          location: store.read("recent_place_name") ??
+                              "error in LoginPage",
+                          state: store.read("state") ?? "",
+                          positions : positions,
+                        ));
+                      }
+                      else {
+                        Snack.top("로그인 시도", "성공");
+                        Get.to(UserMain(
+                          location: store.read("recent_place_name") ??
+                              "error in LoginPage",
+                          state: store.read("state") ?? "",
+                          positions : positions,
+                        ));
+                      }
                     } else {
                       Snack.top("로그인 시도", result);
                     }

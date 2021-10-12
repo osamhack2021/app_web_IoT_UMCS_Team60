@@ -3,6 +3,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/data/places/doomfacility.dart';
+import 'package:ucms/data/places/outside_facility.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/utils/place_util/place_repository.dart';
@@ -23,8 +25,14 @@ class PlaceController extends GetxController {
     return doom;
   }
 
-  Future<List<dynamic>> doomFacilAllInfo() async{
-     final doomFacilList = await repository.doomFacilAll();
+  Future<List<String>> doomFacilAllInfo() async{
+     final jsonList = await repository.doomFacilAll();
+
+      List<String> doomFacilList =[];
+
+    for(Map<String,dynamic> json in jsonList) {
+      doomFacilList.add(DoomFacility.fromJson(json).name);
+    }
 
      return doomFacilList;
   }
@@ -33,8 +41,10 @@ class PlaceController extends GetxController {
   Future<dynamic> doomFacilInfo(int id) async{
     final doomFacil = await repository.doom(id);
 
+    
     return doomFacil;
   }
+
   Future<List<dynamic>> doomRoomAllInfo() async{
      final doomRoomList = await repository.doomAll();
 
@@ -48,9 +58,14 @@ class PlaceController extends GetxController {
     return doomRoom;
   }
 
-  Future<List<dynamic>> outsideFacilAllInfo() async{
-     final outsideFacilList = await repository.outsideFacilAll();
+  Future<List<String>> outsideFacilAllInfo() async{
+     final jsonList = await repository.outsideFacilAll();
+    
+    List<String> outsideFacilList =[];
 
+    for(Map<String,dynamic> json in jsonList) {
+      outsideFacilList.add(OutsideFacility.fromJson(json).name);
+    }
      return outsideFacilList;
   }
 
@@ -69,12 +84,9 @@ class PlaceController extends GetxController {
 
     for(Map<String,dynamic> json in l) {
       positionList.add(Position.fromJson(json));
-      debugPrint("${json["user_name"]}");
     }
     
     PositionList list = PositionList.fromList(positionList);
-    debugPrint("헤이 ${positionList.length}");
-    debugPrint("듀드 ${list.list.length}");
      return list;
   }
 

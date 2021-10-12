@@ -78,7 +78,7 @@ class _UserMainState extends State<UserMain> {
     String name = store.read("name") ?? "모름";
     widget.location = store.read("recent_place_name") ?? "위치 모름";
     widget.state = store.read("state");
-    if (firstSnack) Snack.top("로그인 성공", "$name 으로 로그인됨");
+    if (firstSnack) Snack.top("평시 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
