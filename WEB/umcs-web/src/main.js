@@ -9,7 +9,7 @@ import "vue-draggable-resizable/dist/VueDraggableResizable.css";
 
 import io  from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io-extended'
-const socket = io('http://127.0.0.1:3010/manager', { transports : ['websocket'] });
+const socket = io('https://militaryumcs.com/manager', { transports : ['websocket'] });
 
 Vue.use(VueSocketIO, socket);
 Vue.config.productionTip = false;
