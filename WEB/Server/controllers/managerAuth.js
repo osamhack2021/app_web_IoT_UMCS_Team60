@@ -12,10 +12,11 @@ const login = (req, res, next) => {
         if(err) { // db error
             req.code = 4;
             req.msg = msg[req.code];
-            return next(err)
+            return next(err);
         }
         
         if(!manager) { // 로그인 실패 시 manager가 비어있음
+            console.log("login fail");
             req.code = req.flash('code')[0]; // managerPassport의 localVerify에서 넘겨받은 flash
             req.msg = msg[req.code];
             return next();
@@ -24,6 +25,7 @@ const login = (req, res, next) => {
         req.login(manager, () => { // 로그인 성공 시
             const { salt, enc_pwd, ...payload } = manager; // 비밀번호 관련 정보를 제외하고 payload에 저장
             req.data = payload;
+            console.log("login success", payload);
             return next();
         });
     })(req, res, next);
@@ -62,10 +64,11 @@ const register = (req, res, next) => {
 };
 
 const checkLogin = (req, res, next) => {
-    
-    if (req.isAuthenticated() && req.user)
+    if (req.isAuthenticated() && req.user) {
+        console.log("logined", req.user);
         return next();
-    else 
+    }
+    console.log("not logined");
     return res.status(400).json({
         code: 9,
         msg: 'not_login',
