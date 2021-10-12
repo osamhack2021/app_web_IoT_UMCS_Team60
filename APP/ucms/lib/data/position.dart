@@ -75,7 +75,7 @@ class Position {
 
   ListTile toListTile() {
     return ListTile(
-              leading: FlutterLogo(),
+              leading: const FlutterLogo(),
               title: title("$userRank $userName : in $name"),
               subtitle: quote("last in : $inTime"),
     );

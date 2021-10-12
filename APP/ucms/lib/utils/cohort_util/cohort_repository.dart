@@ -72,7 +72,7 @@ class CohortRepository {
     }
   }
 
-  Future<Map<String,dynamic>> anomaly(Map<String, dynamic> data) async {
+  Future<String> anomaly(Map<String, dynamic> data) async {
     Response resp = await _cohortProvider.anomaly(data);
     dynamic body = resp.body;
 
@@ -80,11 +80,6 @@ class CohortRepository {
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
 
-    if (serverRespDto.code == 1) {
-      Map<String,dynamic> data = serverRespDto.data;
-      return data;
-    } else {
-      return {};
-    }
+    return serverRespDto.msg;
   }
 }

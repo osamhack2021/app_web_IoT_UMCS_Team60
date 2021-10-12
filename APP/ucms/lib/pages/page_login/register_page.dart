@@ -37,6 +37,7 @@ class RegisterPage extends StatelessWidget {
           children: [
             topMargin(),
             title("회원가입"),
+            const SizedBox(height: 20),
             Form(
               key: _formKey,
               child: Column(
@@ -56,6 +57,7 @@ class RegisterPage extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 20),
             PostButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {

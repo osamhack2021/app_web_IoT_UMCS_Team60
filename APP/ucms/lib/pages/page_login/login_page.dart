@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,7 +8,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
@@ -76,6 +77,7 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
               PageButton(
                 label: "용사 로그인",
                 onPressed: () async {
@@ -84,7 +86,7 @@ class LoginPage extends StatelessWidget {
                     String result =
                         await u.login(_tag.text.trim(), _password.text.trim());
                     if (result == "success") {
-                      store.write("state", "정상");
+                      store.writeIfNull("state", "정상");
                       
                       await u.currentPosition(_tag.text.trim());
                       positions = await p.positionAllInfo();
