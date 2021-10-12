@@ -37,6 +37,7 @@
     "socket.io": "^2.4.1",
     "socket.io-client": "^4.2.0",
     "socketio-jwt": "^4.6.2",
+    "vue-socket.io": "^3.0.7",
     "ws": "^8.2.2"
   },
   "devDependencies": {

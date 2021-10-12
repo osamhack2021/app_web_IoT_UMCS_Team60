@@ -6,8 +6,8 @@ module.exports = () => {
   return {
     init: () => {
       return mysql.createConnection({
-        host: '10.0.1.174',
-        port: '3306',
+        host: 'localhost',
+        port: '3307',
         user: 'root',
         password: process.env.DB_PASSWORD,
         database: 'UMCS'

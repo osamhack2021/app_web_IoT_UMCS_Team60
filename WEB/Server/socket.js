@@ -16,7 +16,7 @@ function newkrDate() {
 }
 
 module.exports = (server, session) => {
-    const io = require('socket.io')(server); 
+    const io = require('socket.io')(server, { cors: { origin: "*" }}); 
     const FileStore = require("session-file-store")(session);
     
     io.use(passportSocketIo.authorize({
@@ -247,6 +247,10 @@ module.exports = (server, session) => {
             socket.disconnect(0);
         }
 
+        socket.on('disconnect', ()=>{
+            console.log('disconnect')
+        });
+
         // 평시->코호트 전환
         socket.on('to_cohort', async () =>{
             let sql = "INSERT INTO cohort_status VALUE (NULL, true, ?)";
@@ -258,6 +262,7 @@ module.exports = (server, session) => {
         socket.on('to_normal', async () =>{
             let sql = "INSERT INTO cohort_status VALUE (NULL, false, ?)";
             let [result] = await dbPromiseConnection.query(sql, [nowDateTime()]);
+            console.log("to_normal")
             userio.emit('to_normal');
         });
 
