@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/cohort_util/cohort_provider.dart';
@@ -34,6 +35,7 @@ class CohortRepository {
       Map<String,dynamic> data = serverRespDto.data;
       return data;
     } else {
+      debugPrint("someThing is wrong");
       return {};
     }
   }

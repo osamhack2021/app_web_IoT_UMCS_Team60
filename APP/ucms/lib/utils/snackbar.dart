@@ -24,7 +24,7 @@ class Snack {
                     );
   }
 
-  static void warn(title, message){
+  static void warnTop(title, message){
     Get.snackbar(title, message,
                       backgroundColor: warnBackColor,
                       margin : const EdgeInsets.all(20),

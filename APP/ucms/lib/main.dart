@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         primaryColor : mainTextColor(),
         backgroundColor: backgroundColor(),
       ),
-      initialRoute: "/nav",
+      initialRoute: "/login",
       routes: {
         "/noti_test" : (context) => const NotiTestPage(),
         "/nav" : (context) => const NavPage(),

@@ -5,18 +5,20 @@ import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/text_theme.dart';
 
 class LabelFormInput extends StatelessWidget {
-  const LabelFormInput(
+  LabelFormInput(
       {Key? key,
       required this.label,
       required this.hint,
       required this.controller,
-      required this.validator,})
+      required this.validator,
+      this.isCohort=false,})
       : super(key: key);
 
   final String label;
   final String hint;
   final TextEditingController controller;
   final String? Function(String?) validator;
+  bool isCohort;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class LabelFormInput extends StatelessWidget {
           Text(label, style: bold()),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-            child: KTextFormField(hint: hint, controller: controller, validator: validator,),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, isCohort: isCohort,),
           ),
         ],
       ),
@@ -36,18 +38,20 @@ class LabelFormInput extends StatelessWidget {
   }
 }
 class LabelFormIntInput extends StatelessWidget {
-  const LabelFormIntInput(
+  LabelFormIntInput(
       {Key? key,
       required this.label,
       required this.hint,
       required this.controller,
-      required this.validator,})
+      required this.validator,
+      this.isCohort=false,})
       : super(key: key);
 
   final String label;
   final String hint;
   final TextEditingController controller;
   final String? Function(String?) validator;
+  bool isCohort;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,7 @@ class LabelFormIntInput extends StatelessWidget {
           Text(label, style: bold()),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number, isCohort: isCohort,),
           ),
         ],
       ),
@@ -68,18 +72,20 @@ class LabelFormIntInput extends StatelessWidget {
 }
 
 class LabelFormFloatInput extends StatelessWidget {
-  const LabelFormFloatInput(
+  LabelFormFloatInput(
       {Key? key,
       required this.label,
       required this.hint,
       required this.controller,
-      required this.validator,})
+      required this.validator,
+      this.isCohort=false,})
       : super(key: key);
 
   final String label;
   final String hint;
   final TextEditingController controller;
   final String? Function(String?) validator;
+  bool isCohort;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +97,7 @@ class LabelFormFloatInput extends StatelessWidget {
           Text(label, style: bold()),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.number, isCohort: isCohort,),
           ),
         ],
       ),
@@ -100,18 +106,20 @@ class LabelFormFloatInput extends StatelessWidget {
 }
 
 class LabelFormDateTimeInput extends StatelessWidget {
-  const LabelFormDateTimeInput(
+  LabelFormDateTimeInput(
       {Key? key,
       required this.label,
       required this.hint,
       required this.controller,
-      required this.validator,})
+      required this.validator,
+      this.isCohort=false,})
       : super(key: key);
 
   final String label;
   final String hint;
   final TextEditingController controller;
   final String? Function(String?) validator;
+  bool isCohort;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +131,7 @@ class LabelFormDateTimeInput extends StatelessWidget {
           Text(label, style: bold()),
           Container(
             constraints: const BoxConstraints(maxWidth: 200, minWidth: 200),
-            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.datetime),
+            child: KTextFormField(hint: hint, controller: controller, validator: validator, type:TextInputType.datetime, isCohort: isCohort,),
           ),
         ],
       ),
@@ -132,13 +140,14 @@ class LabelFormDateTimeInput extends StatelessWidget {
 }
 
 class LabelFormDropDown extends StatefulWidget {
-  const LabelFormDropDown(
+   LabelFormDropDown(
       {Key? key,
       required this.label,
       required this.hint,
       required this.controller,
       required this.validator,
       required this.labels,
+      this.isCohort=false,
       })
       : super(key: key);
 
@@ -147,6 +156,7 @@ class LabelFormDropDown extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?) validator;
   final List<String> labels;
+  bool isCohort;
 
   @override
   State<LabelFormDropDown> createState() => _LabelFormDropDownState();
@@ -168,11 +178,11 @@ class _LabelFormDropDownState extends State<LabelFormDropDown> {
             child: DropdownButton<String>(
                 value: dropdownValue,
                 hint: const Text("선택하세요", textAlign:TextAlign.end),
-                style: TextStyle(color: enabledColor()),
+                style: TextStyle(color: (widget.isCohort)?warningColor():enabledColor()),
                 alignment: AlignmentDirectional.centerEnd,
                 underline: Container(
                   height: 2,
-                  color: enabledColor(),
+                  color: (widget.isCohort)?warningColor():enabledColor(),
                 ),
                 onChanged: (String? newValue) {
                   setState(() {
