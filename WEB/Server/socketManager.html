@@ -80,7 +80,7 @@
 
 
       socket.once('my_info', function(manager) { 
-        $('#my_info').prepend(manager.tag + " " + manager.rank + " " + manager.name+ " 금일 담당생활관id:" + manager.charge_doom); 
+        $('#my_info').prepend(manager.tag + " " + manager.rank + " " + manager.name+ " 금일 담당생활관id:" + manager.charge_dooms); 
       });
 
       socket.on('cannot_assemble', function(msg) { 
