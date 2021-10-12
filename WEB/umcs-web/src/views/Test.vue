@@ -7,6 +7,7 @@
     >
       button
     </v-btn>
+    <span> {{ $socket.connected ? 'Connected' : 'Disconnected' }} </span>
   </v-container>
 </template>
 
@@ -36,8 +37,16 @@ export default {
   },
   methods: {
     btnEvent() {
-      console.log("btn Clicked!!");
-      this.$socket.emit('to_cohort');
+      console.log(this.$socket.client);
+      this.$socket.client.emit('to_cohort');
+    }
+  },
+  sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    doom_get_in(data) {
+      console.log(data);
     }
   }
 };

@@ -8,7 +8,9 @@ import VueDraggableResizable from "vue-draggable-resizable";
 import "vue-draggable-resizable/dist/VueDraggableResizable.css";
 import io from "socket.io-client";
 
-const socket = io("https://militaryumcs.com/manager");
+import io  from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io-extended'
+const socket = io('https://militaryumcs.com/manager', { transports : ['websocket'] });
 
 Vue.prototype.$socket = socket;
 Vue.config.productionTip = false;

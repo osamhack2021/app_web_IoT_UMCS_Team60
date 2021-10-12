@@ -3,7 +3,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'https://militaryumcs.com',
+        target: 'https://militaryumcs.com/',
       },
     }
   },
