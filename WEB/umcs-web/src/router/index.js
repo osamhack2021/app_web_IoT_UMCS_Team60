@@ -1,6 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+import io  from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io-extended'
+const socket = io('http://127.0.0.1:3010/manager', { transports : ['websocket'] });
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -11,6 +15,10 @@ const routes = [
   {
     path:"/test",
     component: () => import("@/views/Test"),
+    beforeEnter(to, from, next) {      
+      Vue.use(VueSocketIO, socket);
+      next();
+    }
   },
   {
     path: "/main",

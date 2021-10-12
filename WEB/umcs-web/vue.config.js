@@ -3,7 +3,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'https://militaryumcs.com/',
+        target: 'http://127.0.0.1:3010/',
       },
     }
   },

@@ -5,7 +5,7 @@
     <v-btn
       @click="btnEvent"
     >
-      button
+      코호트전환
     </v-btn>
     <span> {{ $socket.connected ? 'Connected' : 'Disconnected' }} </span>
   </v-container>
@@ -20,20 +20,22 @@ export default {
     }
   },
   mounted() {
-    this.$socket.on('doom_get_in', (data) => {
+    this.$socket.$subscribe('doom_get_in', (data) => {
       console.log(data);
       this.response = data;
     });
-    this.$socket.on('doomroom_get_in', (data) => {
+    this.$socket.$subscribe('doomroom_get_in', (data) => {
       console.log(data);
       this.response = data;
     });
-    this.$socket.on('doomfacility_get_in', (data) => {
+    this.$socket.$subscribe('doomfacility_get_in', (data) => {
       console.log(data);
       this.response = data;
     })
-
-    console.log(this.$socket.connect().connected);
+    this.$socket.$subscribe('outside_facility_get_in', (data) => {
+      console.log(data);
+      this.response = data;
+    })
   },
   methods: {
     btnEvent() {
@@ -45,9 +47,6 @@ export default {
     connect() {
       console.log('socket connected')
     },
-    doom_get_in(data) {
-      console.log(data);
-    }
   }
 };
 </script>
