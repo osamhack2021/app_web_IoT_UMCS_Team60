@@ -46,6 +46,8 @@ module.exports = (server, session) => {
     userio.on('connection', (socket) => {
         try { // jwt가 header로 왔는지 확인하여 user 인증
             var user = decodeToken(socket.handshake.headers.authorization.split('Bearer ')[1]);
+            if(!user) user = decodeToken(socket.handshake.query.jwt);
+            
             socket.join(user.doom_id);
             user.socket_id = socket.id;
             userio.emit('my_info', user);
