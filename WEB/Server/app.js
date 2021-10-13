@@ -33,7 +33,7 @@ app.use(session({
         httpOnly: false,
         secure: false
     },
-    store: new FileStore(),
+    store: new FileStore({logFn: function(){}}),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
