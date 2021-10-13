@@ -22,7 +22,7 @@ router.post('/register', userAuth.register, (req, res) => {
 
 router.post('/login', userAuth.login, (req, res) => {
     if(req.code) 
-        res.setHeader("Access-Control-Expose-Headers", "*").status(400).json({
+        res.status(400).json({
             code: req.code,
             msg: req.msg,
             data: {
@@ -30,10 +30,13 @@ router.post('/login', userAuth.login, (req, res) => {
             }
         });
     else
-        res.setHeader('Authorization', 'Bearer '+ req.token).status(200).json({
+        res.setHeader("Access-Control-Expose-Headers", "*").setHeader('Authorization', 'Bearer '+ req.token).status(200).json({
             code: 1,
             msg: "success",
-            data : req.data
+            data : {
+                ...req.data,
+                jwt:req.token
+            }
         });
 });
 
