@@ -22,7 +22,7 @@ router.post('/register', userAuth.register, (req, res) => {
 
 router.post('/login', userAuth.login, (req, res) => {
     if(req.code) 
-        res.status(400).json({
+        res.setHeader("Access-Control-Expose-Headers", "*").status(400).json({
             code: req.code,
             msg: req.msg,
             data: {
