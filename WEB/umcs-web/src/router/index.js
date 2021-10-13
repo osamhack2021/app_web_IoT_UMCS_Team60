@@ -1,16 +1,24 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+import io  from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io-extended'
+const socket = io('https://militaryumcs.com/manager', { transports : ['websocket'] });
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    redirect: "/authentication/login",
+    redirect: "/authentication/login"
   },
   {
-    path: "/test",
+    path:"/test",
     component: () => import("@/views/Test"),
+    beforeEnter(to, from, next) {
+      Vue.use(VueSocketIO, socket);
+      next();
+    }
   },
   {
     path: "/main",
