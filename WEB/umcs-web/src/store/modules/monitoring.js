@@ -138,12 +138,14 @@ const state = {
     },
   ],
 };
+
 const getters = {
   getEditText(state) {
     if (state.editMode) return "저장";
     else return "편집";
   },
 };
+
 const mutations = {
   changeEditMode(state) {
     state.editMode = !state.editMode;
@@ -152,6 +154,7 @@ const mutations = {
     state.focusRoom = value;
   },
 };
+
 const actions = {};
 
 export default {

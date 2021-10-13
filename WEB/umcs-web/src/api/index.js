@@ -10,9 +10,22 @@ function logoutAdmin() {
   return axios.get(`${BASE_URL}manager/logout`);
 }
 
+// UserProfile
+function fetchUserInfo(tag) {
+  return axios.get(`${BASE_URL}user/${tag}`);
+}
+
 // Monitoring
-function fetchCurrentPositionInfo(beaconId) {
+function fetchCurrentLocation_Tag(tag) {
+  return axios.get(`${BASE_URL}current_position/search?user_tag=${tag}`);
+}
+function fetchCurrentLocation_BeaconId(beaconId) {
   return axios.get(`${BASE_URL}current_position/search?beacon_id=${beaconId}`);
+}
+
+// Moving Report
+function fetchMovingReport() {
+  return axios.get(`${BASE_URL}outside_request/waiting_permission`);
 }
 
 // HealthCare
@@ -20,17 +33,12 @@ function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
 }
 
-// UserProfile
-function fetchUserProfile(tag) {
-  return axios.get(`${BASE_URL}user/${tag}`);
-}
-
-//
-
 export {
   loginAdmin,
   logoutAdmin,
-  fetchCurrentPositionInfo,
+  fetchUserInfo,
+  fetchCurrentLocation_BeaconId,
+  fetchCurrentLocation_Tag,
+  fetchMovingReport,
   fetchHealthReport,
-  fetchUserProfile,
 };

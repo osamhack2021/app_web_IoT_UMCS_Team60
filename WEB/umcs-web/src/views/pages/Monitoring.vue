@@ -163,7 +163,7 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VueDraggableResizable from "vue-draggable-resizable";
-import { fetchCurrentPositionInfo } from "@/api/index.js";
+import { fetchCurrentLocation_BeaconId } from "@/api/index.js";
 
 export default {
   name: "Monitoring",
@@ -215,7 +215,7 @@ export default {
       console.log("beaconId", beaconId);
       this.setFocusRoom(name);
       // beaconId에 해당하는 시설에 있는 인원 목록
-      fetchCurrentPositionInfo(beaconId)
+      fetchCurrentLocation_BeaconId(beaconId)
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
     },
