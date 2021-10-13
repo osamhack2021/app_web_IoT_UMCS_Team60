@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "socket.io-client": "^2.4.0",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.4",
     "vue-draggable-resizable": "^2.3.0",
     "vue-router": "^3.2.0",
     "vue-socket.io": "^3.0.7",

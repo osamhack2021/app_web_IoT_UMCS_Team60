@@ -30,7 +30,7 @@ app.use(session({
     saveUninitialized: true,
     resave: true,
     cookie: {
-        httpOnly: true,
+        httpOnly: false,
         secure: false
     },
     store: new FileStore(),

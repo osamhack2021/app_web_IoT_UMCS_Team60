@@ -3,8 +3,8 @@ import VueRouter from "vue-router";
 
 import io  from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io-extended'
-const socket = io('https://militaryumcs.com/manager', { transports : ['websocket'] });
-
+import VueCookies from "vue-cookies";
+Vue.use(VueCookies);
 Vue.use(VueRouter);
 
 const routes = [
@@ -16,6 +16,8 @@ const routes = [
     path:"/test",
     component: () => import("@/views/Test"),
     beforeEnter(to, from, next) {      
+      console.log(window.$cookies.get('express.sid').replace('s:','').split('.')[0])
+      const socket = io.connect('https://militaryumcs.com/manager', { query: 'session_id=' + window.$cookies.get('express.sid').replace('s:','').split('.')[0] });
       Vue.use(VueSocketIO, socket);
       next();
     }
