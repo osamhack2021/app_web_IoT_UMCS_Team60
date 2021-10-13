@@ -1,3 +1,4 @@
+
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -22,5 +23,14 @@ new Vue({
   axios,
   vuetify,
   VueDraggableResizable,
+  sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    doom_get_in(data) {
+      console.log(data);
+    }
+  },
+
   render: (h) => h(App),
 }).$mount("#app");

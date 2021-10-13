@@ -235,8 +235,11 @@ module.exports = (server, session) => {
             var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
             let [results] = await dbPromiseConnection.query(sql, [manager.tag, nowDate()]);
             if(results.length) { // 금일 근무가 있을 시에만 담당 생활관 room에 참여
-                manager.charge_doom = results[0].charge_doom;
-                socket.join(manager.charge_doom);
+                manager.charge_dooms = [];
+                for(let result of results) {
+                    manager.charge_dooms.push(result.charge_doom);
+                    socket.join(result.charge_doom);
+                }
             }
             
             managerio.emit('my_info', manager);
@@ -246,6 +249,10 @@ module.exports = (server, session) => {
             console.log(err);
             socket.disconnect(0);
         }
+
+        socket.on('disconnect', async() => {
+            console.log('disconnected');
+        });
 
         // 평시->코호트 전환
         socket.on('to_cohort', async () =>{
@@ -258,12 +265,14 @@ module.exports = (server, session) => {
         socket.on('to_normal', async () =>{
             let sql = "INSERT INTO cohort_status VALUE (NULL, false, ?)";
             let [result] = await dbPromiseConnection.query(sql, [nowDateTime()]);
+            console.log("to_normal");
             userio.emit('to_normal');
         });
 
         // 긴급 소집 지시
         socket.on('assemble_command', () =>{
-            userio.to(manager.charge_doom).emit('assemble_command', {send_time: newkrDate()});
+            for(let doom_id of manager.charge_dooms) 
+                userio.to(doom_id).emit('assemble_command', {send_time: newkrDate()});
         });
 
         // 외부시설 이동요청 결재 완료

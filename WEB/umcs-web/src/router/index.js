@@ -1,5 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { io } from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io-extended'
+const socket = io.connect('http://127.0.0.1:3010/manager', { transports : ['websocket'] });
 
 import io  from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io-extended'
@@ -26,6 +29,10 @@ const routes = [
     path: "/main",
     name: "메인 화면",
     component: () => import("@/layouts/adminPages/Index"),
+    beforeEnter (to, from, next) {
+      Vue.use(VueSocketIO, socket);
+      next();
+    },
     children: [
       {
         path: "/monitoring",
