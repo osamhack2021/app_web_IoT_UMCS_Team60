@@ -23,7 +23,7 @@ module.exports = (server, session) => {
         cookieParser: require('cookie-parser'),     
         key: 'express.sid',
         secret: process.env.COOKIE_SECRET, 
-        store: new FileStore(),
+        store: new FileStore({logFn: function(){}}),
         success: onAuthorizeSuccess,
         fail: onAuthorizeFail,
     }));
@@ -115,7 +115,6 @@ module.exports = (server, session) => {
                 if(checks.length) 
                     for(let check of checks) await get_out(check);
                 
-
                 sql = "INSERT INTO access_record VALUE (NULL, ?, ?, ?, NULL)";
                 await dbPromiseConnection.query(sql, [user.tag, data.beacon_id, nowDateTime()]);
 
@@ -191,14 +190,14 @@ module.exports = (server, session) => {
         // 외부시설 이동요청
         socket.on('move_request', async (data) => {
             try {
-                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, NULL, NULL, ?)";
-                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime(), user.socket_id]);
+                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, ?, NULL, ?)";
+                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime(), data.description, user.socket_id]);
                 
                 managerio.to(user.doom_id).emit('move_request', {
                     id: result.insertId,
                     user_tag: user.tag,
-                    outside_id: data.outside_id,
-                    request_time: nowDateTime()
+                    request_time: nowDateTime(),
+                    ...data
                 });
             }
             catch(err) {
