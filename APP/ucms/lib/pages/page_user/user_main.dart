@@ -13,7 +13,6 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
@@ -78,7 +77,7 @@ class _UserMainState extends State<UserMain> {
     String name = store.read("name") ?? "모름";
     widget.location = store.read("recent_place_name") ?? "위치 모름";
     widget.state = store.read("state");
-    if (firstSnack) Snack.top("로그인 성공", "$name 으로 로그인됨");
+    if (firstSnack) Snack.top("평시 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
 
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
@@ -198,6 +197,7 @@ class _UserMainState extends State<UserMain> {
           const SizedBox(height: 20),
           LabelText(label: "현 위치", content: widget.location!),
           LabelText(label: "현 상태", content: widget.state!),
+          const SizedBox(height: 20),
           Visibility(
             visible: assembleVisible,
             child: WarnButton(
@@ -222,6 +222,7 @@ class _UserMainState extends State<UserMain> {
           quote("내 사용자 정보"),
           const SizedBox(height: 20),
           quote("$name 님 환영합니다."),
+          const SizedBox(height: 20),
           PageButton(
               onPressed: () {
                 u.logout();
@@ -230,7 +231,7 @@ class _UserMainState extends State<UserMain> {
               label: "로그아웃하기"),
           WarnButton(
               onPressed: () async{
-                store.write("state", "정상");
+                store.writeIfNull("state", "정상");
                       
                 await u.currentPosition(store.read("tag"));
                 positions = await p.positionAllInfo();

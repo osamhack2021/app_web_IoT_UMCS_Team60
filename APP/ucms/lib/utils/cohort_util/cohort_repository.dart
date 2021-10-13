@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/cohort_util/cohort_provider.dart';
@@ -34,6 +35,7 @@ class CohortRepository {
       Map<String,dynamic> data = serverRespDto.data;
       return data;
     } else {
+      debugPrint("someThing is wrong");
       return {};
     }
   }
@@ -70,7 +72,7 @@ class CohortRepository {
     }
   }
 
-  Future<Map<String,dynamic>> anomaly(Map<String, dynamic> data) async {
+  Future<String> anomaly(Map<String, dynamic> data) async {
     Response resp = await _cohortProvider.anomaly(data);
     dynamic body = resp.body;
 
@@ -78,11 +80,6 @@ class CohortRepository {
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
 
-    if (serverRespDto.code == 1) {
-      Map<String,dynamic> data = serverRespDto.data;
-      return data;
-    } else {
-      return {};
-    }
+    return serverRespDto.msg;
   }
 }

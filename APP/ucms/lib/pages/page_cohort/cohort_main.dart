@@ -13,13 +13,11 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
 import 'package:ucms/pages/page_cohort/cohort_move.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
-import 'package:ucms/pages/page_user/user_assemble.dart';
-import 'package:ucms/pages/page_user/user_move.dart';
+import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
@@ -55,7 +53,7 @@ class _CohortMainState extends State<CohortMain> {
   final tempCon= TextEditingController(); 
   final descCon= TextEditingController();
 
-  int selectedIndex = 1;
+  int selectedIndex = 2;
   bool firstSnack = true;
 
   @override
@@ -89,7 +87,7 @@ class _CohortMainState extends State<CohortMain> {
     String name = store.read("name") ?? "모름";
     widget.location = store.read("recent_place_name") ?? "위치 모름";
     widget.state = store.read("state");
-    if (firstSnack) Snack.top("로그인 성공", "$name 으로 로그인됨");
+    if (firstSnack) Snack.warnTop("코호트 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
     bool assembleVisible = store.read("assemble_visible") ?? false;
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -170,12 +168,42 @@ class _CohortMainState extends State<CohortMain> {
   List<Widget> _buildPages(CohortController c, {required positions, required expanded, 
         required assembleVisible, required name, required nameCon, required GlobalKey<FormState> formKey,  
         required rankCon, required timeCon, required tempCon, required descCon}) {
+    DateTime _now = DateTime.now().toUtc().add(const Duration(hours: 9));
     return <Widget>[
       ListView(
         children: [
           topMargin(),
           title("공공시설 사용 인원 조회"),
           quote("사용자들의 위치를 파악합니다"),
+          quote("갯수 : ${positions.length}"),
+          const SizedBox(height: 20),
+          ExpansionPanelList(
+            animationDuration: const Duration(milliseconds: 2000),
+            children: [
+              ...List<ExpansionPanel>.generate(positions.length, (index) {
+                return ExpansionPanel(
+                  headerBuilder: (context, isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        positions[index].name,
+                        style: body(),
+                      ),
+                    );
+                  },
+                  //body: positions[index].toListTile(),
+                  body : const Text("Weeee"),
+                  isExpanded: expanded[index],
+                  canTapOnHeader: true,
+                );
+              }),
+            ],
+            dividerColor: Colors.grey,
+            expansionCallback: (panelIndex, isExpanded) {
+              setState(() {
+                expanded[panelIndex] = !isExpanded;
+              });
+            },
+          ),
          
           const SizedBox(height: 20),
           footer(),
@@ -207,10 +235,17 @@ class _CohortMainState extends State<CohortMain> {
                 label: "소집 지시가 내려왔습니다."),
           ),
           WarnButton(
-              onPressed: () {
-                Get.to(const CohortMove());
+              onPressed: () async {
+                List<String> btns = await p.outsideFacilAllInfo();
+                Get.to(CohortMove(name : "외부시설", btns: btns));
               },
-              label: "공공시설 사용 요청 하기"),
+              label: "외부시설 사용 요청 하기"),
+          WarnButton(
+              onPressed: () async {
+                List<String> btns = await p.doomFacilAllInfo();
+                Get.to(CohortMove(name : "건물 내", btns: btns));
+              },
+              label: "건물 내 사용 요청 하기"),
           footer(),
         ],
       ),
@@ -219,35 +254,34 @@ class _CohortMainState extends State<CohortMain> {
           topMargin(),
           title("체온측정 및 이상유무 보고"),
           quote("내 건강상태를 보고합니다."),
-          const SizedBox(height: 20),
-          quote("$name 님 환영합니다."),
+          const SizedBox(height: 40),
            Form(
               key: formKey,
               child: Column(
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  LabelFormDropDown(label: "계급", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: rankCon, validator: validateNull(),),
-                  LabelFormInput(label: "이름", hint: "이름",controller: nameCon, validator: validateNull(),),
-                  LabelFormDateTimeInput(label: "현재 시간", hint: "time", controller: timeCon, validator: validateTime()),
-                  LabelFormFloatInput(label: "현재 체온", hint: "체온",controller: tempCon, validator: validateNull(),),
-                  LabelFormInput(label: "이상 유무", hint: "자유롭게 입력",controller: descCon, validator: validateNull(),),
+                  LabelFormDropDown(label: "계급", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: rankCon, validator: validateNull(),isCohort: true,),
+                  LabelFormInput(label: "이름", hint: "이름",controller: nameCon, validator: validateNull(),isCohort: true,),
+                  LabelFormDateTimeInput(label: "현재 시간", hint: "${_now.hour}:${_now.minute}", controller: timeCon, validator: validateTime(),isCohort: true,),
+                  LabelFormFloatInput(label: "현재 체온", hint: "36.5",controller: tempCon, validator: validateNull(),isCohort: true,),
+                  LabelFormInput(label: "이상 유무", hint: "자유롭게 입력",controller: descCon, validator: validateNull(),isCohort: true,),
                 ],
               ),
             ),
-            PostButton(
+            const SizedBox(height: 20),
+            WarnButton(
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    //TODO : implement
                     var json = {
                       "temperature" : tempCon.text.trim(),
                       "details" : descCon.text.trim(),
                     };
-                    dynamic result = await c.anomaly(json);
+                    String result = await c.anomaly(json);
                     if (result =="success") {
                       Get.back();
                       Snack.top("이상 유무 보고 시도", "성공");
-                    } else {Snack.bottom("이상 유무 보고 시도", result);}
-                  }                  
+                    } else {Snack.warnTop("이상 유무 보고 시도", result);}
+                  }
                 },
               label: "이상 유무 보고"),
 
@@ -262,12 +296,29 @@ class _CohortMainState extends State<CohortMain> {
           quote("내 사용자 정보"),
           const SizedBox(height: 20),
           quote("$name 님 환영합니다."),
+          const SizedBox(height: 20),
           WarnButton(
               onPressed: () {
                 u.logout();
                 Get.to(LoginPage());
               },
               label: "로그아웃하기"),
+           PageButton(
+              onPressed: () async{
+                store.writeIfNull("state", "정상");
+                      
+                await u.currentPosition(store.read("tag"));
+                positions = await p.positionAllInfo();
+
+                Snack.top("로그인 시도", "성공");
+                Get.to(UserMain(
+                  location: store.read("recent_place_name") ??
+                      "error in LoginPage",
+                  state: store.read("state") ?? "",
+                  positions : positions,
+                ));
+              },
+              label: "코호트 상황 메인 가기"),
           footer(),
         ],
       ),

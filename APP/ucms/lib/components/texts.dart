@@ -9,7 +9,7 @@ title(content) => Text(content, style: h1(), textAlign: TextAlign.center);
 quote(content) => Text(content, style: body(), textAlign: TextAlign.center);
 
 class KTextFormField extends StatelessWidget {
-  KTextFormField({Key? key, required this.hint, required this.controller, this.obscureText=false, required this.validator, this.type=TextInputType.text})
+  KTextFormField({Key? key, required this.hint, required this.controller, this.obscureText=false, required this.validator, this.type=TextInputType.text, this.isCohort=false})
       : super(key: key);
 
   final String hint;
@@ -18,11 +18,12 @@ class KTextFormField extends StatelessWidget {
   final String? Function(String?) validator;
   final TextInputType type;
   bool obscureText;
+  bool isCohort;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        style: GoogleFonts.nanumGothic(color : mainTextColor()),
+        style: GoogleFonts.nanumGothic(color : isCohort?warningColor():mainTextColor()),
         controller: controller,
         obscureText: obscureText,
         keyboardType: TextInputType.multiline,
@@ -30,10 +31,10 @@ class KTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           enabledBorder: UnderlineInputBorder(      
-                      borderSide: BorderSide(color: enabledColor()),   
+                      borderSide: BorderSide(color: isCohort?warningColor():enabledColor()),   
                       ),  
               focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: selectedColor()),
+                      borderSide: BorderSide(color: isCohort?warningColor():selectedColor()),
                    ),  
         ),
         textAlign: TextAlign.right,

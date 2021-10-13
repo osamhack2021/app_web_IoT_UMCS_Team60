@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
@@ -45,7 +44,7 @@ class UserSocketClient extends GetxService {
       prefs.write("assemble_visible",true);
       debugPrint("assemble");
       Get.to(UserAssemble(location: prefs.read("assemble_location")));
-      Snack.warn("소집 지시", "소집 지시가 내려왔습니다.");
+      Snack.warnTop("소집 지시", "소집 지시가 내려왔습니다.");
     });
     socket.on("to_cohort", (data) {
       dynamic json = jsonDecode(utf8.decode(data));

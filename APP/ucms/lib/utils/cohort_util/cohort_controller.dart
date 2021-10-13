@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ucms/data/is_cohort.dart';
 import 'package:ucms/utils/cohort_util/cohort_repository.dart';
 
 class CohortController extends GetxController {
   final repository = CohortRepository();
-  //TODO : implement
   Future<List<Map<String,dynamic>>> cohortStatus() async {
     return await repository.cohortStatus();
   }
-  Future<Map<String,dynamic>> cohortStatusNow() async {
-    return {};
+  Future<bool> cohortStatusNow() async {
+    Map<String,dynamic> res = await repository.cohortStatusNow();
+    
+    IsCohort isCohort = IsCohort.fromJson(res);
+    
+    return (isCohort.isCohort==1)?true:false;
   }
 
 
@@ -20,7 +23,9 @@ class CohortController extends GetxController {
     return {};
   }
 
-  Future<Map<String,dynamic>> anomaly(Map<String, dynamic> data) async {
-    return {};
+  Future<String> anomaly(Map<String, dynamic> data) async {
+    String res = await repository.anomaly(data);
+    
+    return res;
   }
 }
