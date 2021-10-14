@@ -2,9 +2,6 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <v-card-text>
-          {{ selectedItems }}
-        </v-card-text>
         <v-row>
           <v-col cols="6">
             <!-- Search Bar -->
@@ -18,8 +15,17 @@
             />
           </v-col>
           <v-spacer />
-          <v-btn class="mt-5 mx-5">
+          <v-btn
+            class="mt-5"
+            @click="allAccept()"
+          >
             선택된 항목 모두 승인
+          </v-btn>
+          <v-btn
+            class="mt-5 mx-4"
+            @click="allReject()"
+          >
+            선택된 항목 모두 거절
           </v-btn>
         </v-row>
       </v-card-title>
@@ -139,18 +145,49 @@ export default {
   created() {
     this.FETCH_MOVING_REPORT();
   },
+  mounted() {
+    this.$socket.$subscribe("move_request", (data) => {
+      this.ADD_MOVING_REPORT(data);
+    });
+  },
   methods: {
     ...mapMutations("moving_approval", [
       "updateSearchInput",
       "updateSelectedItems",
       "setLoading",
+      "deleteMovingReport",
     ]),
-    ...mapActions("moving_approval", ["FETCH_MOVING_REPORT"]),
+    ...mapActions("moving_approval", [
+      "FETCH_MOVING_REPORT",
+      "ADD_MOVING_REPORT",
+    ]),
     acceptReport(id) {
-      console.log(`accept!, id=${id}`);
+      const load = {
+        id,
+        permission: true,
+      };
+      this.$socket.client.emit("move_approval", load);
+      this.deleteMovingReport(id);
     },
     rejectReport(id) {
-      console.log(`reject!, id=${id}`);
+      const load = {
+        id,
+        permission: false,
+      };
+      this.$socket.client.emit("move_approval", load);
+      this.deleteMovingReport(id);
+    },
+    allAccept() {
+      this.selectedItems.forEach((elem) => {
+        this.acceptReport(elem.id);
+      });
+      this.selectedItems = [];
+    },
+    allReject() {
+      this.selectedItems.forEach((elem) => {
+        this.rejectReport(elem.id);
+      });
+      this.selectedItems = [];
     },
   },
 };
