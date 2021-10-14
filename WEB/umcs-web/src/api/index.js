@@ -32,6 +32,9 @@ function fetchMovingReport() {
 function fetchUsingReport() {
   return axios.get(`${BASE_URL}facility_request/waiting_permission`);
 }
+function fetchUsingReport_Id(id) {
+  return axios.get(`${BASE_URL}facility_request/${id}`);
+}
 
 // HealthCare
 function fetchHealthReport(date) {
@@ -46,5 +49,6 @@ export {
   fetchCurrentLocation_Tag,
   fetchMovingReport,
   fetchUsingReport,
+  fetchUsingReport_Id,
   fetchHealthReport,
 };

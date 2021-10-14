@@ -13,8 +13,14 @@ const routes = [
   {
     path: "/test",
     component: () => import("@/views/Test"),
+  },
+  {
+    path: "/main",
+    name: "메인 화면",
+    component: () => import("@/layouts/adminPages/Index"),
     beforeEnter(to, from, next) {
       console.log(
+        "cookie",
         window.$cookies.get("express.sid").replace("s:", "").split(".")[0]
       );
       // 실 배포시에는 option 제거할 것
@@ -26,11 +32,6 @@ const routes = [
       Vue.use(VueSocketIO, socket);
       next();
     },
-  },
-  {
-    path: "/main",
-    name: "메인 화면",
-    component: () => import("@/layouts/adminPages/Index"),
     children: [
       {
         path: "/monitoring",

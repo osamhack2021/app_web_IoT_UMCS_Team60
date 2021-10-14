@@ -139,18 +139,34 @@ export default {
   created() {
     this.FETCH_USING_REPORT();
   },
+  mounted() {
+    this.$socket.$subscribe("facility_request", (data) => {
+      this.ADD_USING_REPORT(data);
+    });
+  },
   methods: {
     ...mapMutations("using_approval", [
       "updateSearchInput",
       "updateSelectedItems",
       "setLoading",
+      "deleteMovingReport",
     ]),
-    ...mapActions("using_approval", ["FETCH_USING_REPORT"]),
+    ...mapActions("using_approval", ["FETCH_USING_REPORT", "ADD_USING_REPORT"]),
     acceptReport(id) {
-      console.log(`accept!, id=${id}`);
+      const load = {
+        id: id,
+        permission: true,
+      };
+      this.$socket.client.emit("facility_approval", load);
+      this.deleteMovingReport(id);
     },
     rejectReport(id) {
-      console.log(`reject!, id=${id}`);
+      const load = {
+        id: id,
+        permission: false,
+      };
+      this.$socket.client.emit("facility_approval", load);
+      this.deleteMovingReport(id);
     },
   },
 };
