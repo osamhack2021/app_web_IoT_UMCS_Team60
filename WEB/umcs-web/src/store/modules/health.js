@@ -51,8 +51,8 @@ const actions = {
           obj.tag = elem.user_tag;
           obj.temperature = `${elem.temperature}℃`;
           obj.name = `${elem.rank} ${elem.name}`;
-          obj.reportedTime = `${reported_date.toLocaleTimeString()}`;
-          obj.details = elem.details;
+          obj.reportedTime = reported_date.toLocaleTimeString();
+          obj.details = elem.details;``
           datas.push(obj);
         });
       } else {
