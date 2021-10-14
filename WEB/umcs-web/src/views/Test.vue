@@ -43,10 +43,5 @@ export default {
       this.$socket.client.emit('to_cohort');
     }
   },
-  sockets: {
-    connect() {
-      console.log('socket connected')
-    },
-  }
 };
 </script>
