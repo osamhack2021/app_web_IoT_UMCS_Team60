@@ -1,5 +1,4 @@
 import {
-  fetchUserInfo,
   fetchMovingReport,
   fetchCurrentLocation_Tag,
 } from "@/api/index.js";
@@ -57,26 +56,28 @@ const mutations = {
 
 const actions = {
   async FETCH_MOVING_REPORT({ commit }) {
+    commit("setLoading", true);
     try {
       const response = await fetchMovingReport();
-      console.log("response", response);
       const resData = response.data.data;
       const data = [];
       if (resData) {
         resData.forEach(async (elem) => {
           const obj = {};
-          const userInfo = await fetchUserInfo(elem.user_tag);
           const currentLocation = await fetchCurrentLocation_Tag(elem.user_tag);
-          console.log("currentLocation", currentLocation);
           const reportedDate = new Date(elem.request_time);
 
+          obj.id = elem.id;
           obj.tag = elem.user_tag;
-          obj.name = `${userInfo.data.data.rank} ${userInfo.data.data.name}`;
+          obj.name = `${elem.user_rank} ${elem.user_name}`;
           obj.reportedTime = reportedDate.toLocaleString();
-          obj.currentLocation = currentLocation.data.data.name || "미확인";
+          if (currentLocation.data.code == 1) {
+            obj.currentLocation = currentLocation.data.data.name;
+          } else {
+            obj.currentLocation = "알 수 없음";
+          }
           obj.locationToGo = elem.outside_name;
-          obj.details = elem.description || "";
-          console.log(obj);
+          obj.details = elem.description || "내용이 없습니다.";
           data.push(obj);
         });
       } else {
