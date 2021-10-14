@@ -124,5 +124,33 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.delete('/:id', managerAuth.checkLogin, async (req, res) => {
+    var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "DELETE FROM room_picker WHERE id=?";
+        var [results] = await dbPromiseConnection.query(sql, [req.params.id]);
+
+        if(!results.affectedRows)
+            return res.status(200).json({
+                code: 2,
+                msg: msg[2],
+            });
+
+        return res.status(200).json({
+            code: 1,
+            msg: "success",
+        });
+
+    } catch(err) {
+        console.log(err)
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err
+        });
+    }
+});
+  
+
 
 module.exports = router;
