@@ -1,26 +1,31 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import io  from 'socket.io-client'
-import VueSocketIO from 'vue-socket.io-extended'
-import VueCookies from "vue-cookies";
-Vue.use(VueCookies);
+import io from "socket.io-client";
+import VueSocketIO from "vue-socket.io-extended";
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    redirect: "/authentication/login"
+    redirect: "/authentication/login",
   },
   {
-    path:"/test",
+    path: "/test",
     component: () => import("@/views/Test"),
-    beforeEnter(to, from, next) {      
-      console.log(window.$cookies.get('express.sid').replace('s:','').split('.')[0])
+    beforeEnter(to, from, next) {
+      console.log(
+        window.$cookies.get("express.sid").replace("s:", "").split(".")[0]
+      );
       // 실 배포시에는 option 제거할 것
-      const socket = io.connect('https://militaryumcs.com/manager', { query: 'session_id=' + window.$cookies.get('express.sid').replace('s:','').split('.')[0] });
+      const socket = io.connect("https://militaryumcs.com/manager", {
+        query:
+          "session_id=" +
+          window.$cookies.get("express.sid").replace("s:", "").split(".")[0],
+      });
       Vue.use(VueSocketIO, socket);
       next();
-    }
+    },
   },
   {
     path: "/main",
