@@ -11,7 +11,7 @@ function nowDate() {
 router.get('/', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        sql = 'SELECT orr.*, u.doom_id, u.name as user_name, of.name as outside_name, of.beacon_id, of.current_count ';
+        let sql = 'SELECT orr.*, u.doom_id, u.name as user_name, u.rank as user_rank, of.name as outside_name, of.beacon_id, of.current_count ';
         sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id';
         var [results] = await dbPromiseConnection.query(sql);
         
@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 router.get('/search', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        sql = 'SELECT orr.*, u.doom_id, u.name as user_name, of.name as outside_name, of.beacon_id, of.current_count ';
+        let sql = 'SELECT orr.*, u.doom_id, u.name as user_name, u.rank as user_rank, of.name as outside_name, of.beacon_id, of.current_count ';
         sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id ';
         for(key in req.query)
             sql += `AND ${key} = ? `;
@@ -84,7 +84,7 @@ router.get('/waiting_permission', managerAuth.checkLogin, async (req, res) => {
                 msg: msg[3],
             });
 
-        sql = 'SELECT orr.*, u.doom_id, u.name as user_name, of.name as outside_name, of.beacon_id, of.current_count ';
+        sql = 'SELECT orr.*, u.doom_id, u.name as user_name, u.rank as user_rank, of.name as outside_name, of.beacon_id, of.current_count ';
         sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id AND orr.permission IS NULL';
         for(key in req.query)
             sql += `AND ${key} = ? `;
@@ -120,7 +120,7 @@ router.get('/waiting_permission', managerAuth.checkLogin, async (req, res) => {
 router.get('/:id', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        sql = 'SELECT orr.*, u.doom_id, u.name as user_name, of.name as outside_name, of.beacon_id, of.current_count ';
+        let sql = 'SELECT orr.*, u.doom_id, u.name as user_name, u.rank as user_rank, of.name as outside_name, of.beacon_id, of.current_count ';
         sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id AND id=?';
         var [results] = await dbPromiseConnection.query(sql, [req.params.id]);
         
