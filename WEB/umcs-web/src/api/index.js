@@ -27,6 +27,9 @@ function fetchCurrentLocation_BeaconId(beaconId) {
 function fetchMovingReport() {
   return axios.get(`${BASE_URL}outside_request/waiting_permission`);
 }
+function fetchMovingReport_Id(id) {
+  return axios.get(`${BASE_URL}outside_request/${id}`);
+}
 
 // Using Report
 function fetchUsingReport() {
@@ -48,6 +51,7 @@ export {
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,
   fetchMovingReport,
+  fetchMovingReport_Id,
   fetchUsingReport,
   fetchUsingReport_Id,
   fetchHealthReport,

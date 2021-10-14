@@ -2,9 +2,6 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <v-card-text>
-          {{ selectedItems }}
-        </v-card-text>
         <v-row>
           <v-col cols="6">
             <!-- Search Bar -->
@@ -158,34 +155,36 @@ export default {
       "updateSearchInput",
       "updateSelectedItems",
       "setLoading",
-      "deleteMovingReport",
+      "deleteUsingReport",
     ]),
     ...mapActions("using_approval", ["FETCH_USING_REPORT", "ADD_USING_REPORT"]),
     acceptReport(id) {
       const load = {
-        id: id,
+        id,
         permission: true,
       };
       this.$socket.client.emit("facility_approval", load);
-      this.deleteMovingReport(id);
+      this.deleteUsingReport(id);
     },
     rejectReport(id) {
       const load = {
-        id: id,
+        id,
         permission: false,
       };
       this.$socket.client.emit("facility_approval", load);
-      this.deleteMovingReport(id);
+      this.deleteUsingReport(id);
     },
     allAccept() {
       this.selectedItems.forEach(elem => {
         this.acceptReport(elem.id);
       });
+      this.selectedItems = [];
     },
     allReject() {
       this.selectedItems.forEach(elem => {
         this.rejectReport(elem.id);
       });
+      this.selectedItems = [];
     }
   },
 };

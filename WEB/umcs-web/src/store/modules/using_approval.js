@@ -51,13 +51,13 @@ const mutations = {
   setLoading(state, value) {
     state.loading = value;
   },
-  updateMovingReport(state, data) {
+  updateUsingReport(state, data) {
     state.tableDatas = data;
   },
-  pushMovingReport(state, obj) {
+  pushUsingReport(state, obj) {
     state.tableDatas.push(obj);
   },
-  deleteMovingReport(state, id) {
+  deleteUsingReport(state, id) {
     for (let i = 0; i < state.tableDatas.length; i++) {
       if (state.tableDatas[i].id == id) {
         state.tableDatas.splice(i, 1);
@@ -99,7 +99,7 @@ const actions = {
       } else {
         console.log("There is not Using report!");
       }
-      commit("updateMovingReport", data);
+      commit("updateUsingReport", data);
       commit("setLoading", false);
       return data;
     } catch (error) {
@@ -126,7 +126,7 @@ const actions = {
       obj.locationToUse = locationToUse.data.data.facility_name;
       obj.details = data.description || "내용이 없습니다.";
 
-      commit("pushMovingReport", obj);
+      commit("pushUsingReport", obj);
       return data;
     } catch (error) {
       console.log(error);
