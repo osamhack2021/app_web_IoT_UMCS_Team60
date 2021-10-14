@@ -18,9 +18,9 @@
             />
           </v-col>
           <v-spacer />
-          <v-col cols="5">
-            <v-btn> 선택된 항목 모두 승인 </v-btn>
-          </v-col>
+          <v-btn class="mt-5 mx-5">
+            선택된 항목 모두 승인
+          </v-btn>
         </v-row>
       </v-card-title>
 
