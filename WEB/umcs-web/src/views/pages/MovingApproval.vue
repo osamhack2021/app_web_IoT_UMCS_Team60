@@ -30,11 +30,13 @@
         show-select
         :headers="tableHeaders"
         :items="tableDatas"
-        item-key="tag"
+        item-key="reportedTime"
         :sort-by="['reportedTime']"
         :sort-desc="[true]"
         :search="searchInput"
         show-expand
+        :loading="loading"
+        loading-text="Loading... Please wait"
         hide-default-footer
         :items-per-page="$store.state.ITEMS_PER_PAGE"
         :page.sync="page"
@@ -99,7 +101,11 @@ export default {
   }),
   computed: {
     ...mapState("moving_approval", ["tableHeaders", "tableDatas"]),
-    ...mapGetters("moving_approval", ["getSearchInput", "getSelectedItems"]),
+    ...mapGetters("moving_approval", [
+      "getSearchInput",
+      "getSelectedItems",
+      "getLoading",
+    ]),
     searchInput: {
       get() {
         return this.getSearchInput;
@@ -116,6 +122,14 @@ export default {
         return this.updateSelectedItems(value);
       },
     },
+    loading: {
+      get() {
+        return this.getLoading;
+      },
+      set() {
+        return this.setLoading(value);
+      },
+    },
     pageCount() {
       return Math.ceil(
         this.tableDatas.length / this.$store.state.ITEMS_PER_PAGE
@@ -129,6 +143,7 @@ export default {
     ...mapMutations("moving_approval", [
       "updateSearchInput",
       "updateSelectedItems",
+      "setLoading",
     ]),
     ...mapActions("moving_approval", ["FETCH_MOVING_REPORT"]),
     acceptReport(id) {

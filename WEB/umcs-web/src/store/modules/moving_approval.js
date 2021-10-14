@@ -11,6 +11,9 @@ const state = {
   // Selected
   selectedItems: [],
 
+  // Loading
+  loading: true,
+
   // Data Table
   tableHeaders: [
     { text: "군번", value: "tag" },
@@ -22,40 +25,7 @@ const state = {
     { text: "거절", value: "reject", sortable: false },
     { text: "목적", value: "data-table-expand" },
   ],
-  tableDatas: [
-    {
-      tag: "11111",
-      name: "병장 aaa",
-      reportedTime: "16:15",
-      currentLocation: "5생활관",
-      locationToGo: "식당",
-      details: "밥 먹으러 갑니다",
-    },
-    {
-      tag: "22222",
-      name: "상병 bbb",
-      reportedTime: "20:10",
-      currentLocation: "2생활관",
-      locationToGo: "풋살장",
-      details: "한국의 호날두",
-    },
-    {
-      tag: "44444",
-      name: "일병 ddd",
-      reportedTime: "03:00",
-      currentLocation: "식당",
-      locationToGo: "교회",
-      details: "종교 활동",
-    },
-    {
-      tag: "55555",
-      name: "일병 eee",
-      reportedTime: "5",
-      currentLocation: "3생활관",
-      locationToGo: "위병소",
-      details: "택배 가지러 갔다오겠습니다",
-    },
-  ],
+  tableDatas: [],
 };
 
 const getters = {
@@ -64,6 +34,9 @@ const getters = {
   },
   getSelectedItems(state) {
     return state.selectedItems;
+  },
+  getLoading(state) {
+    return state.loading;
   },
 };
 
@@ -74,8 +47,11 @@ const mutations = {
   updateSelectedItems(state, value) {
     state.selectedItems = value;
   },
+  setLoading(state, value) {
+    state.loading = value;
+  },
   updateMovingReport(state, data) {
-    console.log("moving report", data);
+    state.tableDatas = data;
   },
 };
 
@@ -83,6 +59,7 @@ const actions = {
   async FETCH_MOVING_REPORT({ commit }) {
     try {
       const response = await fetchMovingReport();
+      console.log("response", response);
       const resData = response.data.data;
       const data = [];
       if (resData) {
@@ -90,19 +67,23 @@ const actions = {
           const obj = {};
           const userInfo = await fetchUserInfo(elem.user_tag);
           const currentLocation = await fetchCurrentLocation_Tag(elem.user_tag);
+          console.log("currentLocation", currentLocation);
+          const reportedDate = new Date(elem.request_time);
 
           obj.tag = elem.user_tag;
-          obj.name = `${userInfo.rank} ${userInfo.name}`;
-          obj.reportedTime = elem.request_time;
-          // obj.currentLocation = currentLocation.outside_name;
+          obj.name = `${userInfo.data.data.rank} ${userInfo.data.data.name}`;
+          obj.reportedTime = reportedDate.toLocaleString();
+          obj.currentLocation = currentLocation.data.data.name || "미확인";
           obj.locationToGo = elem.outside_name;
-          // obj.details = ;
+          obj.details = elem.description || "";
+          console.log(obj);
           data.push(obj);
         });
       } else {
         console.log("There is not Moving report!");
       }
-      commit("updateMovingReport", data);1
+      commit("updateMovingReport", data);
+      commit("setLoading", false);
       return data;
     } catch (error) {
       console.log(error);
