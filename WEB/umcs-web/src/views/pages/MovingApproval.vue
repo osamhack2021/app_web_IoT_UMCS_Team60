@@ -30,12 +30,12 @@
         show-select
         :headers="tableHeaders"
         :items="tableDatas"
-        item-key="reportedTime"
+        item-key="id"
         :sort-by="['reportedTime']"
         :sort-desc="[true]"
         :search="searchInput"
         show-expand
-        :loading="loading"
+        :loading="isLoading"
         loading-text="Loading... Please wait"
         hide-default-footer
         :items-per-page="$store.state.ITEMS_PER_PAGE"
@@ -122,7 +122,7 @@ export default {
         return this.updateSelectedItems(value);
       },
     },
-    loading: {
+    isLoading: {
       get() {
         return this.getLoading;
       },

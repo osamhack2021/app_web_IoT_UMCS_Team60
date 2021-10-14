@@ -1,5 +1,4 @@
 import {
-  fetchUserInfo,
   fetchUsingReport,
   fetchCurrentLocation_Tag,
 } from "@/api/index.js";
@@ -10,6 +9,9 @@ const state = {
 
   // Selected
   selectedItems: [],
+
+  // Loading
+  loading: true,
 
   // Data Table
   tableHeaders: [
@@ -22,40 +24,7 @@ const state = {
     { text: "거절", value: "reject", sortable: false },
     { text: "목적", value: "data-table-expand" },
   ],
-  tableDatas: [
-    {
-      tag: "11111",
-      name: "병장 aaa",
-      reportedTime: "16:15",
-      currentLocation: "5생활관",
-      locationToUse: "화장실",
-      details: "양치할게요",
-    },
-    {
-      tag: "22222",
-      name: "상병 bbb",
-      reportedTime: "20:10",
-      currentLocation: "2생활관",
-      locationToUse: "화장살",
-      details: "급합니다",
-    },
-    {
-      tag: "44444",
-      name: "일병 ddd",
-      reportedTime: "03:00",
-      currentLocation: "식당",
-      locationToUse: "샤워실",
-      details: "점호 끝나고 씻어도 될까요?",
-    },
-    {
-      tag: "55555",
-      name: "일병 eee",
-      reportedTime: "5",
-      currentLocation: "3생활관",
-      locationToUse: "세탁실",
-      details: "빨래 잠깐 하겠습니다.",
-    },
-  ],
+  tableDatas: [],
 };
 
 const getters = {
@@ -65,6 +34,9 @@ const getters = {
   getSelectedItems(state) {
     return state.selectedItems;
   },
+  getLoading(state) {
+    return state.loading;
+  }
 };
 
 const mutations = {
@@ -74,13 +46,17 @@ const mutations = {
   updateSelectedItems(state, value) {
     state.selectedItems = value;
   },
+  setLoading(state, value) {
+    state.loading = value;
+  },
   updateMovingReport(state, data) {
-    console.log("moving report", data);
+    state.tableDatas = data;
   },
 };
 
 const actions = {
   async FETCH_USING_REPORT({ commit }) {
+    commit("setLoading", true);
     try {
       const response = await fetchUsingReport();
       const resData = response.data.data;
@@ -88,21 +64,27 @@ const actions = {
       if (resData) {
         resData.forEach(async (elem) => {
           const obj = {};
-          const userInfo = await fetchUserInfo(elem.user_tag);
           const currentLocation = await fetchCurrentLocation_Tag(elem.user_tag);
+          const reportedDate = new Date(elem.request_time);
 
+          obj.id = elem.id;
           obj.tag = elem.user_tag;
-          obj.name = `${userInfo.rank} ${userInfo.name}`;
-          obj.reportedTime = elem.request_time;
-          // obj.currentLocation = currentLocation.
-          obj.locationToUse = elem.
-          // obj.details = ;
-            data.push(obj);
+          obj.name = `${elem.user_rank} ${elem.user_name}`;
+          obj.reportedTime = reportedDate.toLocaleString();
+          if (currentLocation.data.code == 1) {
+            obj.currentLocation = currentLocation.data.data.name;
+          } else {
+            obj.currentLocation = "알 수 없음";
+          }
+          obj.locationToUse = elem.facility_name;
+          obj.details = elem.description || "내용이 없습니다.";
+          data.push(obj);
         });
       } else {
         console.log("There is not Using report!");
       }
-      commit("updateMovingReport", response);
+      commit("updateMovingReport", data);
+      commit("setLoading", false);
       return data;
     } catch (error) {
       console.log(error);

@@ -30,11 +30,13 @@
         show-select
         :headers="tableHeaders"
         :items="tableDatas"
-        item-key="tag"
+        item-key="id"
         :sort-by="['reportedTime']"
         :sort-desc="[true]"
         :search="searchInput"
         show-expand
+        :loading="isLoading"
+        loading-text="Loading... Please wait"
         hide-default-footer
         :items-per-page="$store.state.ITEMS_PER_PAGE"
         :page.sync="page"
@@ -99,7 +101,11 @@ export default {
   }),
   computed: {
     ...mapState("using_approval", ["tableHeaders", "tableDatas"]),
-    ...mapGetters("using_approval", ["getSearchInput", "getSelectedItems"]),
+    ...mapGetters("using_approval", [
+      "getSearchInput",
+      "getSelectedItems",
+      "getLoading",
+    ]),
     searchInput: {
       get() {
         return this.getSearchInput;
@@ -116,6 +122,14 @@ export default {
         return this.updateSelectedItems(value);
       },
     },
+    isLoading: {
+      get() {
+        return this.getLoading;
+      },
+      set() {
+        return this.setLoading(value);
+      },
+    },
     pageCount() {
       return Math.ceil(
         this.tableDatas.length / this.$store.state.ITEMS_PER_PAGE
@@ -123,12 +137,13 @@ export default {
     },
   },
   created() {
-    this.FETCH_MOVING_REPORT();
+    this.FETCH_USING_REPORT();
   },
   methods: {
     ...mapMutations("using_approval", [
       "updateSearchInput",
       "updateSelectedItems",
+      "setLoading",
     ]),
     ...mapActions("using_approval", ["FETCH_USING_REPORT"]),
     acceptReport(id) {
