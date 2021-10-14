@@ -121,7 +121,7 @@ router.get('/:id', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         let sql = 'SELECT orr.*, u.doom_id, u.name as user_name, u.rank as user_rank, of.name as outside_name, of.beacon_id, of.current_count ';
-        sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id AND id=?';
+        sql += 'FROM outside_request `orr`, user `u`, outside_facility `of` WHERE orr.user_tag=u.tag AND of.id=orr.outside_id AND orr.id=?';
         var [results] = await dbPromiseConnection.query(sql, [req.params.id]);
         
         if(!results.length)
