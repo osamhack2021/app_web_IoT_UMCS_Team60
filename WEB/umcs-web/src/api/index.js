@@ -28,6 +28,11 @@ function fetchMovingReport() {
   return axios.get(`${BASE_URL}outside_request/waiting_permission`);
 }
 
+// Using Report
+function fetchUsingReport() {
+  return axios.get(`${BASE_URL}facility_request/waiting_permission`);
+}
+
 // HealthCare
 function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
@@ -40,5 +45,6 @@ export {
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,
   fetchMovingReport,
+  fetchUsingReport,
   fetchHealthReport,
 };
