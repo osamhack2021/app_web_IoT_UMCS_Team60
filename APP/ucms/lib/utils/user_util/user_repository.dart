@@ -1,7 +1,5 @@
-
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
@@ -22,20 +20,23 @@ class UserRepository {
     
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-    Map<String,String> convertHeader = convertUtf8ToObject(headers);
+    dynamic convertHeader = convertUtf8ToObject(headers);
+
 
     debugPrint("convertBody is $convertBody");
     debugPrint("convertHeader is $convertHeader");
+    debugPrint("serverRespDto is  ${serverRespDto.toJson().toString()}");
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
       newUser.token=convertHeader["authorization"]??"no auth key";
-      debugPrint("convertHeader is $convertHeader");
-      
+      debugPrint(newUser.token);
+      debugPrint(newUser.toJson().toString()); 
       return newUser;
     } else {
       prefs.write("loginFailureMsg",serverRespDto.msg);
+      debugPrint(serverRespDto.code.toString());
       return User();
     }
   }

@@ -31,6 +31,18 @@ class User {
         state = json["state"] ?? "",
         token = json["token"] ?? "error in fromJson";
 
+   Map<String,dynamic> toJson() {
+      return  {
+        "tag" : tag,
+        "name" :name,
+        "roomId" :roomId,
+        "doomId" :doomId,
+        "location" :location,
+        "state" : state,
+        "token" : token
+      };
+}
+
   static void updatePrefs(User u) {
     var store = GetStorage();
 
