@@ -68,10 +68,12 @@ const mutations = {
 };
 
 const actions = {
-  async FETCH_MOVING_REPORT({ commit }) {
+  async FETCH_MOVING_REPORT({ commit, state }) {
+    let count = 0;
     commit("setLoading", true);
     try {
       const response = await fetchMovingReport();
+      count += parseInt(response.data.total);
       const resData = response.data.data;
       const data = [];
       if (resData) {
@@ -100,7 +102,12 @@ const actions = {
         console.log("There is not Moving report!");
       }
       commit("updateMovingReport", data);
-      commit("setLoading", false);
+      let timer = setInterval(() => {
+        if (state.tableDatas.length === count) {
+          commit("setLoading", false);
+          clearInterval(timer);
+        }
+      }, 100);
       return data;
     } catch (error) {
       console.log(error);
