@@ -13,6 +13,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/expan_item.dart';
 import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
@@ -35,7 +36,7 @@ class CohortMain extends StatefulWidget {
 
   String? location = "location uninitialized";
   String? state = "state uninitialized";
-  PositionList? positions = PositionList();
+  List<PositionList>? positions = [];
   @override
   State<CohortMain> createState() => _CohortMainState();
 }
@@ -91,16 +92,24 @@ class _CohortMainState extends State<CohortMain> {
     widget.state = store.read("state");
     if (firstSnack) Snack.warnTop("코호트 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
+
+    backMan.man.registerPeriodicTask("1", "refresh_beacon");
+
     bool assembleVisible = store.read("assemble_visible") ?? false;
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
-    List<bool> _expanded =List<bool>.generate(widget.positions!.list.length, (index) {return false;});
     
-    List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+    List<ExpanItem> expanItems =
+        List<ExpanItem>.generate(widget.positions!.length, (index) {
+      //TODO : status quo
+      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTile());
+    });
+    
+    List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!, expanItems : expanItems, 
          assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
          rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
 
-    backMan.man.registerPeriodicTask("1", "refresh_beacon");
+    
 
     return MaterialApp(
       home: KScreen(
@@ -117,11 +126,8 @@ class _CohortMainState extends State<CohortMain> {
               widget.state = store.read("state");
               assembleVisible = store.read("assemble_visible");
               widget.positions = await p.positionAllInfo();
-              _expanded =
-                  List<bool>.generate(widget.positions!.list.length, (index) {
-                return true;
-              });
-              widgetOptions = _buildPages(c, positions : widget.positions!.list, expanded : _expanded, 
+              
+              widgetOptions = _buildPages(c, positions : widget.positions!, expanItems : expanItems, 
          assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
          rankCon : rankCon,  timeCon : timeCon,  tempCon : tempCon ,  descCon : descCon);
             });
@@ -167,8 +173,8 @@ class _CohortMainState extends State<CohortMain> {
     });
   }
 
-  List<Widget> _buildPages(CohortController c, {required positions, required expanded, 
-        required assembleVisible, required name, required nameCon, required GlobalKey<FormState> formKey,  
+  List<Widget> _buildPages(CohortController c, {required List<PositionList> positions, required List<ExpanItem> expanItems, 
+        required bool assembleVisible, required String name, required nameCon, required GlobalKey<FormState> formKey,  
         required rankCon, required timeCon, required tempCon, required descCon}) {
     DateTime _now = DateTime.now().toUtc().add(const Duration(hours: 9));
     return <Widget>[
@@ -187,14 +193,14 @@ class _CohortMainState extends State<CohortMain> {
                   headerBuilder: (context, isExpanded) {
                     return ListTile(
                       title: Text(
-                        positions[index].name,
+                        positions[index].place.name,
                         style: body(),
                       ),
                     );
                   },
                   //body: positions[index].toListTile(),
                   body : const Text("Weeee"),
-                  isExpanded: expanded[index],
+                  isExpanded: expanItems[index].expanded,
                   canTapOnHeader: true,
                 );
               }),
@@ -202,7 +208,7 @@ class _CohortMainState extends State<CohortMain> {
             dividerColor: Colors.grey,
             expansionCallback: (panelIndex, isExpanded) {
               setState(() {
-                expanded[panelIndex] = !isExpanded;
+                expanItems[panelIndex].expanded = !isExpanded;
               });
             },
           ),

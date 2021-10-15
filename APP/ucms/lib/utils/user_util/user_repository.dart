@@ -66,15 +66,4 @@ class UserRepository {
       return data;
   }
 
-  Future<List<Map<String, dynamic>>> currentPositionAll() async {
-    Response resp = await _userProvider.currentPositionAll();
-    dynamic body = resp.body;
-
-    Map<String, dynamic> convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
-    List<Map<String, dynamic>> data = serverRespDto.data;
-      return data;
-  }
-
 }

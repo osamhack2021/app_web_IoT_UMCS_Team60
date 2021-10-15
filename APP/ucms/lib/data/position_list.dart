@@ -1,15 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position.dart';
 
 class PositionList extends GetxService {
 
-  PositionList() : list=[];
+  PositionList({required this.list, required this.place});
 
   List<Position> list;
+  Place place;
 
-  PositionList.fromList(List<Position> l) :list=[] {
-    for(Position p in l) {
-      list.add(p);
-    }} 
-  
+  ListTile toListTile() {
+    //TODO : implement
+    return const ListTile();
+  }
 }

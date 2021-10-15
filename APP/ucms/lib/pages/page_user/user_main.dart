@@ -13,6 +13,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/expan_item.dart';
 import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
@@ -33,7 +34,7 @@ class UserMain extends StatefulWidget {
 
   String? location = "location uninitialized";
   String? state = "state uninitialized";
-  PositionList? positions = PositionList();
+  List<PositionList>? positions = [];
   @override
   State<UserMain> createState() => _UserMainState();
 }
@@ -49,19 +50,20 @@ class _UserMainState extends State<UserMain> {
 
   @override
   void initState() {
-    super.initState();
+     super.initState();
     var beaconMan = Get.find<BeaconManager>();
-    var socketClient = Get.find<UserSocketClient>();
+    UserSocketClient socketClient = Get.find<UserSocketClient>();
+    socketClient.startSocket(store.read("token"));
     var beaconResult = beaconMan.beaconResult;
     int min15 = 900;
 
     beaconMan.startListeningBeacons();
-    Timer.periodic(const Duration(minutes: 2), (timer) {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
       if (min15 >= 0) {
-        socketClient.locationReport(
+        socketClient.getIn(
             macAddress: beaconResult.macAddress,
-            scanTime: beaconResult.scanTime);
-        min15 -= 120;
+        );
+        min15 -= 2;
       } else {
         timer.cancel();
       }
@@ -80,7 +82,7 @@ class _UserMainState extends State<UserMain> {
     widget.state = store.read("state");
     if (firstSnack) Snack.top("평시 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
-
+    
     backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
     bool assembleVisible = store.read("assemble_visible") ?? false;
@@ -88,13 +90,14 @@ class _UserMainState extends State<UserMain> {
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
 
-    List<bool> _expanded =
-        List<bool>.generate(widget.positions!.list.length, (index) {
-      return false;
+    List<ExpanItem> expanItems =
+        List<ExpanItem>.generate(widget.positions!.length, (index) {
+      //TODO : status quo
+      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTile());
     });
 
     List<Widget> widgetOptions =
-        _buildPages(widget.positions!.list, _expanded, assembleVisible, name);
+        _buildPages(widget.positions!, expanItems, assembleVisible, name);
 
     return MaterialApp(
       home: KScreen(
@@ -111,12 +114,9 @@ class _UserMainState extends State<UserMain> {
               widget.state = store.read("state");
               assembleVisible = store.read("assemble_visible");
               widget.positions = await p.positionAllInfo();
-              _expanded =
-                  List<bool>.generate(widget.positions!.list.length, (index) {
-                return true;
-              });
+
               widgetOptions = _buildPages(
-                  widget.positions!.list, _expanded, assembleVisible, name);
+                  widget.positions!, expanItems, assembleVisible, name);
             });
           },
           child: widgetOptions.elementAt(selectedIndex),
@@ -151,14 +151,14 @@ class _UserMainState extends State<UserMain> {
     });
   }
 
-  List<Widget> _buildPages(positions, _expanded, assembleVisible, name) {
+  List<Widget> _buildPages(List<PositionList> positions, List<ExpanItem> expanItems, bool assembleVisible, String name) {
     return <Widget>[
       ListView(
         children: [
           topMargin(),
           title("모니터링"),
           quote("사용자들의 위치를 파악합니다"),
-          quote("갯수 : ${positions.length}"),
+          quote("장소 갯수 : ${positions.length}"),
           const SizedBox(height: 20),
           ExpansionPanelList(
             animationDuration: const Duration(milliseconds: 2000),
@@ -168,14 +168,13 @@ class _UserMainState extends State<UserMain> {
                   headerBuilder: (context, isExpanded) {
                     return ListTile(
                       title: Text(
-                        positions[index].name,
+                        positions[index].place.name,
                         style: body(),
                       ),
                     );
                   },
-                  //body: positions[index].toListTile(),
-                  body : const Text("Weeee"),
-                  isExpanded: _expanded[index],
+                  body: positions[index].toListTile(),
+                  isExpanded: expanItems[index].expanded,
                   canTapOnHeader: true,
                 );
               }),
@@ -183,7 +182,7 @@ class _UserMainState extends State<UserMain> {
             dividerColor: Colors.grey,
             expansionCallback: (panelIndex, isExpanded) {
               setState(() {
-                _expanded[panelIndex] = !isExpanded;
+                expanItems[panelIndex].expanded = !isExpanded;
               });
             },
           ),

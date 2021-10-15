@@ -3,6 +3,7 @@ import 'package:ucms/data/places/doom.dart';
 import 'package:ucms/data/places/doomfacility.dart';
 import 'package:ucms/data/places/doomroom.dart';
 import 'package:ucms/data/places/outside_facility.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/utils/place_util/place_repository.dart';
@@ -75,15 +76,38 @@ class PlaceController extends GetxController {
     return OutsideFacility.fromJson(json);
   }
 
-  Future<PositionList> positionAllInfo() async{
-    List<Map<String,dynamic>> l = await repository.positionAll();
-    List<Position> positionList =[];
+  Future<List<PositionList>> positionAllInfo() async{
+    // 같은 Position 정보들을 가진 놈들을 PositionList 로 묶고,
+    // 그 PositionList 를 list 로 정리한다. 
 
+    //1.모든 위치정보 가져와 Position 들로 만들기.
+    List<Map<String,dynamic>> l = await repository.positionAll();
+
+    List<Position> pos =[];
     for(Map<String,dynamic> json in l) {
-      positionList.add(Position.fromJson(json));
+      pos.add(Position.fromJson(json));
+    }
+    //2. 모든 가능한 장소 불러오기
+    List<Place> avail = await allAvailablePlaces();
+
+    //3. 모든 가능한 장소에 대해 PositionList 만들기
+
+    List<PositionList> list = [];
+    for(Place p in avail) {
+      list.add(PositionList(list: [], place: p));
+    }
+
+    //4. position 들 각 장소에 해당하는 positionlist 의 list 에 귀속시키기
+    
+    for(Position p in pos) {
+      for(int i=0;i<list.length;i++) {
+        if(list[i].place.beaconId==p.beaconId){
+          list[i].list.add(p);
+          break;
+        }
+      }
     }
     
-    PositionList list = PositionList.fromList(positionList);
      return list;
   }
 
@@ -92,5 +116,21 @@ class PlaceController extends GetxController {
     final json = await repository.position(id);
 
     return Position.fromJson(json);
+  }
+
+  Future<List<Place>> allAvailablePlaces() async {
+    List<Place> doom = await doomAllInfo();
+    List<Place> doomRoom = await doomRoomAllInfo();
+    List<Place> doomFacil = await doomFacilAllInfo();
+    List<Place> outsideFacil = await outsideFacilAllInfo();
+
+    List<Place> res =[];
+
+    for(Place p in doom) {res.add(p);}
+    for(Place p in doomRoom) {res.add(p);}
+    for(Place p in doomFacil) {res.add(p);}
+    for(Place p in outsideFacil) {res.add(p);}
+
+    return res;
   }
 }

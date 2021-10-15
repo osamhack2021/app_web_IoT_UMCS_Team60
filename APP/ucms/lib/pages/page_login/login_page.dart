@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
       ? Get.find<CohortController>()
       : Get.put(CohortController());
   
-  PositionList positions = Get.put(PositionList());
+  List<PositionList> positions = [];
 
   @override
   Widget build(BuildContext context) {
