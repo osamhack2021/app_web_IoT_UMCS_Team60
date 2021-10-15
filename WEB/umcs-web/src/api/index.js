@@ -14,6 +14,9 @@ function logoutAdmin() {
 function fetchCurrentSituation() {
   return axios.get(`${BASE_URL}cohort_status/now`);
 }
+function fetchAdminInfo(tag) {
+  return axios.get(`${BASE_URL}manager/${tag}`);
+}
 function fetchUsers() {
   return axios.get(`${BASE_URL}user`);
 }
@@ -66,10 +69,19 @@ function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
 }
 
+// Manage Admin
+function fetchAdminInfo_month(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth()+1;
+  return axios.get(`${BASE_URL}watchman/search?year=${year}&month=${month}`);
+}
+
 export {
   loginAdmin,
   logoutAdmin,
   fetchCurrentSituation,
+  fetchAdminInfo,
   fetchUsers,
   fetchUserInfo,
   fetchFacilityList,
@@ -83,4 +95,5 @@ export {
   createTimeTable,
   fetchTimeTable,
   fetchHealthReport,
+  fetchAdminInfo_month,
 };

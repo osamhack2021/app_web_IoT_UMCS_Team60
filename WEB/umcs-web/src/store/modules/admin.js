@@ -1,72 +1,76 @@
+import { fetchAdminInfo, fetchAdminInfo_month } from "@/api/index.js";
+
 const state = {
-  dialog: false,
-  events: [
-    {
-      name: "김중위",
-      start: new Date('2021-09-27T00:00:00'),
-      end: new Date('2021-09-27T08:30:00'),
-      color: "orange",
-      details: "말년 중위 김중위",
-      timed: true,
-    },
-    {
-      name: "김하사",
-      start: '2021-09-15T15:00:00',
-      end: new Date('2021-09-15T22:00:00'),
-      color: "orange",
-      details: "",
-      timed: true,
-    },
-    {
-      name: "송중사",
-      start: '2021-09-28T13:30:00',
-      end: '2021-09-28T18:45:00',
-      color: "orange",
-      details: "",
-      timed: true,
-    }
-  ],
+  selectedDate: "",
+  events: [],
+  //
   selectedEvent: {},
-  selectedElement: null,
+  selectedElement: undefined,
   selectedOpen: false,
-  colors: [
-    "orange",
-  ],
-}
+};
 const getters = {
-  getDialog(state) {
-    return state.dialog;
+  getSelectedDate(state) {
+    return state.selectedDate;
   },
-  getEvents(state) {
-    return state.events;
+  getSelectedOpen(state) {
+    return state.selectedOpen;
   },
-  getEventColor(state, event) {
-    return event.color;
-  }
-}
+};
 const mutations = {
-  setDialog(state, value) {
-    state.dialog = value;
+  setSelectedDate(state, value) {
+    state.selectedDate = value;
+  },
+  setSelectedOpen(state, value) {
+    state.selectedOpen = value;
+  },
+  updateEvents(state, data) {
+    state.events = data;
   },
   showEvent(state, { nativeEvent, event }) {
     const open = () => {
       state.selectedEvent = event;
       state.selectedElement = nativeEvent.target;
-      requestAnimationFrame(() => requestAnimationFrame(() => state.selectedOpen = true));
-    }
-    if (state.selectedOpen) {
-      state.selectedOpen = false;
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => (state.selectedOpen = true))
+      );
+    };
+    if (this.selectedOpen) {
+      this.selectedOpen = false;
       requestAnimationFrame(() => requestAnimationFrame(() => open()));
     } else {
       open();
     }
-
     nativeEvent.stopPropagation();
-  }
-}
+  },
+};
 const actions = {
+  async FETCH_ADMIN_INFO({ commit, state }) {
+    try {
+      const response = await fetchAdminInfo_month(state.selectedDate);
+      const resData = response.data.data;
+      const data = [];
+      if (resData) {
+        resData.forEach(async (elem) => {
+          const obj = {};
+          const adminInfo = await fetchAdminInfo(elem.manager_tags);
 
-}
+          obj.id = elem.id;
+          obj.tag = elem.manager_tags;
+          obj.name = `${adminInfo.data.data.rank} ${adminInfo.data.data.name}`;
+          obj.color = "cyan";
+          obj.start = new Date(elem.responsible_date);
+          data.push(obj);
+        });
+      } else {
+        console.log("이번 달 관리자 정보가 없습니다!");
+      }
+      commit("updateEvents", data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 export default {
   namespaced: true,
@@ -74,4 +78,4 @@ export default {
   getters,
   mutations,
   actions,
-}
+};
