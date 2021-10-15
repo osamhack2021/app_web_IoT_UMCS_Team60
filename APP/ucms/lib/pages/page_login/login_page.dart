@@ -103,7 +103,7 @@ class LoginPage extends StatelessWidget {
                       }
                       else {
                         Snack.top("로그인 시도", "성공");
-                        Get.to(UserMain(
+                        Get.to(UserMain( 
                           location: store.read("recent_place_name") ??
                               "error in LoginPage",
                           state: store.read("state") ?? "",

@@ -24,7 +24,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   var client = Get.put(UserSocketClient());
-  client.startSocket();
+  client.startSocket("");
   
   Get.put(BeaconManager());
 

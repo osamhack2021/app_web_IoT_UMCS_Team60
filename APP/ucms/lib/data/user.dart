@@ -29,7 +29,7 @@ class User {
         doomId = json["doom_id"] ??-1,
         location = json["location"] ?? "",
         state = json["state"] ?? "",
-        token = json["token"] ?? "";
+        token = json["token"] ?? "error in fromJson";
 
   static void updatePrefs(User u) {
     var store = GetStorage();
@@ -52,7 +52,7 @@ class User {
       doomId: store.read("doom_id") ?? -1,
       location: store.read("location") ?? "",
       state: store.read("state") ?? "",
-      token: store.read("token") ?? "",
+      token: store.read("token") ?? "error in updatePrefs",
     ));
   }
 }

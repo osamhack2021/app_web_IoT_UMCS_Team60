@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:ucms/data/hostnames.dart';
+import 'package:http/http.dart' as http;
 
 class UserProvider extends GetConnect {
   // Promise (데이터 약속)
-  Future<Response> login(Map data) => post("$restAPIHost/user/login", data, headers: {"charset" : "utf-8"});
+  Future<http.Response> login(Map data) => http.post(Uri.parse("$restAPIHost/user/login"),body : data);
 
-  Future<Response> register(Map data)=> post("$restAPIHost/user/register", data, headers: {"charset" : "utf-8"});
+  Future<http.Response> register(Map data)=> http.post(Uri.parse("$restAPIHost/user/register"), body : data);
 
-  Future<Response> currentPosition(String tag) => get("$restAPIHost/current_position/$tag", headers: {"charset" : "utf-8"});
+  Future<http.Response> currentPosition(String tag) => http.get(Uri.parse("$restAPIHost/current_position/$tag"));
 
-  Future<Response> currentPositionAll() => get("$restAPIHost/current_position", headers: {"charset" : "utf-8"});
+  Future<http.Response> currentPositionAll() => http.get(Uri.parse("$restAPIHost/current_position"));
 }

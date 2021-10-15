@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/hostnames.dart';
 import 'package:ucms/notification/noti_manager.dart';
@@ -14,12 +15,15 @@ class UserSocketClient extends GetxService {
   var prefs = GetStorage();
   late socket_io.Socket socket;
 
-  void startSocket() {
-    socket = Get.put(socket_io.io(socketHost, <String, dynamic>{
-            'transports': ['websocket'],
-            'Authorization' : "Bearer ${prefs.read("token")}"
-      }));
+  void startSocket(String token) {
+    socket = Get.put(socket_io.io(socketHost, OptionBuilder()
+      .setTransports(['websocket']) // for Flutter or Dart VM
+      .disableAutoConnect()
+      .setQuery({'token' :'Bearer $token'})  // disable auto-connection // optional
+      .build()
+    ));
     debugPrint("Socket on");
+    debugPrint("token : $token");
     socket.connect();
 
     socket.onConnect((_) {});
@@ -71,9 +75,13 @@ class UserSocketClient extends GetxService {
     //TODO : outside_id 로 바꿔야 함.
   }
 
-  void getIn() {
-    //TODO : impelment
-    //beacon_id
+  void getIn({required String macAddress}) {
+    startSocket(prefs.read("token"));
+    Map<String, dynamic> json = {
+      "beacon_id": macAddress,
+    };
+
+    socket.emit("get_in", json);
   }
 
   void getOut() {
@@ -82,18 +90,23 @@ class UserSocketClient extends GetxService {
   }
 
   void locationReport({required String macAddress, required String scanTime}) {
-    startSocket();
+    startSocket(prefs.read("token"));
+    socket.io.options['extraHeaders'] = {'authorization': 'Bearer ${prefs.read("token")}'};
+    socket.io..disconnect()..connect();
+
+    // TODO : implement 
     Map<String, dynamic> json = {
       "tag": prefs.read("tag"),
       "beacon_id": macAddress,
       "time": scanTime,
     };
 
-    socket.emit("location_report", json);
+    socket.emit("get_in", json);
+    //get_in, get_out
   }
 
   void cannotAssemble({required String description}) {
-    startSocket();
+    startSocket(prefs.read("token"));
     Map<String, dynamic> json = {
       "tag": prefs.read("tag"),
       "description" : description

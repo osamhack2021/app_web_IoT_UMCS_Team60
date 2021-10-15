@@ -60,17 +60,18 @@ class _CohortMainState extends State<CohortMain> {
   void initState() {
     super.initState();
     var beaconMan = Get.find<BeaconManager>();
-    var socketClient = Get.find<UserSocketClient>();
+    UserSocketClient socketClient = Get.find<UserSocketClient>();
+    socketClient.startSocket(store.read("token"));
     var beaconResult = beaconMan.beaconResult;
     int min15 = 900;
 
     beaconMan.startListeningBeacons();
-    Timer.periodic(const Duration(minutes: 2), (timer) {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
       if (min15 >= 0) {
-        socketClient.locationReport(
+        socketClient.getIn(
             macAddress: beaconResult.macAddress,
-            scanTime: beaconResult.scanTime);
-        min15 -= 120;
+        );
+        min15 -= 2;
       } else {
         timer.cancel();
       }
