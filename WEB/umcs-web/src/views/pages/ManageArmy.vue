@@ -3,6 +3,28 @@
     <v-row>
       <v-col class="my-4">
         <v-alert
+          v-if="coronaSituation"
+          outlined
+          type="error"
+          prominent
+          text
+        >
+          <v-row align="center">
+            <v-col class="grow font-weight-medium">
+              현재 부대는 코로나 격리 상황 유지중입니다
+            </v-col>
+            <v-col class="shrink">
+              <v-btn
+                color="secondary"
+                @click="changeOfSituation_toNormal()"
+              >
+                평시 상황으로 전환
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-alert>
+        <v-alert
+          v-else
           outlined
           type="success"
           prominent
@@ -13,25 +35,11 @@
               현재 부대에는 코로나 격리 상황이 발생하지 않았습니다
             </v-col>
             <v-col class="shrink">
-              <v-btn color="secondary">
-                Take action
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-alert>
-        <v-alert
-          outlined
-          type="error"
-          prominent
-          text
-        >
-          <v-row align="center">
-            <v-col class="grow font-weight-medium">
-              현재 부대는 코로나 격리 상황 유지중입니다.
-            </v-col>
-            <v-col class="shrink">
-              <v-btn color="secondary">
-                Take action
+              <v-btn
+                color="secondary"
+                @click="changeOfSituation_toCohort()"
+              >
+                코로나 격리 상황으로 전환
               </v-btn>
             </v-col>
           </v-row>
@@ -41,9 +49,7 @@
 
     <!-- Data Table -->
     <v-card>
-      <v-card-title>
-        용사 목록
-      </v-card-title>
+      <v-card-title> 용사 목록 </v-card-title>
       <v-data-table
         :headers="tableHeaders"
         :items="userList"
@@ -83,7 +89,7 @@ export default {
     page: 1,
   }),
   computed: {
-    ...mapState(["userList"]),
+    ...mapState(["coronaSituation", "userList"]),
     ...mapState("army", ["tableHeaders"]),
     ...mapGetters("army", ["getSearchInput"]),
     searchInput: {
@@ -99,7 +105,16 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["setCoronaSituation"]),
     ...mapMutations("army", ["updateSearchInput"]),
+    changeOfSituation_toCohort() {
+      this.setCoronaSituation(true);
+      this.$socket.client.emit("to_cohort");
+    },
+    changeOfSituation_toNormal() {
+      this.setCoronaSituation(false);
+      this.$socket.client.emit("to_normal");
+    },
   },
 };
 </script>

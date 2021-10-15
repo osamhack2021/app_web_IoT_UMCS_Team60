@@ -11,6 +11,9 @@ function logoutAdmin() {
 }
 
 // Common
+function fetchCurrentSituation() {
+  return axios.get(`${BASE_URL}cohort_status/now`);
+}
 function fetchUsers() {
   return axios.get(`${BASE_URL}user`);
 }
@@ -66,6 +69,7 @@ function fetchHealthReport(date) {
 export {
   loginAdmin,
   logoutAdmin,
+  fetchCurrentSituation,
   fetchUsers,
   fetchUserInfo,
   fetchFacilityList,
