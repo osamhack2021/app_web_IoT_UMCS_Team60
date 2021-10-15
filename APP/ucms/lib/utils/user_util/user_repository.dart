@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
@@ -30,6 +28,7 @@ class UserRepository {
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
+      //TODO : token 에서 Bearer 떼어내기
       newUser.token=convertHeader["authorization"]??"no auth key";
       
       return newUser;

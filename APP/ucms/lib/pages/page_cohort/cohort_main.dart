@@ -13,6 +13,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
 import 'package:ucms/pages/page_cohort/cohort_move.dart';
@@ -215,6 +216,7 @@ class _CohortMainState extends State<CohortMain> {
           topMargin(),
           title("공공시설 사용 시간표 조회"),
           quote("사용할 수 있는 시간을 파악합니다"),
+          //TODO : implement
           footer(),
         ],
       ),
@@ -237,13 +239,13 @@ class _CohortMainState extends State<CohortMain> {
           ),
           WarnButton(
               onPressed: () async {
-                List<String> btns = await p.outsideFacilAllInfo();
+                List<Place> btns = await p.outsideFacilAllInfo();
                 Get.to(CohortMove(name : "외부시설", btns: btns));
               },
               label: "외부시설 사용 요청 하기"),
           WarnButton(
               onPressed: () async {
-                List<String> btns = await p.doomFacilAllInfo();
+                List<Place> btns = await p.doomFacilAllInfo();
                 Get.to(CohortMove(name : "건물 내", btns: btns));
               },
               label: "건물 내 사용 요청 하기"),

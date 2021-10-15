@@ -13,6 +13,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
@@ -208,8 +209,9 @@ class _UserMainState extends State<UserMain> {
                 label: "소집 지시가 내려왔습니다."),
           ),
           PageButton(
-              onPressed: () {
-                Get.to(const UserMove());
+              onPressed: () async {
+                List<Place> btns = await p.outsideFacilAllInfo();
+                Get.to(UserMove(btns: btns));
               },
               label: "이동 보고 하기"),
           footer(),

@@ -17,9 +17,9 @@ class UserSocketClient extends GetxService {
 
   void startSocket(String token) {
     socket = Get.put(socket_io.io(socketHost, OptionBuilder()
-      .setTransports(['websocket']) // for Flutter or Dart VM
+      .setTransports(['websocket']) 
       .disableAutoConnect()
-      .setQuery({'token' :'Bearer $token'})  // disable auto-connection // optional
+      .setQuery({'token' :'Bearer $token'})  
       .build()
     ));
     debugPrint("Socket on");
@@ -28,6 +28,7 @@ class UserSocketClient extends GetxService {
 
     socket.onConnect((_) {});
 
+    //LISTEN
     socket.on("move_approval", (_) async {
       //TODO:  impelment
 
@@ -36,7 +37,7 @@ class UserSocketClient extends GetxService {
       await n.flutterLocalNotificationsPlugin.show(
     1,"test", "testBody",n.platformChannelSpecifics);
     });
-
+    
     socket.on("facility_approval", (_){
       //TODO:  impelment
     });
@@ -50,6 +51,7 @@ class UserSocketClient extends GetxService {
       Get.to(UserAssemble(location: prefs.read("assemble_location")));
       Snack.warnTop("소집 지시", "소집 지시가 내려왔습니다.");
     });
+
     socket.on("to_cohort", (data) {
       dynamic json = jsonDecode(utf8.decode(data));
       bool flag =false;
@@ -64,15 +66,25 @@ class UserSocketClient extends GetxService {
         
       }
     });
+
     socket.on("to_normal", (_) {
       //TODO:  impelment
     });
-  }
 
-  void moveRequest({required String destination}) {
-    MoveRequestDto dto = MoveRequestDto(destination: destination);
-    socket.emit("move_request", dto.toJson());
-    //TODO : outside_id 로 바꿔야 함.
+     socket.on("contact_alert", (_) {
+      //TODO:  impelment
+    });
+
+  }
+  //EMIT
+  void cannotAssemble({required String description}) {
+    startSocket(prefs.read("token"));
+    Map<String, dynamic> json = {
+      "tag": prefs.read("tag"),
+      "description" : description
+    };
+
+    socket.emit("cannot_assemble", json);
   }
 
   void getIn({required String macAddress}) {
@@ -84,9 +96,25 @@ class UserSocketClient extends GetxService {
     socket.emit("get_in", json);
   }
 
-  void getOut() {
+  void getOut({required String macAddress}) {
     //TODO : impelment 
-    //beacon_id
+    startSocket(prefs.read("token"));
+    Map<String, dynamic> json = {
+      "beacon_id": macAddress,
+    };
+
+    socket.emit("get_in", json);
+  }
+
+  void moveRequest({required String outsideId, required String desc}) {
+    MoveRequestDto dto = MoveRequestDto(outsideId: outsideId, description: desc);
+    socket.emit("move_request", dto.toJson());
+  }
+
+  void facilityRequest({required String outsideId, required String desc}) {
+    //TODO : implement
+    MoveRequestDto dto = MoveRequestDto(outsideId: outsideId, description: desc);
+    socket.emit("move_request", dto.toJson());
   }
 
   void locationReport({required String macAddress, required String scanTime}) {
@@ -105,13 +133,5 @@ class UserSocketClient extends GetxService {
     //get_in, get_out
   }
 
-  void cannotAssemble({required String description}) {
-    startSocket(prefs.read("token"));
-    Map<String, dynamic> json = {
-      "tag": prefs.read("tag"),
-      "description" : description
-    };
-
-    socket.emit("cannot_assemble", json);
-  }
+  
 }

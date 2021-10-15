@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MoveRequestDto {
-  const MoveRequestDto({Key? key, required this.destination});
+  const MoveRequestDto({Key? key, required this.outsideId, required this.description});
 
-  final String? destination;
+  final String? outsideId;
+  final String? description;
   
   Map<String, dynamic> toJson() => {
-        "destination": destination,
+        "outside_id" : outsideId,
+        "description" : description
       };
 }

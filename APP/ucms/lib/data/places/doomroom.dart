@@ -1,20 +1,20 @@
-class DoomRoom {
-  DoomRoom(this.id, this.name, this.beaconId, this.doomId, this.floor);
+import 'package:ucms/data/places/place.dart';
+
+class DoomRoom  extends Place{
+  DoomRoom({required id, required name, required beaconId, required this.doomId, required this.floor})
+    : super(id: id, name: name, beaconId: beaconId);
   
-  final int id;
-  final String beaconId;
+
   final int doomId;
   final int floor;
-  final String name;
   
 
   DoomRoom.fromJson(Map<String, dynamic> json) 
-    : id = json["id"],
-      beaconId = json["beaconId"],
-      doomId = json["doomId"],
+    : doomId = json["doomId"],
       floor = json["floor"],
-      name = json["name"];
+      super(id: json["id"], name: json["name"], beaconId: json["beaconId"]);
 
+  @override
   Map<String,dynamic> toJson() {
     Map<String,dynamic> result = {
       "id" : id,
