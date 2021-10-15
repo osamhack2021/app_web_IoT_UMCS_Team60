@@ -11,8 +11,14 @@ function logoutAdmin() {
 }
 
 // Common
+function fetchUsers() {
+  return axios.get(`${BASE_URL}user`);
+}
 function fetchUserInfo(tag) {
   return axios.get(`${BASE_URL}user/${tag}`);
+}
+function fetchFacilityList() {
+  return axios.get(`${BASE_URL}watchman/myCharge/details`);
 }
 function fetchRoomInfo(id) {
   return axios.get(`${BASE_URL}doomroom/${id}`);
@@ -60,7 +66,9 @@ function fetchHealthReport(date) {
 export {
   loginAdmin,
   logoutAdmin,
+  fetchUsers,
   fetchUserInfo,
+  fetchFacilityList,
   fetchRoomInfo,
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,

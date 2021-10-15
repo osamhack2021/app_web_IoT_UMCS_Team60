@@ -43,11 +43,15 @@
       :datas="getAccountDatas"
       :need-search="true"
     />
+
+    <v-card>
+      {{ userList }}
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import DataTable from "@/components/DataTable";
 
 export default {
@@ -56,6 +60,7 @@ export default {
     DataTable,
   },
   computed: {
+    ...mapState(["userList"]),
     ...mapGetters("army", ["getAccountDatas"]),
   },
 };
