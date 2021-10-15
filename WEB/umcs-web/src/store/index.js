@@ -2,14 +2,14 @@ import Vue from "vue";
 import Vuex from "vuex";
 import modules from "./modules";
 
-import { fetchUsers, fetchFacilityList } from "@/api/index.js";
+import { fetchCurrentSituation, fetchUsers, fetchFacilityList } from "@/api/index.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     // true: 코로나 격리, false: 평시
-    coronaStatus: false,
+    coronaSituation: undefined,
     // Data Table에서 한 페이지당 표시할 item 개수
     ITEMS_PER_PAGE: 10,
     // pagination에서 최대 표시할 페이지 개수
@@ -23,15 +23,28 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    setCoronaSituation(state, value) {
+      state.coronaSituation = value;
+    },
     setUserList(state, data) {
       state.userList = data;
     },
     setFacilityList(state, data) {
       state.facilityList = data;
-    }
+    },
   },
 
   actions: {
+    async FETCH_CORONA_SITUATION({ commit }) {
+      try {
+        const response = await fetchCurrentSituation();
+        const resData = response.data.data;
+        commit("setCoronaSituation", Boolean(resData.isCohort));
+        return resData;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async FETCH_USER_LIST({ commit }) {
       try {
         const response = await fetchUsers();
@@ -51,7 +64,7 @@ export default new Vuex.Store({
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
 
   modules,
