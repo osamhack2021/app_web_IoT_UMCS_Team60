@@ -1,19 +1,17 @@
 <template>
-  <v-container>
+  <v-container class="mt-5">
     <v-row>
       <!-- Facility List Info -->
       <v-col cols="5">
-        <v-card
-          class="mx-auto"
-          tile
-        >
+        <v-card>
           <v-list expand>
             <!-- List Title -->
             <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-home</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>시설 목록</v-list-item-title>
+              <v-list-item-title
+                class="text-h5 text-center py-4"
+              >
+                시설 목록
+              </v-list-item-title>
             </v-list-item>
 
             <!-- List Content -->
