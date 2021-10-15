@@ -42,7 +42,6 @@
         :search="searchInput"
         show-expand
         :loading="isLoading"
-        loading-text="Loading... Please wait"
         hide-default-footer
         :items-per-page="$store.state.ITEMS_PER_PAGE"
         :page.sync="page"

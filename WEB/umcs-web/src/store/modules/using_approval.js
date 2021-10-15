@@ -13,7 +13,7 @@ const state = {
   selectedItems: [],
 
   // Loading
-  loading: true,
+  loading: false,
 
   // Data Table
   tableHeaders: [
@@ -59,7 +59,7 @@ const mutations = {
   },
   deleteUsingReport(state, id) {
     for (let i = 0; i < state.tableDatas.length; i++) {
-      if (state.tableDatas[i].id == id) {
+      if (state.tableDatas[i].id === id) {
         state.tableDatas.splice(i, 1);
         break;
       }
@@ -87,7 +87,7 @@ const actions = {
           obj.tag = elem.user_tag;
           obj.name = `${elem.user_rank} ${elem.user_name}`;
           obj.reportedTime = reportedDate.toLocaleString();
-          if (currentLocation.data.code == 1) {
+          if (currentLocation.data.code === 1) {
             obj.currentLocation = currentLocation.data.data.name;
           } else {
             obj.currentLocation = "알 수 없음";
@@ -118,7 +118,7 @@ const actions = {
       obj.tag = data.user_tag;
       obj.name = `${userInfo.data.data.rank} ${userInfo.data.data.name}`;
       obj.reportedTime = reportedDate.toLocaleString();
-      if (currentLocation.data.code == 1) {
+      if (currentLocation.data.code === 1) {
         obj.currentLocation = currentLocation.data.data.name;
       } else {
         obj.currentLocation = "알 수 없음";

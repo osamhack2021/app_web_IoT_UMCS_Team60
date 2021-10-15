@@ -12,6 +12,9 @@ export default new Vuex.Store({
     ITEMS_PER_PAGE: 10,
     // pagination에서 최대 표시할 페이지 개수
     TOTAL_VISIBLE: 7,
+
+    // 관리하는 장소들의 목록
+    facilityList: [],
   },
   modules
 });
