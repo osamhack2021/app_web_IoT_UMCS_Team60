@@ -1,48 +1,46 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/user_util/user_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
-import 'package:http/http.dart' as http;
+
 
 class UserRepository {
   final UserProvider _userProvider = UserProvider();
 
   Future<User> login(Map<String, dynamic> json) async {
-    http.Response resp = await _userProvider.login(json);
+    Response resp = await _userProvider.login(json);
     dynamic headers = resp.headers;
     String body = resp.body;
     final prefs = GetStorage();
     
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    ServerRespDto serverRespDto = ServerRespDto(code: convertBody["code"],msg: convertBody["msg"], data: convertBody["data"]);
     dynamic convertHeader = convertUtf8ToObject(headers);
 
 
-    debugPrint("convertBody is $convertBody");
-    debugPrint("convertHeader is $convertHeader");
-    debugPrint("serverRespDto is  ${serverRespDto.toJson().toString()}");
+    // debugPrint("convertBody is $convertBody");
+    // debugPrint("convertHeader is $convertHeader");
+    // debugPrint("serverRespDto is  ${serverRespDto.toJson().toString()}");
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
       newUser.token=convertHeader["authorization"]??"no auth key";
-      debugPrint(newUser.token);
-      debugPrint(newUser.toJson().toString()); 
+      
       return newUser;
     } else {
       prefs.write("loginFailureMsg",serverRespDto.msg);
-      debugPrint(serverRespDto.code.toString());
       return User();
     }
   }
 
   Future<String> register(Map<String,dynamic> json) async {
-    http.Response resp = await _userProvider.register(json);
+    Response resp = await _userProvider.register(json);
     dynamic body = resp.body;
     final prefs = GetStorage();
 
@@ -59,7 +57,7 @@ class UserRepository {
   }
 
   Future<Map<String,dynamic>> currentPosition(String tag) async {
-    http.Response resp = await _userProvider.currentPosition(tag);
+    Response resp = await _userProvider.currentPosition(tag);
     dynamic body = resp.body;
 
     Map<String, dynamic> convertBody = convertUtf8ToObject(body);
@@ -70,7 +68,7 @@ class UserRepository {
   }
 
   Future<List<Map<String, dynamic>>> currentPositionAll() async {
-    http.Response resp = await _userProvider.currentPositionAll();
+    Response resp = await _userProvider.currentPositionAll();
     dynamic body = resp.body;
 
     Map<String, dynamic> convertBody = convertUtf8ToObject(body);

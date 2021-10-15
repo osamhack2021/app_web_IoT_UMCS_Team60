@@ -92,6 +92,8 @@ class LoginPage extends StatelessWidget {
                       positions = await p.positionAllInfo();
                       bool isCohort = await c.cohortStatusNow();
 
+                      debugPrint("여기까지");
+
                       if(isCohort) {
                         Snack.top("로그인 시도", "성공");
                         Get.to(CohortMain(
