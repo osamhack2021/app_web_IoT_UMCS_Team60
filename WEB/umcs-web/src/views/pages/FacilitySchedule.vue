@@ -137,8 +137,8 @@ export default {
     page: 1,
   }),
   computed: {
+    ...mapState(["facilityList"]),
     ...mapState("facility", [
-      "facilityList",
       "selectedFacility",
       "tableHeaders",
       "tableDatas",
