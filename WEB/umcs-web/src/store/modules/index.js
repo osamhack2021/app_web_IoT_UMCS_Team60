@@ -3,7 +3,8 @@ import monitoring from "./monitoring";
 import health from "./health";
 import facility from "./facility";
 import admin from "./admin";
-import approval from "./approval";
+import using_approval from "./using_approval";
+import moving_approval from "./moving_approval";
 import army from "./army";
 
 export default {
@@ -12,6 +13,7 @@ export default {
   health,
   facility,
   admin,
-  approval,
+  using_approval,
+  moving_approval,
   army,
 };

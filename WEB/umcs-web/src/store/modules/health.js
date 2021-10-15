@@ -12,7 +12,7 @@ const state = {
     { text: "군번", value: "tag", width: "25%" },
     { text: "관등성명", value: "name", width: "20%" },
     { text: "체온", value: "temperature", width: "15%" },
-    { text: "보고 시간", value: "reported_time", width: "25%" },
+    { text: "보고 시간", value: "reportedTime", width: "25%" },
     { text: "특이사항", value: "data-table-expand", width: "15%" },
   ],
   tableDatas: [],
@@ -32,9 +32,9 @@ const mutations = {
   updateSearchInput(state, value) {
     state.searchInput = value;
   },
-  updateTableDatas(state, datas) {
+  updateTableDatas(state, data) {
     // actions에서 api로 호출한 값을 가져옴
-    state.tableDatas = datas;
+    state.tableDatas = data;
   },
 };
 const actions = {
@@ -44,16 +44,16 @@ const actions = {
       const data = response.data.data;
       const datas = [];
       if (data) {
-        data.forEach((obj) => {
-          const objElem = {};
-          const reported_date = new Date(obj.reported_time);
+        data.forEach((elem) => {
+          const obj = {};
+          const reported_date = new Date(elem.reported_time);
 
-          objElem.tag = obj.user_tag;
-          objElem.temperature = `${obj.temperature}℃`;
-          objElem.name = `${obj.rank} ${obj.name}`;
-          objElem.reported_time = `${reported_date.toLocaleTimeString()}`;
-          objElem.details = obj.details;
-          datas.push(objElem);
+          obj.tag = elem.user_tag;
+          obj.temperature = `${elem.temperature}℃`;
+          obj.name = `${elem.rank} ${elem.name}`;
+          obj.reportedTime = reported_date.toLocaleTimeString();
+          obj.details = elem.details;``
+          datas.push(obj);
         });
       } else {
         console.log("data is empty!");

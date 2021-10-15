@@ -34,7 +34,7 @@
             :headers="tableHeaders"
             :items="tableDatas"
             item-key="tag"
-            :sort-by="['reported_time']"
+            :sort-by="['reportedTime']"
             :sort-desc="[true]"
             :search="searchInput"
             show-expand
@@ -79,6 +79,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
+  name: "HealthCare",
   data: () => ({
     // vuex 안써도 될 거 같은 값들
     page: 1,
@@ -113,7 +114,7 @@ export default {
     const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10);
-      // YYYY-MM-DD
+    // YYYY-MM-DD
     this.setPickedDate(today);
     // data Table init
     this.updateTable(this.picker);

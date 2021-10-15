@@ -23,7 +23,7 @@ module.exports = (server, session) => {
         cookieParser: require('cookie-parser'),     
         key: 'express.sid',
         secret: process.env.COOKIE_SECRET, 
-        store: new FileStore(),
+        store: new FileStore({logFn: function(){}}),
         success: onAuthorizeSuccess,
         fail: onAuthorizeFail,
     }));
@@ -46,6 +46,8 @@ module.exports = (server, session) => {
     userio.on('connection', (socket) => {
         try { // jwt가 header로 왔는지 확인하여 user 인증
             var user = decodeToken(socket.handshake.headers.authorization.split('Bearer ')[1]);
+            if(!user) user = decodeToken(socket.handshake.query.jwt);
+            
             socket.join(user.doom_id);
             user.socket_id = socket.id;
             userio.emit('my_info', user);
@@ -113,7 +115,6 @@ module.exports = (server, session) => {
                 if(checks.length) 
                     for(let check of checks) await get_out(check);
                 
-
                 sql = "INSERT INTO access_record VALUE (NULL, ?, ?, ?, NULL)";
                 await dbPromiseConnection.query(sql, [user.tag, data.beacon_id, nowDateTime()]);
 
@@ -189,14 +190,14 @@ module.exports = (server, session) => {
         // 외부시설 이동요청
         socket.on('move_request', async (data) => {
             try {
-                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, NULL, NULL, ?)";
-                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime(), user.socket_id]);
+                let sql = "INSERT INTO outside_request VALUE (NULL, ?, ?, ?, NULL, ?, NULL, ?)";
+                let [result] = await dbPromiseConnection.query(sql, [user.tag, data.outside_id, nowDateTime(), data.description, user.socket_id]);
                 
                 managerio.to(user.doom_id).emit('move_request', {
                     id: result.insertId,
                     user_tag: user.tag,
-                    outside_id: data.outside_id,
-                    request_time: nowDateTime()
+                    request_time: nowDateTime(),
+                    ...data
                 });
             }
             catch(err) {
@@ -235,8 +236,11 @@ module.exports = (server, session) => {
             var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
             let [results] = await dbPromiseConnection.query(sql, [manager.tag, nowDate()]);
             if(results.length) { // 금일 근무가 있을 시에만 담당 생활관 room에 참여
-                manager.charge_doom = results[0].charge_doom;
-                socket.join(manager.charge_doom);
+                manager.charge_dooms = [];
+                for(let result of results) {
+                    manager.charge_dooms.push(result.charge_doom);
+                    socket.join(result.charge_doom);
+                }
             }
             
             managerio.emit('my_info', manager);
@@ -246,6 +250,10 @@ module.exports = (server, session) => {
             console.log(err);
             socket.disconnect(0);
         }
+
+        socket.on('disconnect', async() => {
+            console.log('disconnected');
+        });
 
         // 평시->코호트 전환
         socket.on('to_cohort', async () =>{
@@ -258,12 +266,14 @@ module.exports = (server, session) => {
         socket.on('to_normal', async () =>{
             let sql = "INSERT INTO cohort_status VALUE (NULL, false, ?)";
             let [result] = await dbPromiseConnection.query(sql, [nowDateTime()]);
+            console.log("to_normal");
             userio.emit('to_normal');
         });
 
         // 긴급 소집 지시
         socket.on('assemble_command', () =>{
-            userio.to(manager.charge_doom).emit('assemble_command', {send_time: newkrDate()});
+            for(let doom_id of manager.charge_dooms) 
+                userio.to(doom_id).emit('assemble_command', {send_time: newkrDate()});
         });
 
         // 외부시설 이동요청 결재 완료

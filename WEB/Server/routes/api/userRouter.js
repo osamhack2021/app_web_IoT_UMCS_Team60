@@ -30,10 +30,13 @@ router.post('/login', userAuth.login, (req, res) => {
             }
         });
     else
-        res.setHeader('Authorization', 'Bearer '+ req.token).status(200).json({
+        res.setHeader("Access-Control-Expose-Headers", "*").setHeader('Authorization', 'Bearer '+ req.token).status(200).json({
             code: 1,
             msg: "success",
-            data : req.data
+            data : {
+                ...req.data,
+                jwt:req.token
+            }
         });
 });
 

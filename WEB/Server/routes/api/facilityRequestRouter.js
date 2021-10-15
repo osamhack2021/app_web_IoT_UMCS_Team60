@@ -11,7 +11,8 @@ function nowDate() {
 router.get('/', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT f.*, u.doom_id FROM facility_request f, user u WHERE f.user_tag=u.tag";
+        let sql = 'SELECT fr.*, u.doom_id, u.name as user_name, u.rank as user_rank, df.name as facility_name, df.beacon_id, df.floor, df.current_count, d.name as doom_name ';
+        sql += 'FROM facility_request `fr`, user `u`, doomfacility `df`, doom `d` WHERE fr.user_tag=u.tag AND df.id=fr.facility_id AND d.id=u.doom_id';
         var [results] = await dbPromiseConnection.query(sql);
         
         if(!results.length)
@@ -41,7 +42,8 @@ router.get('/', async (req, res) => {
 router.get('/search', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT f.*, u.doom_id FROM facility_request f, user u WHERE f.user_tag=u.tag ";
+        let sql = 'SELECT fr.*, u.doom_id, u.name as user_name, u.rank as user_rank, df.name as facility_name, df.*, d.name as doom_name ';
+        sql += 'FROM facility_request `fr`, user `u`, doomfacility `df`, doom `d` WHERE fr.user_tag=u.tag AND df.id=fr.facility_id AND d.id=u.doom_id ';
         for(key in req.query)
             sql += `AND ${key} = ? `;
         var [results] = await dbPromiseConnection.query(sql, Object.values(req.query));
@@ -82,7 +84,8 @@ router.get('/waiting_permission', managerAuth.checkLogin, async (req, res) => {
                 msg: msg[3],
             });
 
-        sql = "SELECT f.*, u.doom_id FROM facility_request f, user u WHERE f.user_tag=u.tag AND f.permission IS NULL ";
+        sql = 'SELECT fr.*, u.doom_id, u.name as user_name, u.rank as user_rank, df.name as facility_name, df.beacon_id, df.floor, df.current_count, d.name as doom_name ';
+        sql += 'FROM facility_request `fr`, user `u`, doomfacility `df`, doom `d` WHERE fr.user_tag=u.tag AND df.id=fr.facility_id AND d.id=u.doom_id AND fr.permission IS NULL ';
         for(key in req.query)
             sql += `AND ${key} = ? `;
         var [results] = await dbPromiseConnection.query(sql, Object.values(req.query));
@@ -117,7 +120,8 @@ router.get('/waiting_permission', managerAuth.checkLogin, async (req, res) => {
 router.get('/:id', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "SELECT f.*, u.doom_id FROM facility_request f, user u WHERE f.user_tag=u.tag AND id=?"
+        let sql = 'SELECT fr.*, u.doom_id, u.name as user_name, u.rank as user_rank, df.name as facility_name, df.beacon_id, df.floor, df.current_count, d.name as doom_name ';
+        sql += 'FROM facility_request `fr`, user `u`, doomfacility `df`, doom `d` WHERE fr.user_tag=u.tag AND df.id=fr.facility_id AND d.id=u.doom_id AND fr.id=?';
         var [results] = await dbPromiseConnection.query(sql, [req.params.id]);
         
         if(!results.length)

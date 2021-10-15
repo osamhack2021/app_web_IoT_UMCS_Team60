@@ -37,6 +37,7 @@
   <form action="" id="move_request">
     [평시] 외부시설 이동요청 (move_request)
     <select id="a"></select>
+    <input type="text" id="bb" placeholder="사유" />
     <input type="submit" />
   </form>
 
@@ -148,7 +149,7 @@
 
       $('#move_request').submit(function(e) {
         e.preventDefault(); 
-        socket.emit('move_request', {outside_id: $('#a').val()});
+        socket.emit('move_request', {outside_id: $('#a').val(), description: $('#bb').val()});
         return false;
       });
 

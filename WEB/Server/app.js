@@ -30,10 +30,10 @@ app.use(session({
     saveUninitialized: true,
     resave: true,
     cookie: {
-        httpOnly: true,
+        httpOnly: false,
         secure: false
     },
-    store: new FileStore(),
+    store: new FileStore({logFn: function(){}}),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
