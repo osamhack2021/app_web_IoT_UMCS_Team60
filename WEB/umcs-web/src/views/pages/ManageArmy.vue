@@ -39,24 +39,67 @@
       </v-col>
     </v-row>
 
-    <data-table
-      :datas="getAccountDatas"
-      :need-search="true"
-    />
+    <!-- Data Table -->
+    <v-card>
+      <v-card-title>
+        용사 목록
+      </v-card-title>
+      <v-data-table
+        :headers="tableHeaders"
+        :items="userList"
+        :search="searchInput"
+        hide-default-footer
+        :items-per-page="$store.state.ITEMS_PER_PAGE"
+        :page.sync="page"
+      >
+        <!-- Slot:item.name - user profile routing -->
+        <template v-slot:[`item.name`]="{ item }">
+          <router-link
+            :to="`/user/${item.tag}`"
+            class="info--text text-decoration-none"
+          >
+            {{ item.name }}
+          </router-link>
+        </template>
+      </v-data-table>
+    </v-card>
+    <!-- Pagination -->
+    <div class="text-center pt-2">
+      <v-pagination
+        v-model="page"
+        :length="pageCount"
+        :total-visible="$store.state.TOTAL_VISIBLE"
+      />
+    </div>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import DataTable from "@/components/DataTable";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "ManageArmy",
-  components: {
-    DataTable,
-  },
+  data: () => ({
+    page: 1,
+  }),
   computed: {
-    ...mapGetters("army", ["getAccountDatas"]),
+    ...mapState(["userList"]),
+    ...mapState("army", ["tableHeaders"]),
+    ...mapGetters("army", ["getSearchInput"]),
+    searchInput: {
+      get() {
+        return this.getSearchInput;
+      },
+      set(value) {
+        return this.updateSearchInput(value);
+      },
+    },
+    pageCount() {
+      return Math.ceil(this.userList.length / this.$store.state.ITEMS_PER_PAGE);
+    },
+  },
+  methods: {
+    ...mapMutations("army", ["updateSearchInput"]),
   },
 };
 </script>
