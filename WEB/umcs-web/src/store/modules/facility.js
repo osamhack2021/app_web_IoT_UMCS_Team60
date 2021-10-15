@@ -1,113 +1,74 @@
-const state = {
-  // Facility List
-  focus: "공용 시설",
-  facilityList: [
-    {
-      title: "1층",
-      items: [
-        { title: "1층 화장실" },
-        { title: "1층 샤워실" },
-        { title: "체단실" },
-      ],
-    },
-    {
-      title: "2층",
-      items: [
-        { title: "2층 화장실" },
-        { title: "2층 샤워실" },
-        { title: "노래방" },
-      ],
-    },
-  ],
+import { fetchRoomInfo, createTimeTable, fetchTimeTable } from "@/api/index.js";
 
-  // Data Table
-  facilityTimeTable: {
-    headers: [
-      { text: "호실/생활관", value: "room" },
-      { text: "시작 시각", value: "start" },
-      { text: "종료 시각", value: "end" },
-      { text: "수정/삭제", value: "actions", sortable: false },
-    ],
-    datas: [
-      {
-        room: "1호실",
-        start: "09:20",
-        end: "09:40",
-      },
-      {
-        room: "2호실",
-        start: "10:00",
-        end: "10:20",
-      },
-      {
-        room: "3호실",
-        start: "10:40",
-        end: "11:00",
-      },
-    ],
-  },
-  editedIndex: -1,
-  editedItem: {
-    room: "",
-    start: "",
-    end: "",
-  },
-  defaultItem: {
-    room: "",
-    start: "",
-    end: "",
-  },
+const state = {
+  /* Data Table */
+  // Loading
+  loading: false,
+
+  selectedFacility: "공용 시설",
+
+  tableHeaders: [
+    { text: "호실/생활관", value: "room" },
+    { text: "시작 시각", value: "startTime" },
+    { text: "종료 시각", value: "endTime" },
+    { text: "수정 / 삭제", value: "actions", sortable: false },
+  ],
+  tableDatas: [],
 };
 
 const getters = {
-  // Facility List
-  getFacilityList(state) {
-    return state.facilityList;
+  getLoading(state) {
+    return state.loading;
   },
-  getFocusingItem(state) {
-    return state.focus;
-  },
-
-  // Time Table
-  getTimeTable(state) {
-    return state.facilityTimeTable;
-  },
-  // CRUD
 };
 
 const mutations = {
   // Facility List
-  updateFocusingItem(state, value) {
-    state.focus = value;
+  setSelectedFacility(state, value) {
+    state.selectedFacility = value;
+  },
+
+  setLoading(state, value) {
+    state.loading = value;
   },
 
   // Time Table
-  // CRUD
-  setDefault(state) {
-    // state.editedItem = Object.assign({}, state.defaultItem);
-    state.editedItem = state.defaultItem;
-    state.editedIndex = -1;
+  updateTimeTable(state, data) {
+    state.tableDatas = data;
   },
-  setEditedIndex(state, item) {
-    state.editedIndex = state.facilityTimeTable.datas.indexOf(item);
-  },
-  setEditedItem(state, item) {
-    // state.editedItem = Object.assign({}, item);
-    state.editedItem = item;
-  },
-  pushNewItem(state) {
-    state.facilityTimeTable.datas.push(state.editedItem);
-  },
-  editOneItem(state) {
-    // Object.assign(state.facilityTimeTable.datas[state.editedIndex], state.editedItem);
-    state.facilityTimeTable.datas[state.editedIndex] = state.editedItem;
-  },
-  deleteOneItem(state) {
-    state.facilityTimeTable.datas.splice(state.editedIndex, 1);
-  }
 };
 
-const actions = {};
+const actions = {
+  async FETCH_TIME_TABLE({ commit }, idData) {
+    commit("setLoading", true);
+    try {
+      const response = await fetchTimeTable(idData);
+      const resData = response.data.data;
+      const data = [];
+      if (resData) {
+        resData.forEach(async (elem) => {
+          const obj = {};
+          const roomInfo = await fetchRoomInfo(elem.room_id);
+          const startTime = new Date(elem.start_time);
+          const endTime = new Date(elem.end_time);
+          const option = { hour: "2-digit", minute: "2-digit", hour12: false };
+
+          obj.room = roomInfo.data.data.name;
+          obj.startTime = startTime.toLocaleTimeString([], option);
+          obj.endTime = endTime.toLocaleTimeString([], option);
+          data.push(obj);
+        });
+      } else {
+        console.log("이용 시간표 정보가 없습니다!");
+      }
+      commit("updateTimeTable", data);
+      commit("setLoading", false);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
 
 export default {
   namespaced: true,

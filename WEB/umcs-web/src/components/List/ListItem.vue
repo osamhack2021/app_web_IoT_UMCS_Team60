@@ -3,7 +3,6 @@
     <v-list-item
       link
       active-class="primary"
-      @click="$store.commit('facility/updateFocusingItem', item.title)"
     >
       <v-list-item-content>
         <v-list-item-title>
