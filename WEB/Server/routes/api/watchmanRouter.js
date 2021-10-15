@@ -77,8 +77,11 @@ router.get('/search', (req, res) => {
 
     if(Object.keys(req.query).length) {
         sql += " WHERE";
-        for(key in req.query)
-            sql += ` ${key} = ? AND`;
+        for(key in req.query) {
+            if(key === 'year') sql +=  ' year(responsible_date) = ? AND';
+            else if(key === 'month') sql +=  ' month(responsible_date) = ? AND';  
+            else sql += ` ${key} = ? AND`;
+        }
         sql = sql.substr(0, sql.length - 3);
     }
     console.log(sql);
