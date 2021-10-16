@@ -13,20 +13,14 @@ import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/beacon/beacon_manager.dart';
 import 'package:ucms/theme/color_theme.dart';
 
-import 'notification/noti_manager.dart';
-
 
 void main() async {
   await GetStorage.init();
-  WidgetsFlutterBinding.ensureInitialized();
   
   var client = Get.put(UserSocketClient());
   client.startSocket("");
   
   Get.put(BeaconManager());
-
-  var notiMan = Get.put(NotiManager());
-  notiMan.initState();
    
   User.userInit();
 
@@ -56,13 +50,13 @@ class MyApp extends StatelessWidget {
       initialRoute: "/login",
       routes: {
       
-        "/nav" : (context) => const NavPage(),
+        // "/nav" : (context) => const NavPage(),
         "/login": (context) => LoginPage(),
-        "/register": (context) => RegisterPage(),
-        "/user/main": (context) => UserMain(location: "", state: ""),
-        //"/user/move": (context) => UserMove(),
-        "/user/assemble": (context) => UserAssemble(
-            location: "막사"),
+        // "/register": (context) => RegisterPage(),
+        // "/user/main": (context) => UserMain(location: "", state: ""),
+        // //"/user/move": (context) => UserMove(),
+        // "/user/assemble": (context) => UserAssemble(
+        //     location: "막사"),
       },
     );
   }

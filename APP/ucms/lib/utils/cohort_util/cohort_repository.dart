@@ -48,7 +48,7 @@ class CohortRepository {
     dynamic convertBody = convertUtf8ToObject(body);
     ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, convertBody["data"]);
 
-
+    
     if (serverRespDto.code == 1) {
       List<Map<String,dynamic>> data = serverRespDto.data;
       return data;
