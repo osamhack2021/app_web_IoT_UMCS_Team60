@@ -1,7 +1,10 @@
 <template>
   <v-list-item>
     <v-list-item-avatar>
-      <v-img src="@/assets/UMCS-icon.png" />
+      <v-img
+        src="@/assets/UMCS_icon.png"
+        height="50"
+      />
     </v-list-item-avatar>
     <v-list-item-content>
       <v-list-item-title class="text-h6-en">
