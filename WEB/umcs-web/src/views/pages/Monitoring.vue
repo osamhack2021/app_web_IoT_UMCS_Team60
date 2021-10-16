@@ -7,84 +7,38 @@
         class="mx-auto"
       >
         <v-row class="mt-5">
-          <v-col cols="9">
+          <v-col cols="8">
             <div
-              v-for="doom in roomList"
-              :key="doom.doomId"
+              v-for="doom in facilityList"
+              :key="doom.doom_id"
             >
               <v-card>
+                <!-- Dialog for Create Icon -->
                 <v-card-actions>
-                  <!-- Dialog for Create Icon -->
-                  <v-dialog
-                    v-model="dialog"
-                    max-width="600px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        추가
-                      </v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-title>
-                        <span class="text-h5">관리할 장소 추가</span>
-                      </v-card-title>
-                      <v-form>
-                        <v-card-text>
-                          <v-container>
-                            <v-row>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.doom"
-                                  label="건물"
-                                />
-                              </v-col>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.floor"
-                                  label="층"
-                                />
-                              </v-col>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.name"
-                                  label="장소"
-                                />
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer />
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="dialog = false"
-                          >
-                            Close
-                          </v-btn>
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="createRoomIcon(floor)"
-                          >
-                            Save
-                          </v-btn>
-                        </v-card-actions>
-                      </v-form>
-                    </v-card>
-                  </v-dialog>
-
+                  <v-btn>추가</v-btn>
                   <v-btn
                     class="ml-2"
-                    @click="changeEditMode"
+                    @click="editModeChanged"
                   >
                     {{ getEditText }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
+              <!-- Edit Alert Message -->
+              <v-alert
+                v-if="editMode"
+                type="error"
+                outlined
+                dense
+                text
+                class="mt-3"
+              >
+                <v-row align="center">
+                  <v-col class="grow font-weight-medium">
+                    Room Icon의 편집(위치 이동)은 한번에 하나만 가능합니다
+                  </v-col>
+                </v-row>
+              </v-alert>
               <!-- v-for 사용하여 나열 -->
               <v-card
                 v-for="floor in doom.items"
@@ -97,52 +51,69 @@
                   {{ floor.name }}
                 </v-card-title>
 
-                <v-img :src="require(`@/assets/doom${doom.doomId}-floor${floor.floor}-drawing.png`)">
-                  <vue-draggable-resizable
-                    v-for="picker in roomPickers[floor.floor-1].items"
-                    :key="picker.beaconId"
-                    :w="50"
-                    :h="50"
-                    :x="picker.x"
-                    :y="picker.y"
-                    :draggable="editMode"
-                    :resizable="false"
-                    class-name="box-content"
-                    @dragging="onDrag"
-                  >
-                    <v-btn
-                      fab
-                      class="info text-body-1 font-weight-medium white--text"
-                      @click="test($event, picker.name, picker.beaconId)"
+                <v-img
+                  :src="
+                    require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
+                  "
+                >
+                  <template v-for="picker in floor.items">
+                    <vue-draggable-resizable
+                      v-if="picker.room_picker"
+                      :key="picker.beacon_id"
+                      :w="50"
+                      :h="50"
+                      :x="picker.room_picker.x"
+                      :y="picker.room_picker.y"
+                      :draggable="editMode"
+                      :resizable="false"
+                      class-name="box-content"
+                      @dragging="onDrag"
                     >
-                      {{ picker.current_count }}
-                    </v-btn>
-                  </vue-draggable-resizable>
+                      <v-btn
+                        fab
+                        small
+                        class="info text-body-1 font-weight-medium white--text"
+                        @click="
+                          pickerClicked(
+                            picker.name,
+                            picker.beacon_id,
+                            picker.room_picker.id
+                          )
+                        "
+                      >
+                        {{ picker.current_count }}
+                      </v-btn>
+                    </vue-draggable-resizable>
+                  </template>
                 </v-img>
               </v-card>
             </div>
           </v-col>
 
           <!-- People list -->
-          <v-col cols="3">
+          <v-col cols="4">
             <v-card>
-              <v-card-title>
-                {{ focusRoom }}
-
+              <v-card-title> {{ focusRoom }} 인원현황 </v-card-title>
+              <v-card-text>
+                <!-- Search Bar -->
                 <v-text-field
-                  v-model="searchValue"
+                  v-model="searchInput"
                   append-icon="mdi-magnify"
                   label="Search"
                   single-line
                   hide-details
                   clearable
                 />
-              </v-card-title>
+              </v-card-text>
               <v-data-table
                 :headers="tableHeaders"
-                :items="peopleList"
-                :search="searchValue"
+                :items="tableDatas"
+                :search="searchInput"
+                :loading="isLoading"
+                hide-default-footer
                 :items-per-page="$store.state.ITEMS_PER_PAGE"
+                :page.sync="page"
+                class="elavation-1"
               >
                 <!-- Slot:item.name - user profile routing -->
                 <template v-slot:[`item.name`]="{ item }">
@@ -154,6 +125,14 @@
                   </router-link>
                 </template>
               </v-data-table>
+              <!-- Pagination -->
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="page"
+                  :length="pageCount"
+                  :total-visible="$store.state.TOTAL_VISIBLE"
+                />
+              </div>
             </v-card>
           </v-col>
         </v-row>
@@ -171,7 +150,6 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VueDraggableResizable from "vue-draggable-resizable";
-import { fetchCurrentLocation_BeaconId } from "@/api/index.js";
 
 export default {
   name: "Monitoring",
@@ -180,10 +158,7 @@ export default {
   },
   data() {
     return {
-      editedX: 0,
-      editedY: 0,
-      searchValue: "",
-      dialog: false,
+      page: 1,
 
       // Create Form
       selectFromItems: {},
@@ -195,18 +170,79 @@ export default {
     };
   },
   computed: {
+    ...mapState(["facilityList"]),
     ...mapState("monitoring", [
       "editMode",
       "focusRoom",
       "tableHeaders",
-      "peopleList",
-      "roomList",
-      "roomPickers",
+      "tableDatas",
     ]),
-    ...mapGetters("monitoring", ["getEditText"]),
+    ...mapGetters("monitoring", [
+      "getEditText",
+      "getEditedX",
+      "getEditedY",
+      "getSearchInput",
+      "getLoading",
+    ]),
+    editedX: {
+      get() {
+        return this.getEditedX;
+      },
+      set(value) {
+        return this.setEditedX(value);
+      },
+    },
+    editedY: {
+      get() {
+        return this.getEditedY;
+      },
+      set(value) {
+        return this.setEditedY(value);
+      },
+    },
+    searchInput: {
+      get() {
+        return this.getSearchInput;
+      },
+      set(value) {
+        return this.updateSearchInput(value);
+      },
+    },
+    isLoading: {
+      get() {
+        return this.getLoading;
+      },
+      set(value) {
+        return this.setLoading(value);
+      },
+    },
+    pageCount() {
+      return Math.ceil(
+        this.tableDatas.length / this.$store.state.ITEMS_PER_PAGE
+      );
+    },
   },
   methods: {
-    ...mapMutations("monitoring", ["changeEditMode", "setFocusRoom"]),
+    ...mapMutations("monitoring", [
+      "changeEditMode",
+      "setEditedX",
+      "setEditedY",
+      "setFocusPickerId",
+      "setFocusRoom",
+      "updateSearchInput",
+      "setLoading",
+    ]),
+    ...mapActions("monitoring", [
+      "FETCH_CURRENT_LOCATION_BEACON",
+      "EDIT_ROOM_PICKER",
+    ]),
+    editModeChanged() {
+      this.changeEditMode();
+      // 저장 -> 편집 (저장 했을 경우)
+      if (this.editMode === false) {
+        this.EDIT_ROOM_PICKER();
+      }
+    },
     onDrag(x, y) {
       this.editedX = x;
       this.editedY = y;
@@ -215,19 +251,12 @@ export default {
       console.log(floor);
       this.dialog = false;
     },
-    test(event, name, beaconId) {
-      console.log("test is called!");
-      console.log("event", event);
-      console.log("beaconId", beaconId);
+    pickerClicked(name, beaconId, roomPickerId) {
+      this.setFocusPickerId(roomPickerId);
       this.setFocusRoom(name);
       // beaconId에 해당하는 시설에 있는 인원 목록
-      fetchCurrentLocation_BeaconId(beaconId)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+      this.FETCH_CURRENT_LOCATION_BEACON(beaconId);
     },
   },
 };
 </script>
-
-<style scoped>
-</style>

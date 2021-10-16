@@ -1,142 +1,32 @@
+import { loadingCycle } from "@/utils/loading.js";
+import {
+  createRoomPicker,
+  editRoomPicker,
+  deleteRoomPicker,
+  fetchCurrentLocation_BeaconId,
+} from "@/api/index.js";
+
 const state = {
   editMode: false,
-  focusRoom: "",
+  editedX: 0,
+  editedY: 0,
 
-  // Data Table
+  // focused Picker
+  focusPickerId: 0,
+
+  /* Data Table */
   tableHeaders: [
-    { text: "군번", value: "tag" },
     { text: "관등성명", value: "name" },
+    { text: "출입시각", value: "enterTime" },
   ],
-  peopleList: [
-    {
-      tag: "20-70000001",
-      name: "상병 엄복걸",
-    },
-    {
-      tag: "20-70000002",
-      name: "병장 손박타",
-    },
-    {
-      tag: "20-70000003",
-      name: "상병 유분조",
-    },
-    {
-      tag: "20-70000004",
-      name: "일병 진환이",
-    },
-  ],
+  tableDatas: [],
 
-  // 관리할 장소(room) data
-  roomList: [
-    {
-      doomId: "1",
-      doomName: "1생활관",
-      items: [
-        {
-          name: "1층",
-          floor: 1,
-          items: [
-            {
-              id: 1,
-              beaconId: "aa:aa:aa:aa:aa:aa",
-              doom_id: 1,
-              floor: 1,
-              name: "101호",
-              current_count: 2,
-            },
-            {
-              id: 2,
-              beaconId: "bb:bb:bb:bb:bb:bb",
-              doom_id: 1,
-              floor: 1,
-              name: "102호",
-              current_count: 2,
-            },
-            {
-              id: 3,
-              beaconId: "cc:cc:cc:cc:cc:cc",
-              doom_id: 1,
-              floor: 1,
-              name: "화장실",
-              current_count: 4,
-            },
-            {
-              beaconId: "dd:dd:dd:dd:dd:dd",
-              name: "샤워실",
-            },
-          ],
-        },
-        {
-          name: "2층",
-          floor: 2,
-          items: [
-            {
-              beaconId: "ee:ee:ee:ee:ee:ee",
-              name: "201호",
-            },
-            {
-              beaconId: "ff:ff:ff:ff:ff:ff",
-              name: "202호",
-            },
-            {
-              beaconId: "gg:gg:gg:gg:gg:gg",
-              name: "화장실",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-
-  // Room Picker
-  roomPickers: [
-    {
-      floor: 1,
-      items: [
-        {
-          x: 320,
-          y: 60,
-          size: "normal",
-          name: "화장실",
-          current_count: 1,
-          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
-          beaconId: "34:14:B5:41:A2:7E",
-        },
-        {
-          x: 100,
-          y: 82,
-          size: "normal",
-          name: "102호",
-          current_count: 4,
-          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
-          beaconId: "aa:aa:aa:aa:aa:aa",
-        },
-      ],
-    },
-    {
-      floor: 2,
-      items: [
-        {
-          x: 297,
-          y: 60,
-          size: "normal",
-          name: "화장실",
-          current_count: 2,
-          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
-          beaconId: "bb:bb:bb:bb:bb:bb",
-        },
-        {
-          x: 666,
-          y: 8,
-          size: "normal",
-          name: "PX",
-          current_count: 5,
-          // 해당 방에 대한 인원 현황을 불러오기 위한 beacon_id
-          beaconId: "aa:aa:aa:aa:aa:aa",
-        },
-      ],
-    },
-  ],
+  // focused Room
+  focusRoom: "",
+  // Search
+  searchInput: "",
+  // Loading
+  loading: false,
 };
 
 const getters = {
@@ -144,18 +34,99 @@ const getters = {
     if (state.editMode) return "저장";
     else return "편집";
   },
+  getEditedX(state) {
+    return state.editedX;
+  },
+  getEditedY(state) {
+    return state.editedY;
+  },
+  getSearchInput(state) {
+    return state.searchInput;
+  },
+  getLoading(state) {
+    return state.loading;
+  },
 };
 
 const mutations = {
   changeEditMode(state) {
     state.editMode = !state.editMode;
   },
+  setEditedX(state, value) {
+    state.editedX = value;
+  },
+  setEditedY(state, value) {
+    state.editedY = value;
+  },
+  setFocusPickerId(state, value) {
+    state.focusPickerId = value;
+  },
   setFocusRoom(state, value) {
     state.focusRoom = value;
   },
+  setPeopleList(state, data) {
+    state.tableDatas = data;
+  },
+  updateSearchInput(state, value) {
+    state.searchInput = value;
+  },
+  setLoading(state, value) {
+    state.loading = value;
+  },
 };
 
-const actions = {};
+const actions = {
+  async FETCH_CURRENT_LOCATION_BEACON({ commit, state }, beaconId) {
+    let count = 0;
+    commit("setLoading", true);
+    try {
+      const response = await fetchCurrentLocation_BeaconId(beaconId);
+      count += parseInt(response.data.total);
+      const resData = response.data.data;
+      const data = [];
+      if (resData) {
+        resData.forEach((elem) => {
+          const obj = {};
+          const enterTime = new Date(elem.in_time);
+          // UTC time으로 Date 객체를 생성하면 현지 시각으로 자동 변환됨
+          // 한국시간, UTC time은 9시간 차이나므로 자동 변환을 막는 code
+          enterTime.setHours(enterTime.getHours() - 9);
+
+          obj.tag = elem.user_tag;
+          obj.name = `${elem.user_rank} ${elem.user_name}`;
+          obj.enterTime = enterTime.toLocaleString();
+          data.push(obj);
+        });
+      } else {
+        count = 0;
+        console.log("There isn't any person");
+      }
+      commit("setPeopleList", data);
+      let timer = setInterval(() => {
+        if (state.tableDatas.length === count) {
+          commit("setLoading", false);
+          clearInterval(timer);
+        }
+      }, loadingCycle);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async EDIT_ROOM_PICKER({ state }) {
+    try {
+      const payload = {
+        id: state.focusPickerId,
+        x: state.editedX,
+        y: state.editedY,
+      };
+      const response = await editRoomPicker(payload);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 export default {
   namespaced: true,
