@@ -1,22 +1,16 @@
-class OutsideFacility{
-   OutsideFacility(this.id, this.name, this.beaconId);
+import 'package:ucms/data/places/place.dart';
+
+class OutsideFacility extends Place{
+   OutsideFacility({required id, required name, required beaconId}) 
+    :super(id: id,name: name, beaconId: beaconId);
   
-  final int id;
-  final String name;
-  final String beaconId;
 
   OutsideFacility.fromJson(Map<String, dynamic> json) 
-    : id = json["id"],
-      name = json["name"],
-      beaconId = json["beaconId"];
+    : super(id: json["id"], name: json["name"], beaconId: json["beaconId"]);
 
-  Map<String,dynamic> toJson() {
-    Map<String,dynamic> result = {
-      "id" : id,
-      "name" : name,
-      "beaconId" : beaconId
-    };
-    return result;
-  }
+  // @override
+  // Map<String,dynamic> toJson() {
+  //   return super.toJson();
+  // }
   
 }

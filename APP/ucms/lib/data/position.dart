@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ucms/components/texts.dart';
+import 'package:ucms/components/texts.dart' as text;
+import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/utils/timestring_to_datetime.dart';
 
 class Position {
   String userTag;
   String beaconId;
-  String inTime;
-  String outTime;
+  DateTime inTime;
+  DateTime outTime;
   int doomId;
   String userName;
   String userRank;
@@ -33,8 +35,8 @@ class Position {
   Position.fromJson(Map<String, dynamic> json)
       : userTag = json["user_tag"]??"",
         beaconId = json["beacon_id"]??"",
-        inTime =json["in_time"]??"",
-        outTime =json["out_time"]??"",
+        inTime =TimestringToDateTime.encode(json["in_time"]??"1970-01-01T12:34:56.000Z"),
+        outTime =TimestringToDateTime.encode(json["out_time"]??"1970-01-01T12:34:56.000Z"),
         doomId = json["doom_id"]??-1,
         userName= json["user_name"]??"",
         userRank = json["user_rank"]??"",
@@ -75,9 +77,9 @@ class Position {
 
   ListTile toListTile() {
     return ListTile(
-              leading: const FlutterLogo(),
-              title: title("$userRank $userName : in $name"),
-              subtitle: quote("last in : $inTime"),
+              leading: const Icon(Icons.account_circle), 
+              title : text.quoteLeft("$userRank $userName",),
+              trailing: text.small("${inTime.month}/${inTime.day} ${inTime.hour}:${inTime.minute}"),
     );
   }
 }

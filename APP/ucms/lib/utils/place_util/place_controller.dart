@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
+import 'package:ucms/data/places/doom.dart';
 import 'package:ucms/data/places/doomfacility.dart';
+import 'package:ucms/data/places/doomroom.dart';
 import 'package:ucms/data/places/outside_facility.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/utils/place_util/place_repository.dart';
@@ -8,88 +11,127 @@ import 'package:ucms/utils/place_util/place_repository.dart';
 class PlaceController extends GetxController {
   final repository = PlaceRepository();
 
-  Future<List<dynamic>> doomAllInfo() async{
-     final doomList = await repository.doomAll();
+  Future<List<Doom>> doomAllInfo() async{
+     final jsonList = await repository.doomAll();
+    List<Doom> doomList =[];
 
-     return doomList;
-  }
-
-  
-  Future<dynamic> doomInfo(int doomId) async{
-    final doom = await repository.doom(doomId);
-
-    return doom;
-  }
-
-  Future<List<String>> doomFacilAllInfo() async{
-     final jsonList = await repository.doomFacilAll();
-
-      List<String> doomFacilList =[];
-
-    for(Map<String,dynamic> json in jsonList) {
-      doomFacilList.add(DoomFacility.fromJson(json).name);
-    }
-
-     return doomFacilList;
-  }
-
-  
-  Future<dynamic> doomFacilInfo(int id) async{
-    final doomFacil = await repository.doom(id);
-
+    for(Map<String,dynamic> json in jsonList) {doomList.add(Doom.fromJson(json));}
     
-    return doomFacil;
-  }
-
-  Future<List<dynamic>> doomRoomAllInfo() async{
-     final doomRoomList = await repository.doomAll();
-
-     return doomRoomList;
+    return doomList;
   }
 
   
-  Future<dynamic> doomRoomInfo(int id) async{
-    final doomRoom = await repository.doom(id);
+  Future<Doom> doomInfo(int doomId) async{
+    final json = await repository.doom(doomId);
 
-    return doomRoom;
+    return Doom.fromJson(json);
   }
 
-  Future<List<String>> outsideFacilAllInfo() async{
+  Future<List<DoomFacility>> doomFacilAllInfo() async{
+    final jsonList = await repository.doomFacilAll();
+    List<DoomFacility> doomFacilList =[];
+
+    for(Map<String,dynamic> json in jsonList) {doomFacilList.add(DoomFacility.fromJson(json));}
+    
+    return doomFacilList;
+  }
+
+  
+  Future<DoomFacility> doomFacilInfo(int id) async{
+    final json = await repository.doom(id);
+    return DoomFacility.fromJson(json);
+  }
+
+  Future<List<DoomRoom>> doomRoomAllInfo() async{
+    final jsonList = await repository.doomRoomAll();
+    List<DoomRoom> doomRoomList =[];
+
+    for(Map<String,dynamic> json in jsonList) {doomRoomList.add(DoomRoom.fromJson(json));}
+    
+    return doomRoomList;
+  }
+
+  
+  Future<DoomRoom> doomRoomInfo(int id) async{
+    final json = await repository.doomRoom(id);
+
+    return DoomRoom.fromJson(json);
+  }
+
+  Future<List<OutsideFacility>> outsideFacilAllInfo() async{
      final jsonList = await repository.outsideFacilAll();
     
-    List<String> outsideFacilList =[];
+    List<OutsideFacility> outsideFacilList =[];
 
     for(Map<String,dynamic> json in jsonList) {
-      outsideFacilList.add(OutsideFacility.fromJson(json).name);
+      outsideFacilList.add(OutsideFacility.fromJson(json));
     }
      return outsideFacilList;
   }
 
   
-  Future<dynamic> outsideFacilInfo(int id) async{
-    final outsideFacil = await repository.outsideFacil(id);
+  Future<OutsideFacility> outsideFacilInfo(int id) async{
+    final json = await repository.outsideFacil(id);
 
-    
-
-    return outsideFacil;
+    return OutsideFacility.fromJson(json);
   }
 
-  Future<PositionList> positionAllInfo() async{
-    List<Map<String,dynamic>> l = await repository.positionAll();
-    List<Position> positionList =[];
+  Future<List<PositionList>> positionAllInfo() async{
+    // 같은 Position 정보들을 가진 놈들을 PositionList 로 묶고,
+    // 그 PositionList 를 list 로 정리한다. 
 
+    //1.모든 위치정보 가져와 Position 들로 만들기.
+    List<Map<String,dynamic>> l = await repository.positionAll();
+
+    List<Position> pos =[];
     for(Map<String,dynamic> json in l) {
-      positionList.add(Position.fromJson(json));
+      pos.add(Position.fromJson(json));
     }
+    //2. 모든 가능한 장소 불러오기
+    List<Place> avail = await allAvailablePlaces();
+
+    //3. 모든 가능한 장소에 대해 PositionList 만들기
+
+    List<PositionList> list = [];
+    for(Place p in avail) {
+      list.add(PositionList(list: [], place: p));
+    }
+
+    //4. position 들 각 장소에 해당하는 positionlist 의 list 에 귀속시키기
     
-    PositionList list = PositionList.fromList(positionList);
+    for(Position p in pos) {
+      for(int i=0;i<list.length;i++) {
+        if(list[i].place.name==p.name){
+          list[i].list.add(p);
+          break;
+        }
+      }
+    }
+    //5. 아무도 없는 곳 떨구기?
+    
      return list;
   }
 
   
-  Future<dynamic> positionInfo(int id) async{
-    final position = await repository.position(id);
+  Future<Position> positionInfo(int id) async{
+    final json = await repository.position(id);
 
-    return position;
+    return Position.fromJson(json);
+  }
+
+  Future<List<Place>> allAvailablePlaces() async {
+    List<Place> doom = await doomAllInfo();
+    List<Place> doomRoom = await doomRoomAllInfo();
+    List<Place> doomFacil = await doomFacilAllInfo();
+    List<Place> outsideFacil = await outsideFacilAllInfo();
+
+    List<Place> res =[];
+
+    for(Place p in doom) {res.add(p);}
+    for(Place p in doomRoom) {res.add(p);}
+    for(Place p in doomFacil) {res.add(p);}
+    for(Place p in outsideFacil) {res.add(p);}
+
+    return res;
   }
 }

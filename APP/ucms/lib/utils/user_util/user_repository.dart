@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/data/user.dart';
@@ -30,6 +28,7 @@ class UserRepository {
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
+      //TODO : token 에서 Bearer 떼어내기
       newUser.token=convertHeader["authorization"]??"no auth key";
       
       return newUser;
@@ -64,17 +63,6 @@ class UserRepository {
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
 
     Map<String, dynamic> data = serverRespDto.data;
-      return data;
-  }
-
-  Future<List<Map<String, dynamic>>> currentPositionAll() async {
-    Response resp = await _userProvider.currentPositionAll();
-    dynamic body = resp.body;
-
-    Map<String, dynamic> convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
-    List<Map<String, dynamic>> data = serverRespDto.data;
       return data;
   }
 

@@ -1,22 +1,15 @@
-class Doom {
-  Doom(this.id, this.name, this.beaconId);
+import 'package:ucms/data/places/place.dart';
+
+class Doom extends Place {
+  Doom(id, name, beaconId) : super(id : id,name : name,beaconId : beaconId);
   
-  final int id;
-  final String name;
-  final String beaconId;
 
   Doom.fromJson(Map<String, dynamic> json) 
-    : id = json["id"],
-      name = json["name"],
-      beaconId = json["beaconId"];
+    : super.fromJson(json);
 
-  Map<String,dynamic> toJson() {
-    Map<String,dynamic> result = {
-      "id" : id,
-      "name" : name,
-      "beaconId" : beaconId
-    };
-    return result;
-  }
+  // @override
+  // Map<String,dynamic> toJson() {
+  //   return super.toJson();
+  // }
   
 }

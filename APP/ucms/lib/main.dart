@@ -11,7 +11,6 @@ import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/nav.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
-import 'package:ucms/pages/page_user/user_move.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/beacon/beacon_manager.dart';
 import 'package:ucms/theme/color_theme.dart';
@@ -69,7 +68,7 @@ class MyApp extends StatelessWidget {
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
         "/user/main": (context) => UserMain(location: "", state: ""),
-        "/user/move": (context) => const UserMove(),
+        //"/user/move": (context) => UserMove(),
         "/user/assemble": (context) => UserAssemble(
             location: "막사"),
       },

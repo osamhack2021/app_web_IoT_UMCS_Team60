@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,28 +8,29 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/utils/validate.dart';
 
 class UserMove extends StatefulWidget {
-  const UserMove({Key? key}) : super(key: key);
+  UserMove({Key? key,required this.btns}) : super(key: key);
 
+  List<Place> btns;
+  
   @override
   State<UserMove> createState() => _UserMoveState();
 }
 
 class _UserMoveState extends State<UserMove> {
-  final etcCon = TextEditingController();
-  final etcController = TextEditingController();
+  final descCon = TextEditingController();
   int _value=1;
 
   final u = Get.find<UserController>();
-
-  List<String> btns = ["막사", "체단실" , "노래방", "지통실", "사지방","샤워실", "통신과"];
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +42,11 @@ class _UserMoveState extends State<UserMove> {
             topMargin(),
             title("이동 보고"),
             const SizedBox(height: 20),
-            Wrap(children: List<Widget>.generate(btns.length,(int index) {
+            Wrap(children: List<Widget>.generate(widget.btns.length,(int index) {
                 return Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: ChoiceChip(
-                    label: Text(btns[index], style:body(fontSize: 15)),
+                    label: Text(widget.btns[index].name, style:body(fontSize: 15)),
                     selectedColor: selectedColor(),
                     disabledColor: disabledColor(),
                     backgroundColor: chipBackcolor(),
@@ -59,14 +62,15 @@ class _UserMoveState extends State<UserMove> {
               },
             ).toList(),
             ),
+            KTextFormField(hint: "구체적인 사유를 입력하세요", controller: descCon, validator: validateNothing()),
             const SizedBox(height: 15),
             PostButton(
                 onPressed: () async {
                   final store = GetStorage();
                   UserSocketClient socket = Get.find<UserSocketClient>();
-                  socket.moveRequest( destination: btns[_value],);
+                  socket.moveRequest( outsideId :  widget.btns[_value].beaconId, desc: descCon.text.trim());
                   
-                  store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${btns[_value]} )");
+                  store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${widget.btns[_value].name} )");
                   Get.back();
                   Snack.top("새로고침 필요", "화면을 끌어내려주세요");
                 },

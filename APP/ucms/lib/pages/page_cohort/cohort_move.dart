@@ -8,17 +8,19 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
+import 'package:ucms/data/places/place.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/utils/validate.dart';
 
 class CohortMove extends StatefulWidget {
   CohortMove({Key? key, required this.name, required this.btns}) : super(key: key);
 
-  List<String> btns;
+  List<Place> btns;
   String name; //외부 or 건물 내
   // List<String> btns = ["막사", "체단실" , "노래방", "지통실", "사지방","샤워실", "통신과"];
 
@@ -27,9 +29,8 @@ class CohortMove extends StatefulWidget {
 }
 
 class _CohortMoveState extends State<CohortMove> {
-  final etcCon = TextEditingController();
-  final etcController = TextEditingController();
-  int _value=1;
+  final descCon = TextEditingController();
+  int _value=0;
 
   final u = Get.find<UserController>();
 
@@ -49,7 +50,7 @@ class _CohortMoveState extends State<CohortMove> {
                 return Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: ChoiceChip(
-                    label: Text(widget.btns[index], style:body(fontSize: 15)),
+                    label: Text(widget.btns[index].name, style:body(fontSize: 15)),
                     selectedColor: warningColor(),
                     disabledColor: disabledColor(),
                     backgroundColor: warningEnabledColor(),
@@ -65,14 +66,15 @@ class _CohortMoveState extends State<CohortMove> {
               },
             ).toList(),
             ),
+            KTextFormField(hint: "구체적인 사유를 입력하세요", controller: descCon, validator: validateNothing()),
             const SizedBox(height: 15),
             WarnButton(
                 onPressed: () async {
                   final store = GetStorage();
                   UserSocketClient socket = Get.find<UserSocketClient>();
-                  socket.moveRequest( destination: widget.btns[_value],);
+                  socket.moveRequest( outsideId : widget.btns[_value].beaconId, desc: descCon.text.trim());
                   
-                  store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${widget.btns[_value]} )");
+                  store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${widget.btns[_value].name} )");
                   Get.back();
                   Snack.warnTop("새로고침 필요", "화면을 끌어내려주세요");
                 },
