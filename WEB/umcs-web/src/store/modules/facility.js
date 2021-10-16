@@ -40,9 +40,11 @@ const mutations = {
 
 const actions = {
   async FETCH_TIME_TABLE({ commit }, idData) {
+    let count = 0;
     commit("setLoading", true);
     try {
       const response = await fetchTimeTable(idData);
+      count += parseInt(response.data.total);
       const resData = response.data.data;
       const data = [];
       if (resData) {
@@ -62,7 +64,12 @@ const actions = {
         console.log("이용 시간표 정보가 없습니다!");
       }
       commit("updateTimeTable", data);
-      commit("setLoading", false);
+      let timer = setInterval(() => {
+        if (state.tableDatas.length === count) {
+          commit("setLoading", false);
+          clearInterval(timer);
+        }
+      }, 1000);
       return data;
     } catch (error) {
       console.log(error);

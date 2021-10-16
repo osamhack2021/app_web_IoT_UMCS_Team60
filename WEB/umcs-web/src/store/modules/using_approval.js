@@ -107,7 +107,7 @@ const actions = {
           commit("setLoading", false);
           clearInterval(timer);
         }
-      }, 100);
+      }, 1000);
       return data;
     } catch (error) {
       console.log(error);
