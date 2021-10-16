@@ -39,7 +39,6 @@ dependencies:
   socket_io_client: ^1.0.1
   beacons_plugin: ^2.0.1
   get_storage: ^2.0.3
-  workmanager: ^0.4.1
   google_fonts: ^2.1.0
   flutter_native_splash: ^1.2.4
   flutter_local_notifications: ^9.0.0
