@@ -15,77 +15,30 @@
               <v-card>
                 <!-- Dialog for Create Icon -->
                 <v-card-actions>
-                  <v-dialog
-                    v-model="dialog"
-                    max-width="600px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        추가
-                      </v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-title>
-                        <span class="text-h5">관리할 장소 추가</span>
-                      </v-card-title>
-                      <v-form>
-                        <v-card-text>
-                          <v-container>
-                            <v-row>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.doom"
-                                  label="건물"
-                                />
-                              </v-col>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.floor"
-                                  label="층"
-                                />
-                              </v-col>
-                              <v-col cols="4">
-                                <v-select
-                                  v-model="formInput.name"
-                                  label="장소"
-                                />
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer />
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="dialog = false"
-                          >
-                            Close
-                          </v-btn>
-                          <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="createRoomIcon(floor)"
-                          >
-                            Save
-                          </v-btn>
-                        </v-card-actions>
-                      </v-form>
-                    </v-card>
-                  </v-dialog>
-
+                  <v-btn>추가</v-btn>
                   <v-btn
                     class="ml-2"
-                    @click="changeEditMode"
+                    @click="editModeChanged"
                   >
                     {{ getEditText }}
                   </v-btn>
-                  ({{ editedX }}, {{ editedY }})
                 </v-card-actions>
               </v-card>
+              <!-- Edit Alert Message -->
+              <v-alert
+                v-if="editMode"
+                type="error"
+                outlined
+                dense
+                text
+                class="mt-3"
+              >
+                <v-row align="center">
+                  <v-col class="grow font-weight-medium">
+                    Room Icon의 편집(위치 이동)은 한번에 하나만 가능합니다
+                  </v-col>
+                </v-row>
+              </v-alert>
               <!-- v-for 사용하여 나열 -->
               <v-card
                 v-for="floor in doom.items"
@@ -120,7 +73,13 @@
                         fab
                         small
                         class="info text-body-1 font-weight-medium white--text"
-                        @click="test($event, picker.name, picker.beacon_id)"
+                        @click="
+                          pickerClicked(
+                            picker.name,
+                            picker.beacon_id,
+                            picker.room_picker.id
+                          )
+                        "
                       >
                         {{ picker.current_count }}
                       </v-btn>
@@ -134,9 +93,7 @@
           <!-- People list -->
           <v-col cols="4">
             <v-card>
-              <v-card-title>
-                {{ focusRoom }} 인원현황
-              </v-card-title>
+              <v-card-title> {{ focusRoom }} 인원현황 </v-card-title>
               <v-card-text>
                 <!-- Search Bar -->
                 <v-text-field
@@ -152,6 +109,7 @@
                 :headers="tableHeaders"
                 :items="tableDatas"
                 :search="searchInput"
+                :loading="isLoading"
                 hide-default-footer
                 :items-per-page="$store.state.ITEMS_PER_PAGE"
                 :page.sync="page"
@@ -200,10 +158,7 @@ export default {
   },
   data() {
     return {
-      editedX: 0,
-      editedY: 0,
-      searchValue: "",
-      dialog: false,
+      page: 1,
 
       // Create Form
       selectFromItems: {},
@@ -222,7 +177,29 @@ export default {
       "tableHeaders",
       "tableDatas",
     ]),
-    ...mapGetters("monitoring", ["getEditText", "getSearchInput"]),
+    ...mapGetters("monitoring", [
+      "getEditText",
+      "getEditedX",
+      "getEditedY",
+      "getSearchInput",
+      "getLoading",
+    ]),
+    editedX: {
+      get() {
+        return this.getEditedX;
+      },
+      set(value) {
+        return this.setEditedX(value);
+      },
+    },
+    editedY: {
+      get() {
+        return this.getEditedY;
+      },
+      set(value) {
+        return this.setEditedY(value);
+      },
+    },
     searchInput: {
       get() {
         return this.getSearchInput;
@@ -231,17 +208,41 @@ export default {
         return this.updateSearchInput(value);
       },
     },
-  },
-  created() {
-    console.log(this.facilityList);
+    isLoading: {
+      get() {
+        return this.getLoading;
+      },
+      set(value) {
+        return this.setLoading(value);
+      },
+    },
+    pageCount() {
+      return Math.ceil(
+        this.tableDatas.length / this.$store.state.ITEMS_PER_PAGE
+      );
+    },
   },
   methods: {
     ...mapMutations("monitoring", [
       "changeEditMode",
+      "setEditedX",
+      "setEditedY",
+      "setFocusPickerId",
       "setFocusRoom",
       "updateSearchInput",
+      "setLoading",
     ]),
-    ...mapActions("monitoring", ["FETCH_CURRENT_LOCATION_BEACON"]),
+    ...mapActions("monitoring", [
+      "FETCH_CURRENT_LOCATION_BEACON",
+      "EDIT_ROOM_PICKER",
+    ]),
+    editModeChanged() {
+      this.changeEditMode();
+      // 저장 -> 편집 (저장 했을 경우)
+      if (this.editMode === false) {
+        this.EDIT_ROOM_PICKER();
+      }
+    },
     onDrag(x, y) {
       this.editedX = x;
       this.editedY = y;
@@ -250,10 +251,8 @@ export default {
       console.log(floor);
       this.dialog = false;
     },
-    test(event, name, beaconId) {
-      console.log("test is called!");
-      console.log("event", event);
-      console.log("beaconId", beaconId);
+    pickerClicked(name, beaconId, roomPickerId) {
+      this.setFocusPickerId(roomPickerId);
       this.setFocusRoom(name);
       // beaconId에 해당하는 시설에 있는 인원 목록
       this.FETCH_CURRENT_LOCATION_BEACON(beaconId);

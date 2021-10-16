@@ -41,16 +41,17 @@ function fetchCurrentLocation_Tag(tag) {
 function fetchCurrentLocation_BeaconId(beaconId) {
   return axios.get(`${BASE_URL}current_position/search?beacon_id=${beaconId}`);
 }
-function deleteFacility(id) {
-  return axios.delete(`${BASE_URL}doomfacility/${id}`);
-}
 
 // Monitoring
-function fetchRoomPickerList() {
-  return axios.get(`${BASE_URL}room_picker`);
-}
 function createRoomPicker(data) {
   return axios.post(`${BASE_URL}room_picker`, data);
+}
+function editRoomPicker(data) {
+  const pos = {
+    x: data.x,
+    y: data.y,
+  };
+  return axios.put(`${BASE_URL}room_picker/${data.id}`, pos);
 }
 function deleteRoomPicker(id) {
   return axios.delete(`${BASE_URL}room_picker/${id}`);
@@ -113,7 +114,6 @@ function deleteDuty(id) {
 }
 
 export {
-  deleteFacility,
   loginAdmin,
   logoutAdmin,
   fetchCurrentSituation,
@@ -126,8 +126,8 @@ export {
   fetchRoomInfo,
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,
-  fetchRoomPickerList,
   createRoomPicker,
+  editRoomPicker,
   deleteRoomPicker,
   fetchMovingReport,
   fetchMovingReport_Id,
