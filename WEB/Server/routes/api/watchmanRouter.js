@@ -157,6 +157,11 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
                 let found = doomResults.find(d => d.floor === doomroom.floor);
                 doomroom.doomroom_id = doomroom.id;
                 delete doomroom.id;
+
+                sql ="SELECT * FROM room_picker WHERE beacon_id=?";
+                let [roompickerInfo] = await dbPromiseConnection.query(sql, [doomroom.beacon_id]);
+                if(roompickerInfo[0]) doomroom.room_picker = roompickerInfo[0];
+                
                 if(!found) 
                     doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomroom}]});
                 else 
@@ -169,8 +174,13 @@ router.get('/myCharge/details', managerAuth.checkLogin, async (req, res) => {
                 let found = doomResults.find(d => d.floor === doomfacility.floor);
                 doomfacility.doomfacility_id = doomfacility.id;
                 delete doomfacility.id;
+
+                sql ="SELECT * FROM room_picker WHERE beacon_id=?";
+                let [roompickerInfo] = await dbPromiseConnection.query(sql, [doomfacility.beacon_id]);
+                if(roompickerInfo[0]) doomfacility.room_picker = roompickerInfo[0];
+
                 if(!found) 
-                    doomResults.push({floor: doomroom.floor, name: doomroom.floor+"층", items: [{...doomfacility}]});
+                    doomResults.push({floor: doomfacility.floor, name: doomfacility.floor+"층", items: [{...doomfacility}]});
                 else 
                     found.items.push({...doomfacility});
             }

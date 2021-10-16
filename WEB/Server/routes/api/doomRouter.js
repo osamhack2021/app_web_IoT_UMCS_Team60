@@ -152,10 +152,13 @@ router.put('/:id', managerAuth.checkLogin, (req, res) => {
     });
 });
 
-router.delete('/:id', managerAuth.checkLogin, (req, res) => {
+router.delete('/:id', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
 
-    var sql = "DELETE FROM doom WHERE id=?";
+    var sql = "UPDATE beacon SET doom_id=NULL WHERE doom_id=?";
+    await dbPromiseConnection.query(sql, [req.params.id]);
+
+    sql = "DELETE FROM doom WHERE id=?";
     dbConnection.query(sql, [req.params.id], (err, rows) => {
         if(err)
             return res.status(400).json({
