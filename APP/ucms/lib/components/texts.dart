@@ -62,6 +62,7 @@ class KTextFormFieldMultiLine extends StatelessWidget {
         style: GoogleFonts.nanumGothic(color : isCohort?warningColor():mainTextColor()),
         controller: controller,
         //TODO : input type multiline
+        keyboardType: TextInputType.multiline,
         maxLines: null,
         decoration: InputDecoration(
           hintText: hint,

@@ -13,11 +13,20 @@ class PlaceRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    List<Map<String,dynamic>> dat =[];
+      for(dynamic d in convertBody["data"]) {
+        dat.add(convertUtf8ToObject(d));
+      }
 
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, dat);
 
+    
     if (serverRespDto.code == 1) {
-      List<Map<String,dynamic>> data = serverRespDto.data;
+      List<dynamic> temp = serverRespDto.data;
+      List<Map<String,dynamic>> data =[];
+      for(dynamic d in temp) {
+        data.add(convertUtf8ToObject(d));
+      }
       return data;
     } else {
       return [];
@@ -46,11 +55,20 @@ class PlaceRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    List<Map<String,dynamic>> dat =[];
+      for(dynamic d in convertBody["data"]) {
+        dat.add(convertUtf8ToObject(d));
+      }
 
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, dat);
 
+    
     if (serverRespDto.code == 1) {
-      List<Map<String,dynamic>> data = serverRespDto.data;
+      List<dynamic> temp = serverRespDto.data;
+      List<Map<String,dynamic>> data =[];
+      for(dynamic d in temp) {
+        data.add(convertUtf8ToObject(d));
+      }
       return data;
     } else {
       return [];
@@ -79,11 +97,20 @@ class PlaceRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    List<Map<String,dynamic>> dat =[];
+      for(dynamic d in convertBody["data"]) {
+        dat.add(convertUtf8ToObject(d));
+      }
 
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, dat);
 
+    
     if (serverRespDto.code == 1) {
-      List<Map<String,dynamic>> data = serverRespDto.data;
+      List<dynamic> temp = serverRespDto.data;
+      List<Map<String,dynamic>> data =[];
+      for(dynamic d in temp) {
+        data.add(convertUtf8ToObject(d));
+      }
       return data;
     } else {
       return [];
@@ -112,11 +139,20 @@ class PlaceRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    List<Map<String,dynamic>> dat =[];
+      for(dynamic d in convertBody["data"]) {
+        dat.add(convertUtf8ToObject(d));
+      }
 
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, dat);
 
+    
     if (serverRespDto.code == 1) {
-      List<Map<String,dynamic>> data = serverRespDto.data;
+      List<dynamic> temp = serverRespDto.data;
+      List<Map<String,dynamic>> data =[];
+      for(dynamic d in temp) {
+        data.add(convertUtf8ToObject(d));
+      }
       return data;
     } else {
       return [];
@@ -144,12 +180,21 @@ class PlaceRepository {
      Response resp = await _placeProvider.positionAllInfo();
     dynamic body = resp.body;
 
-    dynamic convertBody = convertUtf8ToObject(body);
-    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, convertBody["data"]);
+    Map<String,dynamic> convertBody = convertUtf8ToObject(body);
+    List<Map<String,dynamic>> dat =[];
+      for(dynamic d in convertBody["data"]) {
+        dat.add(convertUtf8ToObject(d));
+      }
+
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, dat);
 
 
     if (serverRespDto.code == 1) {
-      List<Map<String,dynamic>> data = serverRespDto.data;
+      List<dynamic> temp = serverRespDto.data;
+      List<Map<String,dynamic>> data =[];
+      for(dynamic d in temp) {
+        data.add(convertUtf8ToObject(d));
+      }
       return data;
     } else {
       return [];

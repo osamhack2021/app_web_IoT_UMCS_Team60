@@ -2,7 +2,7 @@
 class ServerMultiRespDto {
   final int code;
   final String msg;
-  final List<Map<String,dynamic>> data;
+  final List<dynamic> data;
 
   ServerMultiRespDto({required this.code, required this.msg, required this.data});
 

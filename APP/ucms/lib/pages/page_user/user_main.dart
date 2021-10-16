@@ -15,6 +15,7 @@ import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/expan_item.dart';
 import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position_list.dart';
+import 'package:ucms/data/time_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
@@ -23,6 +24,7 @@ import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/utils/cohort_util/cohort_controller.dart';
 import 'package:ucms/utils/place_util/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
@@ -235,7 +237,7 @@ class _UserMainState extends State<UserMain> {
           PageButton(
               onPressed: () {
                 u.logout();
-                Get.to(LoginPage());
+                Get.offAll(LoginPage());
               },
               label: "로그아웃하기"),
           WarnButton(
@@ -244,14 +246,18 @@ class _UserMainState extends State<UserMain> {
                       
                 await u.currentPosition(store.read("tag"));
                 positions = await p.positionAllInfo();
+                CohortController c = Get.isRegistered<CohortController>()? Get.find<CohortController>():Get.put(CohortController());
+                List<TimeList> times = await c.timeTableAllInfo();
 
                 Snack.top("로그인 시도", "성공");
-                Get.to(CohortMain(
+                WidgetsBinding.instance!
+        .addPostFrameCallback((_) =>Get.to(CohortMain(
                   location: store.read("recent_place_name") ??
                       "error in LoginPage",
                   state: store.read("state") ?? "",
                   positions : positions,
-                ));
+                  times : times
+                )));
               },
               label: "코호트 상황 메인 가기"),
           footer(),

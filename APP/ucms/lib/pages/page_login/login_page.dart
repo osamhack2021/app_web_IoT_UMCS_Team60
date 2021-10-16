@@ -9,6 +9,7 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/position_list.dart';
+import 'package:ucms/data/time_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
@@ -38,6 +39,7 @@ class LoginPage extends StatelessWidget {
       : Get.put(CohortController());
   
   List<PositionList> positions = [];
+  List<TimeList> times = [];
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,7 @@ class LoginPage extends StatelessWidget {
                       
                       await u.currentPosition(_tag.text.trim());
                       positions = await p.positionAllInfo();
+                      times = await c.timeTableAllInfo();
                       bool isCohort = await c.cohortStatusNow();
 
                       if(isCohort) {
@@ -102,6 +105,7 @@ class LoginPage extends StatelessWidget {
                               "error in LoginPage",
                           state: store.read("state") ?? "",
                           positions : positions,
+                          times : times,
                         ));
                       }
                       else {

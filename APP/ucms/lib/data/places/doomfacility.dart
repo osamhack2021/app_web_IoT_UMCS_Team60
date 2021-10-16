@@ -9,17 +9,17 @@ class DoomFacility extends Place {
   
 
   DoomFacility.fromJson(Map<String, dynamic> json) 
-    : doomId = json["doomId"],
+    : doomId = json["doom_id"],
       floor = json["floor"],
-      super(id:json["id"], name:json["name"], beaconId: json["beaconId"]);
+      super(id:json["id"], name:json["name"], beaconId: json["beacon_id"]);
 
   @override
   Map<String,dynamic> toJson() {
     Map<String,dynamic> result = {
       "id" : id,
       "name" : name,
-      "beaconId" : beaconId,
-      "doomId" : doomId,
+      "beacon_id" : beaconId,
+      "doom_id" : doomId,
       "floor" : floor
     };
     return result;

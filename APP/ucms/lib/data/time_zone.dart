@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ucms/data/places/place_database.dart';
 import 'package:ucms/utils/timestring_to_datetime.dart';
+import 'package:ucms/components/texts.dart' as text;
 
 class TimeZone {
   final int id;
@@ -7,6 +11,7 @@ class TimeZone {
   final int facilityId;
   final DateTime startTime;
   final DateTime endTime;
+  PlaceDatabase placeDB = Get.find<PlaceDatabase>();
 
   TimeZone.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -25,7 +30,16 @@ class TimeZone {
         "start_time" : startTime.toString(),
         "end_time" : endTime.toString(),
       };
-
+  ListTile toListTile() {
+    //TODO : roomId 가지고 이름으로 변환하기
+    
+    String doomName = placeDB.getDoomName(doomId);
+    String roomName = placeDB.getRoomName(roomId);
+    return ListTile(
+              title : text.quoteLeft("$doomName $roomName",),
+              trailing: text.quote("${startTime.hour}:${startTime.minute} ~ ${endTime.hour}:${endTime.minute} "),
+    );
+  }
   // "id": 1,
   // "doom_id": 2,
   // "room_id": 4,

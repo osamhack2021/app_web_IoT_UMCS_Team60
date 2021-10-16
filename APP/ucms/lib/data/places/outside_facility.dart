@@ -6,7 +6,7 @@ class OutsideFacility extends Place{
   
 
   OutsideFacility.fromJson(Map<String, dynamic> json) 
-    : super(id: json["id"], name: json["name"], beaconId: json["beaconId"]);
+    : super(id: json["id"], name: json["name"], beaconId: json["beacon_id"]);
 
   // @override
   // Map<String,dynamic> toJson() {
