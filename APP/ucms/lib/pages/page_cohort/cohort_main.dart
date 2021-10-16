@@ -58,6 +58,8 @@ class _CohortMainState extends State<CohortMain> {
   int selectedIndex = 2;
   bool firstSnack = true;
 
+  List<ExpanItem> expanItems=[];
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +79,10 @@ class _CohortMainState extends State<CohortMain> {
       } else {
         timer.cancel();
       }
+    });
+    expanItems=
+        List<ExpanItem>.generate(widget.positions!.length, (index) {
+      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTiles());
     });
   }
 
@@ -98,11 +104,6 @@ class _CohortMainState extends State<CohortMain> {
     bool assembleVisible = store.read("assemble_visible") ?? false;
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
-    
-    List<ExpanItem> expanItems =
-        List<ExpanItem>.generate(widget.positions!.length, (index) {
-      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTiles());
-    });
     
     List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!, expanItems : expanItems, 
          assembleVisible : assembleVisible,  name : name,  nameCon : nameCon , formKey : formKey,  
@@ -198,8 +199,7 @@ class _CohortMainState extends State<CohortMain> {
                       ),
                     );
                   },
-                  //body: positions[index].toListTile(),
-                  body : const Text("Weeee"),
+                  body: positions[index].toListTiles(),
                   isExpanded: expanItems[index].expanded,
                   canTapOnHeader: true,
                 );
