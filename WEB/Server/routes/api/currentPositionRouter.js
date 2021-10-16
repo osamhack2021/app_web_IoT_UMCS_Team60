@@ -106,7 +106,7 @@ router.get('/search', async (req, res) => {
             code: 1,
             msg: "success",
             total: results.length,
-            data: results[0]
+            data: results
         });
 
     } catch(err) {
