@@ -100,6 +100,7 @@ const actions = {
           data.push(obj);
         });
       } else {
+        count = 0;
         console.log("There is not Moving report!");
       }
       commit("updateMovingReport", data);

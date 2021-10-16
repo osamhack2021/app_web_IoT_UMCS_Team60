@@ -62,9 +62,11 @@ const actions = {
           data.push(obj);
         });
       } else {
+        count = 0;
         console.log("이용 시간표 정보가 없습니다!");
       }
       commit("updateTimeTable", data);
+      console.log("count", count);
       let timer = setInterval(() => {
         if (state.tableDatas.length === count) {
           commit("setLoading", false);
