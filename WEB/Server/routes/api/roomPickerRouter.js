@@ -123,23 +123,17 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', managerAuth.checkLogin, (req, res) => {
+router.put('/:id', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
+    try {
+        var sql = "UPDATE room_picker SET ";
+        for(key in req.body)
+            sql += ` ${key} = ?, `;
+        sql = sql.substr(0, sql.length - 2);
+        sql += " WHERE id=? "
 
-    var sql = "UPDATE room_picker SET ";
-    for(key in req.body)
-        sql += ` ${key} = ?, `;
-    sql = sql.substr(0, sql.length - 2);
-    sql += " WHERE id=? "
-
-    dbConnection.query(sql, [...Object.values(req.body), req.params.id], (err, rows) => {
-        if(err)
-            return res.status(400).json({
-                code: 4,
-                msg: msg[4],
-                err
-            });
-        if(!rows.affectedRows)
+        var [results] = await dbPromiseConnection.query(sql, [...Object.values(req.body), req.params.id]);
+        if(!results.affectedRows)
             return res.status(200).json({
                 code: 2,
                 msg: msg[2],
@@ -150,7 +144,14 @@ router.put('/:id', managerAuth.checkLogin, (req, res) => {
             msg: "success",
             data: req.body,
         });
-    });
+    } catch(err) {
+        console.log(err)
+        return res.status(400).json({
+            code: 4,
+            msg: msg[4],
+            err
+        });
+    }
 });
 
 router.delete('/:id', managerAuth.checkLogin, async (req, res) => {
