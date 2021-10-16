@@ -1,3 +1,4 @@
+import { loadingCycle } from "@/utils/loading.js";
 import {
   fetchUserInfo,
   fetchMovingReport,
@@ -107,7 +108,7 @@ const actions = {
           commit("setLoading", false);
           clearInterval(timer);
         }
-      }, 1000);
+      }, loadingCycle);
       return data;
     } catch (error) {
       console.log(error);

@@ -1,3 +1,4 @@
+import { loadingCycle } from "@/utils/loading.js";
 import { fetchRoomInfo, createTimeTable, fetchTimeTable } from "@/api/index.js";
 
 const state = {
@@ -69,7 +70,7 @@ const actions = {
           commit("setLoading", false);
           clearInterval(timer);
         }
-      }, 1000);
+      }, loadingCycle);
       return data;
     } catch (error) {
       console.log(error);
