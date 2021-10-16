@@ -11,8 +11,8 @@ function nowDateTime() {
 router.post('/', managerAuth.checkLogin, async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
-        var sql = "INSERT INTO room_picker VALUE (NULL, ?, ?, ?, ?, ?)";
-        var [result] = await dbPromiseConnection.query(sql, [req.body.x, req.body.y, req.body.size, req.body.name, req.body.beacon_id]);
+        var sql = "INSERT INTO room_picker VALUE (NULL, ?, ?, ?, NULL, ?)";
+        var [result] = await dbPromiseConnection.query(sql, [req.body.x, req.body.y, req.body.size, req.body.beacon_id]);
         
         return res.status(201).json({
             code: 1,
