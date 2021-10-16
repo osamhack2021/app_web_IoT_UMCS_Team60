@@ -22,8 +22,6 @@ class UserSocketClient extends GetxService {
       .setQuery({'token' :'Bearer $token'})  
       .build()
     ));
-    debugPrint("Socket on");
-    debugPrint("token : $token");
     socket.connect();
 
     socket.onConnect((_) {});

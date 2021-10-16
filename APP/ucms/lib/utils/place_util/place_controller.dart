@@ -43,7 +43,7 @@ class PlaceController extends GetxController {
   }
 
   Future<List<DoomRoom>> doomRoomAllInfo() async{
-    final jsonList = await repository.doomAll();
+    final jsonList = await repository.doomRoomAll();
     List<DoomRoom> doomRoomList =[];
 
     for(Map<String,dynamic> json in jsonList) {doomRoomList.add(DoomRoom.fromJson(json));}
@@ -53,7 +53,7 @@ class PlaceController extends GetxController {
 
   
   Future<DoomRoom> doomRoomInfo(int id) async{
-    final json = await repository.doom(id);
+    final json = await repository.doomRoom(id);
 
     return DoomRoom.fromJson(json);
   }
@@ -101,12 +101,13 @@ class PlaceController extends GetxController {
     
     for(Position p in pos) {
       for(int i=0;i<list.length;i++) {
-        if(list[i].place.beaconId==p.beaconId){
+        if(list[i].place.name==p.name){
           list[i].list.add(p);
           break;
         }
       }
     }
+    //5. 아무도 없는 곳 떨구기?
     
      return list;
   }

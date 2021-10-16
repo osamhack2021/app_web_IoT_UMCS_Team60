@@ -29,12 +29,12 @@ import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserMain extends StatefulWidget {
-  UserMain({Key? key, this.location, this.state, this.positions})
+  UserMain({Key? key, required this.location, required this.state, this.positions})
       : super(key: key);
 
   String? location = "location uninitialized";
   String? state = "state uninitialized";
-  List<PositionList>? positions = [];
+  List<PositionList>? positions;
   @override
   State<UserMain> createState() => _UserMainState();
 }
@@ -44,9 +44,10 @@ class _UserMainState extends State<UserMain> {
   UserController u = Get.find<UserController>();
   BackgroundManager backMan = Get.find<BackgroundManager>();
   PlaceController p = Get.find<PlaceController>();
-
+  List<ExpanItem> expanItems=[];
   int selectedIndex = 1;
   bool firstSnack = true;
+  ScrollController scrollCon = ScrollController();
 
   @override
   void initState() {
@@ -57,8 +58,9 @@ class _UserMainState extends State<UserMain> {
     var beaconResult = beaconMan.beaconResult;
     int min15 = 900;
 
+
     beaconMan.startListeningBeacons();
-    Timer.periodic(const Duration(seconds: 2), (timer) {
+    Timer.periodic(const Duration(minutes: 2), (timer) {
       if (min15 >= 0) {
         socketClient.getIn(
             macAddress: beaconResult.macAddress,
@@ -67,6 +69,11 @@ class _UserMainState extends State<UserMain> {
       } else {
         timer.cancel();
       }
+    });
+
+     expanItems=
+        List<ExpanItem>.generate(widget.positions!.length, (index) {
+      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTiles());
     });
   }
 
@@ -90,14 +97,10 @@ class _UserMainState extends State<UserMain> {
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
         GlobalKey<RefreshIndicatorState>();
 
-    List<ExpanItem> expanItems =
-        List<ExpanItem>.generate(widget.positions!.length, (index) {
-      //TODO : status quo
-      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTile());
-    });
+    
 
     List<Widget> widgetOptions =
-        _buildPages(widget.positions!, expanItems, assembleVisible, name);
+        _buildPages(widget.positions!, expanItems, assembleVisible, name, scrollCon);
 
     return MaterialApp(
       home: KScreen(
@@ -116,7 +119,7 @@ class _UserMainState extends State<UserMain> {
               widget.positions = await p.positionAllInfo();
 
               widgetOptions = _buildPages(
-                  widget.positions!, expanItems, assembleVisible, name);
+                  widget.positions!, expanItems, assembleVisible, name, scrollCon);
             });
           },
           child: widgetOptions.elementAt(selectedIndex),
@@ -151,7 +154,20 @@ class _UserMainState extends State<UserMain> {
     });
   }
 
-  List<Widget> _buildPages(List<PositionList> positions, List<ExpanItem> expanItems, bool assembleVisible, String name) {
+  void _scrollToSelectedContent(bool isExpanded, double previousOffset, int index, GlobalKey myKey) {
+    final keyContext = myKey.currentContext;
+
+    if (keyContext != null) {
+      // make sure that your widget is visible
+      final box = keyContext.findRenderObject() as RenderBox;
+      scrollCon.animateTo(isExpanded ? (box.size.height * index+200) : previousOffset,
+          duration: const Duration(milliseconds: 500), curve: Curves.linear);
+    }
+  }
+
+  List<Widget> _buildPages(List<PositionList> positions, List<ExpanItem> expanItems, bool assembleVisible, String name, ScrollController scrollCon) {
+    final GlobalKey expansionPanelKey = GlobalKey();
+
     return <Widget>[
       ListView(
         children: [
@@ -161,6 +177,7 @@ class _UserMainState extends State<UserMain> {
           quote("장소 갯수 : ${positions.length}"),
           const SizedBox(height: 20),
           ExpansionPanelList(
+            key : expansionPanelKey,
             animationDuration: const Duration(milliseconds: 2000),
             children: [
               ...List<ExpansionPanel>.generate(positions.length, (index) {
@@ -168,12 +185,12 @@ class _UserMainState extends State<UserMain> {
                   headerBuilder: (context, isExpanded) {
                     return ListTile(
                       title: Text(
-                        positions[index].place.name,
+                        "${positions[index].place.name} (${positions[index].list.length} 명)",
                         style: body(),
                       ),
                     );
                   },
-                  body: positions[index].toListTile(),
+                  body: positions[index].toListTiles(),
                   isExpanded: expanItems[index].expanded,
                   canTapOnHeader: true,
                 );
@@ -183,6 +200,10 @@ class _UserMainState extends State<UserMain> {
             expansionCallback: (panelIndex, isExpanded) {
               setState(() {
                 expanItems[panelIndex].expanded = !isExpanded;
+                //TODO : previousOffset 구해서 넣어줘야 함. test 중
+                double previousOffset = 0.0;
+                if (isExpanded) previousOffset = scrollCon.offset;
+                _scrollToSelectedContent(expanItems[panelIndex].expanded,previousOffset,panelIndex, expansionPanelKey);
               });
             },
           ),

@@ -10,8 +10,13 @@ class PositionList extends GetxService {
   List<Position> list;
   Place place;
 
-  ListTile toListTile() {
-    //TODO : implement
-    return const ListTile();
+  ListView toListTiles() {
+    List<ListTile> posTile =[];
+    for(Position p in list) {
+      posTile.add(p.toListTile());
+    }
+    return ListView (
+      children: [...posTile],
+    );
   }
 }

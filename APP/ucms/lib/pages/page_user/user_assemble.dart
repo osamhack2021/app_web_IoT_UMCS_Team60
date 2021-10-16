@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
@@ -59,7 +58,7 @@ class _UserAssembleState extends State<UserAssemble> {
                   UserSocketClient socket = Get.find<UserSocketClient>();
                   socket.cannotAssemble(description: cannot.text.trim());
 
-                  Get.to(()=> UserMain());
+                  Get.back();
                 }
               },label:labelText),
               footer(),

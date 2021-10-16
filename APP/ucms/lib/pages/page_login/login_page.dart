@@ -42,9 +42,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var prefs = GetStorage();
+    prefs.writeIfNull("state", "정상");
+                      
+    
     //이미 로그인 되어있을 시
     if (u.isLogin.value)  {
-      Get.off(UserMain(
+      Get.offAll(UserMain(
           location: prefs.read("location") ?? "adsf",
           state: prefs.read("state") ?? "asdfafsd",
       ));
@@ -92,11 +95,9 @@ class LoginPage extends StatelessWidget {
                       positions = await p.positionAllInfo();
                       bool isCohort = await c.cohortStatusNow();
 
-                      debugPrint("여기까지");
-
                       if(isCohort) {
                         Snack.top("로그인 시도", "성공");
-                        Get.to(CohortMain(
+                        Get.offAll(CohortMain(
                           location: store.read("recent_place_name") ??
                               "error in LoginPage",
                           state: store.read("state") ?? "",
@@ -105,7 +106,7 @@ class LoginPage extends StatelessWidget {
                       }
                       else {
                         Snack.top("로그인 시도", "성공");
-                        Get.to(UserMain( 
+                        Get.offAll(UserMain( 
                           location: store.read("recent_place_name") ??
                               "error in LoginPage",
                           state: store.read("state") ?? "",

@@ -101,8 +101,7 @@ class _CohortMainState extends State<CohortMain> {
     
     List<ExpanItem> expanItems =
         List<ExpanItem>.generate(widget.positions!.length, (index) {
-      //TODO : status quo
-      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTile());
+      return ExpanItem(expanded: false, header: widget.positions![index].place.name, body : widget.positions![index].toListTiles());
     });
     
     List<Widget> widgetOptions =_buildPages(c, positions : widget.positions!, expanItems : expanItems, 
@@ -186,6 +185,7 @@ class _CohortMainState extends State<CohortMain> {
           quote("갯수 : ${positions.length}"),
           const SizedBox(height: 20),
           ExpansionPanelList(
+            //TODO : ExpansionTile 로 공간 종류마다 나누기.
             animationDuration: const Duration(milliseconds: 2000),
             children: [
               ...List<ExpansionPanel>.generate(positions.length, (index) {
@@ -193,7 +193,7 @@ class _CohortMainState extends State<CohortMain> {
                   headerBuilder: (context, isExpanded) {
                     return ListTile(
                       title: Text(
-                        positions[index].place.name,
+                        "${positions[index].place.name} (${positions[index].list.length} 명)",
                         style: body(),
                       ),
                     );
@@ -319,7 +319,6 @@ class _CohortMainState extends State<CohortMain> {
                 await u.currentPosition(store.read("tag"));
                 positions = await p.positionAllInfo();
 
-                Snack.top("로그인 시도", "성공");
                 Get.to(UserMain(
                   location: store.read("recent_place_name") ??
                       "error in LoginPage",
