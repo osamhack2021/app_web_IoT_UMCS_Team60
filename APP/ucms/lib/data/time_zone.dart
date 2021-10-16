@@ -1,3 +1,5 @@
+import 'package:ucms/utils/timestring_to_datetime.dart';
+
 class TimeZone {
   final int id;
   final int doomId;
@@ -11,8 +13,8 @@ class TimeZone {
         doomId = json["doom_id"],
         roomId = json["room_id"],
         facilityId = json["facility_id"],
-        startTime =DateTime.parse(json["start_time"]),
-        endTime =DateTime.parse(json["end_time"]);
+        startTime =TimestringToDateTime.encode(json["start_time"]??"1970-01-01T12:34:56.000Z"),
+        endTime =TimestringToDateTime.encode(json["end_time"]??"1970-01-01T12:34:56.000Z");
   
   
   Map<String, dynamic> toJson() => {

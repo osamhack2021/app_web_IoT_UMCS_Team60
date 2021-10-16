@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ucms/theme/color_theme.dart';
-import 'package:ucms/theme/text_theme.dart';
+import 'package:ucms/theme/text_theme.dart' as text_theme;
 
-title(content) => Text(content, style: h1(), textAlign: TextAlign.center);
-quote(content) => Text(content, style: body(), textAlign: TextAlign.center);
+title(content) => Text(content, style: text_theme.h1(), textAlign: TextAlign.center);
+quote(content) => Text(content, style: text_theme.body(), textAlign: TextAlign.center);
+quoteLeft(content) => Text(content, style: text_theme.body(), textAlign: TextAlign.left);
+small(content) => Text(content, style: text_theme.small(), textAlign: TextAlign.center);
 
 class KTextFormField extends StatelessWidget {
   KTextFormField({Key? key, required this.hint, required this.controller, this.obscureText=false, required this.validator, this.type=TextInputType.text, this.isCohort=false})

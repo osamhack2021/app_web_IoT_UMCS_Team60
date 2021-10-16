@@ -154,22 +154,17 @@ class _UserMainState extends State<UserMain> {
     });
   }
 
-  void _scrollToSelectedContent(bool isExpanded, double previousOffset, int index, GlobalKey myKey) {
-    final keyContext = myKey.currentContext;
+  void _scrollToSelectedContent(bool isExpanded, double previousOffset, int index) {
 
-    if (keyContext != null) {
-      // make sure that your widget is visible
-      final box = keyContext.findRenderObject() as RenderBox;
-      scrollCon.animateTo(isExpanded ? (box.size.height * index+200) : previousOffset,
+    scrollCon.animateTo(isExpanded ? (100.0 * index) : previousOffset,
           duration: const Duration(milliseconds: 500), curve: Curves.linear);
-    }
   }
 
   List<Widget> _buildPages(List<PositionList> positions, List<ExpanItem> expanItems, bool assembleVisible, String name, ScrollController scrollCon) {
-    final GlobalKey expansionPanelKey = GlobalKey();
 
     return <Widget>[
       ListView(
+        controller: scrollCon,
         children: [
           topMargin(),
           title("모니터링"),
@@ -177,7 +172,6 @@ class _UserMainState extends State<UserMain> {
           quote("장소 갯수 : ${positions.length}"),
           const SizedBox(height: 20),
           ExpansionPanelList(
-            key : expansionPanelKey,
             animationDuration: const Duration(milliseconds: 2000),
             children: [
               ...List<ExpansionPanel>.generate(positions.length, (index) {
@@ -200,10 +194,7 @@ class _UserMainState extends State<UserMain> {
             expansionCallback: (panelIndex, isExpanded) {
               setState(() {
                 expanItems[panelIndex].expanded = !isExpanded;
-                //TODO : previousOffset 구해서 넣어줘야 함. test 중
-                double previousOffset = 0.0;
-                if (isExpanded) previousOffset = scrollCon.offset;
-                _scrollToSelectedContent(expanItems[panelIndex].expanded,previousOffset,panelIndex, expansionPanelKey);
+                _scrollToSelectedContent(expanItems[panelIndex].expanded,scrollCon.offset,panelIndex);
               });
             },
           ),

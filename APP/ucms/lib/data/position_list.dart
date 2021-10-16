@@ -10,12 +10,12 @@ class PositionList extends GetxService {
   List<Position> list;
   Place place;
 
-  ListView toListTiles() {
+  Column toListTiles() {
     List<ListTile> posTile =[];
     for(Position p in list) {
       posTile.add(p.toListTile());
     }
-    return ListView (
+    return Column (
       children: [...posTile],
     );
   }
