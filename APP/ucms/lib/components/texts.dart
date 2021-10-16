@@ -28,7 +28,40 @@ class KTextFormField extends StatelessWidget {
         style: GoogleFonts.nanumGothic(color : isCohort?warningColor():mainTextColor()),
         controller: controller,
         obscureText: obscureText,
-        keyboardType: TextInputType.multiline,
+        decoration: InputDecoration(
+          hintText: hint,
+          enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: isCohort?warningColor():enabledColor()),   
+                      ),  
+              focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: isCohort?warningColor():selectedColor()),
+                   ),  
+        ),
+        textAlign: TextAlign.right,
+        validator: validator,
+    );
+  }
+}
+
+
+class KTextFormFieldMultiLine extends StatelessWidget {
+  KTextFormFieldMultiLine({Key? key, required this.hint, required this.controller, this.obscureText=false, required this.validator, this.type=TextInputType.text, this.isCohort=false})
+      : super(key: key);
+
+  final String hint;
+  TextFormField field = TextFormField();
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+  final TextInputType type;
+  bool obscureText;
+  bool isCohort;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        style: GoogleFonts.nanumGothic(color : isCohort?warningColor():mainTextColor()),
+        controller: controller,
+        //TODO : input type multiline
         maxLines: null,
         decoration: InputDecoration(
           hintText: hint,

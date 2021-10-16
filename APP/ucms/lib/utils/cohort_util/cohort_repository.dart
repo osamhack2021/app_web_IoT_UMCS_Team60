@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:get/get.dart';
+import 'package:ucms/data/dto/server_multi_resp_dto.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/cohort_util/cohort_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
@@ -35,7 +36,6 @@ class CohortRepository {
       Map<String,dynamic> data = serverRespDto.data;
       return data;
     } else {
-      debugPrint("someThing is wrong");
       return {};
     }
   }
@@ -46,7 +46,7 @@ class CohortRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, convertBody["data"]);
 
 
     if (serverRespDto.code == 1) {

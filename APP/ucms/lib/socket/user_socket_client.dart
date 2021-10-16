@@ -45,7 +45,7 @@ class UserSocketClient extends GetxService {
       
       prefs.write("assemble_location", json["beacon_id"]);
       prefs.write("assemble_visible",true);
-      debugPrint("assemble");
+      debugPrint("assemble arrived");
       Get.to(UserAssemble(location: prefs.read("assemble_location")));
       Snack.warnTop("소집 지시", "소집 지시가 내려왔습니다.");
     });

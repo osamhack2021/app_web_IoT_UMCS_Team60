@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/texts.dart' as text;
-import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/timestring_to_datetime.dart';
 
 class Position {
@@ -49,8 +48,8 @@ class Position {
 
     store.write("recent_user_tag", r.userTag);
     store.write("recent_beacon_id", r.userName);
-    store.write("recent_in_time", r.inTime);
-    store.write("recent_out_time", r.outTime);
+    store.write("recent_in_time", r.inTime.toString());
+    store.write("recent_out_time", r.outTime.toString());
     store.write("recent_doom_id", r.doomId);
     store.write("recent_user_name", r.userName);
     store.write("recent_user_rank", r.userRank);
@@ -63,9 +62,9 @@ class Position {
     var store = GetStorage();
     updatePrefs(Position(
         userTag : store.read("recent_user_tag"),
-        beaconId :  store.read("recent_beacon_id"),
-        inTime :store.read("recent_in_time"),
-        outTime :store.read("recent_out_time"),
+        beaconId : store.read("recent_beacon_id"),
+        inTime : TimestringToDateTime.encode(store.read("recent_in_time")),
+        outTime :TimestringToDateTime.encode(store.read("recent_out_time")),
         doomId : store.read("recent_doom_id"),
         userName :store.read("recent_user_name"),
         userRank :store.read("recent_user_rank"),

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ucms/background/background_manager.dart';
 import 'package:ucms/data/user.dart';
-import 'package:ucms/notification/noti_test_page.dart';
 
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/pages/page_login/register_page.dart';
