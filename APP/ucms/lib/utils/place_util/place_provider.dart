@@ -22,4 +22,5 @@ class PlaceProvider extends GetConnect {
   Future<Response> positionAllInfo() => get("$restAPIHost/current_position", headers: {"charset" : "utf-8"});
   Future<Response> positionInfo(int id) => get("$restAPIHost/current_position/$id", headers: {"charset" : "utf-8"});
 
+
 }

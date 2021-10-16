@@ -218,7 +218,33 @@ class _CohortMainState extends State<CohortMain> {
           topMargin(),
           title("공공시설 사용 시간표 조회"),
           quote("사용할 수 있는 시간을 파악합니다"),
-          //TODO : implement
+          ExpansionPanelList(
+            //TODO : ExpansionTile 로 공간 종류마다 나누기.
+            animationDuration: const Duration(milliseconds: 2000),
+            children: [
+              ...List<ExpansionPanel>.generate(positions.length, (index) {
+                return ExpansionPanel(
+                  headerBuilder: (context, isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        "${positions[index].place.name} (${positions[index].list.length} 명)",
+                        style: body(),
+                      ),
+                    );
+                  },
+                  body: positions[index].toListTiles(),
+                  isExpanded: expanItems[index].expanded,
+                  canTapOnHeader: true,
+                );
+              }),
+            ],
+            dividerColor: Colors.grey,
+            expansionCallback: (panelIndex, isExpanded) {
+              setState(() {
+                expanItems[panelIndex].expanded = !isExpanded;
+              });
+            },
+          ),
           footer(),
         ],
       ),
