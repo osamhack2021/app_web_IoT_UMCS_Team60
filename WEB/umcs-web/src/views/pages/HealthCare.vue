@@ -1,75 +1,83 @@
 <template>
   <v-container class="mt-5">
-    <v-row class="fill-height">
-      <!-- Calendar -->
-      <v-col cols="4">
-        <v-date-picker
-          v-model="picker"
-          elevation="15"
-          full-width
-          show-adjacent-months
-          class="pb-5"
-          @change="updateTable"
-        />
-      </v-col>
-
-      <v-spacer />
-
-      <v-col cols="7">
-        <v-card>
-          <!-- Search Bar -->
-          <v-card-title>
-            <v-text-field
-              v-model="searchInput"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-              clearable
+    <v-row>
+      <v-col
+        cols="12"
+        xl="8"
+        class="mx-auto"
+      >
+        <v-row class="fill-height">
+          <!-- Calendar -->
+          <v-col cols="4">
+            <v-date-picker
+              v-model="picker"
+              elevation="15"
+              full-width
+              show-adjacent-months
+              class="pb-5"
+              @change="updateTable"
             />
-          </v-card-title>
+          </v-col>
 
-          <!-- Data Table -->
-          <v-data-table
-            :headers="tableHeaders"
-            :items="tableDatas"
-            item-key="tag"
-            :sort-by="['reportedTime']"
-            :sort-desc="[true]"
-            :search="searchInput"
-            show-expand
-            hide-default-footer
-            :items-per-page="$store.state.ITEMS_PER_PAGE"
-            :page.sync="page"
-            class="elavation-1"
-          >
-            <!-- Slot:item.name - user profile routing -->
-            <template v-slot:[`item.name`]="{ item }">
-              <router-link
-                :to="`/user/${item.tag}`"
-                class="info--text text-decoration-none"
+          <v-spacer />
+
+          <v-col cols="7">
+            <v-card>
+              <!-- Search Bar -->
+              <v-card-title>
+                <v-text-field
+                  v-model="searchInput"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                  clearable
+                />
+              </v-card-title>
+
+              <!-- Data Table -->
+              <v-data-table
+                :headers="tableHeaders"
+                :items="tableDatas"
+                item-key="tag"
+                :sort-by="['reportedTime']"
+                :sort-desc="[true]"
+                :search="searchInput"
+                show-expand
+                hide-default-footer
+                :items-per-page="$store.state.ITEMS_PER_PAGE"
+                :page.sync="page"
+                class="elavation-1"
               >
-                {{ item.name }}
-              </router-link>
-            </template>
+                <!-- Slot:item.name - user profile routing -->
+                <template v-slot:[`item.name`]="{ item }">
+                  <router-link
+                    :to="`/user/${item.tag}`"
+                    class="info--text text-decoration-none"
+                  >
+                    {{ item.name }}
+                  </router-link>
+                </template>
 
-            <!-- Slot:expanded.item -->
-            <template v-slot:expanded-item="{ headers, item }">
-              <td :colspan="headers.length">
-                {{ item.details }}
-              </td>
-            </template>
-          </v-data-table>
+                <!-- Slot:expanded.item -->
+                <template v-slot:expanded-item="{ headers, item }">
+                  <td :colspan="headers.length">
+                    {{ item.details }}
+                  </td>
+                </template>
+              </v-data-table>
 
-          <!-- Pagination -->
-          <div class="text-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="pageCount"
-              :total-visible="$store.state.TOTAL_VISIBLE"
-            />
-          </div>
-        </v-card>
+              <!-- Pagination -->
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="page"
+                  :length="pageCount"
+                  :total-visible="$store.state.TOTAL_VISIBLE"
+                />
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
