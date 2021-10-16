@@ -42,7 +42,6 @@ class UserMain extends StatefulWidget {
 class _UserMainState extends State<UserMain> {
   final store = GetStorage();
   UserController u = Get.find<UserController>();
-  BackgroundManager backMan = Get.find<BackgroundManager>();
   PlaceController p = Get.find<PlaceController>();
   List<ExpanItem> expanItems=[];
   int selectedIndex = 1;
@@ -89,8 +88,6 @@ class _UserMainState extends State<UserMain> {
     widget.state = store.read("state");
     if (firstSnack) Snack.top("평시 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
-    
-    backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
     bool assembleVisible = store.read("assemble_visible") ?? false;
 
