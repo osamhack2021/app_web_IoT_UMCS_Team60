@@ -1,98 +1,106 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title>
-        <v-row>
-          <v-col cols="6">
-            <!-- Search Bar -->
-            <v-text-field
-              v-model="searchInput"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-              clearable
-            />
-          </v-col>
-          <v-spacer />
-          <v-btn
-            class="mt-5"
-            @click="allAccept()"
-          >
-            선택된 항목 모두 승인
-          </v-btn>
-          <v-btn
-            class="mt-5 mx-4"
-            @click="allReject()"
-          >
-            선택된 항목 모두 거절
-          </v-btn>
-        </v-row>
-      </v-card-title>
-
-      <!-- Data Table -->
-      <v-data-table
-        v-model="selectedItems"
-        show-select
-        :headers="tableHeaders"
-        :items="tableDatas"
-        item-key="id"
-        :sort-by="['reportedTime']"
-        :sort-desc="[true]"
-        :search="searchInput"
-        show-expand
-        :loading="isLoading"
-        hide-default-footer
-        :items-per-page="$store.state.ITEMS_PER_PAGE"
-        :page.sync="page"
-        class="elavation-1"
+    <v-row>
+      <v-col
+        cols="12"
+        xl="8"
+        class="mx-auto"
       >
-        <!-- Slot:item.name - user profile routing -->
-        <template v-slot:[`item.name`]="{ item }">
-          <router-link
-            :to="`/user/${item.tag}`"
-            class="info--text text-decoration-none"
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col cols="6">
+                <!-- Search Bar -->
+                <v-text-field
+                  v-model="searchInput"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                  clearable
+                />
+              </v-col>
+              <v-spacer />
+              <v-btn
+                class="mt-5"
+                @click="allAccept()"
+              >
+                선택된 항목 모두 승인
+              </v-btn>
+              <v-btn
+                class="mt-5 mx-4"
+                @click="allReject()"
+              >
+                선택된 항목 모두 거절
+              </v-btn>
+            </v-row>
+          </v-card-title>
+
+          <!-- Data Table -->
+          <v-data-table
+            v-model="selectedItems"
+            show-select
+            :headers="tableHeaders"
+            :items="tableDatas"
+            item-key="id"
+            :sort-by="['reportedTime']"
+            :sort-desc="[true]"
+            :search="searchInput"
+            show-expand
+            :loading="isLoading"
+            hide-default-footer
+            :items-per-page="$store.state.ITEMS_PER_PAGE"
+            :page.sync="page"
+            class="elavation-1"
           >
-            {{ item.name }}
-          </router-link>
-        </template>
+            <!-- Slot:item.name - user profile routing -->
+            <template v-slot:[`item.name`]="{ item }">
+              <router-link
+                :to="`/user/${item.tag}`"
+                class="info--text text-decoration-none"
+              >
+                {{ item.name }}
+              </router-link>
+            </template>
 
-        <!-- Slot:item.details - Hide details -->
-        <template v-slot:[`item.details`]>
-          <p>...</p>
-        </template>
+            <!-- Slot:item.details - Hide details -->
+            <template v-slot:[`item.details`]>
+              <p>...</p>
+            </template>
 
-        <!-- Slot:item.accept - Acception Action -->
-        <template v-slot:[`item.accept`]="{ item }">
-          <v-icon @click="acceptReport(item.id)">
-            mdi-check-bold
-          </v-icon>
-        </template>
+            <!-- Slot:item.accept - Acception Action -->
+            <template v-slot:[`item.accept`]="{ item }">
+              <v-icon @click="acceptReport(item.id)">
+                mdi-check-bold
+              </v-icon>
+            </template>
 
-        <!-- Slot:item.reject - Rejection Action -->
-        <template v-slot:[`item.reject`]="{ item }">
-          <v-icon @click="rejectReport(item.id)">
-            mdi-close-thick
-          </v-icon>
-        </template>
+            <!-- Slot:item.reject - Rejection Action -->
+            <template v-slot:[`item.reject`]="{ item }">
+              <v-icon @click="rejectReport(item.id)">
+                mdi-close-thick
+              </v-icon>
+            </template>
 
-        <!-- Slot:expanded.item -->
-        <template v-slot:expanded-item="{ headers, item }">
-          <td :colspan="headers.length">
-            {{ item.details }}
-          </td>
-        </template>
-      </v-data-table>
+            <!-- Slot:expanded.item -->
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length">
+                {{ item.details }}
+              </td>
+            </template>
+          </v-data-table>
 
-      <!-- Pagination -->
-      <div class="text-center pt-2">
-        <v-pagination
-          v-model="page"
-          :length="pageCount"
-          :total-visible="$store.state.TOTAL_VISIBLE"
-        />
-      </div>
-    </v-card>
+          <!-- Pagination -->
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+              :total-visible="$store.state.TOTAL_VISIBLE"
+            />
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -174,17 +182,17 @@ export default {
       this.deleteUsingReport(id);
     },
     allAccept() {
-      this.selectedItems.forEach(elem => {
+      this.selectedItems.forEach((elem) => {
         this.acceptReport(elem.id);
       });
       this.selectedItems = [];
     },
     allReject() {
-      this.selectedItems.forEach(elem => {
+      this.selectedItems.forEach((elem) => {
         this.rejectReport(elem.id);
       });
       this.selectedItems = [];
-    }
+    },
   },
 };
 </script>
