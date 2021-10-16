@@ -14,6 +14,9 @@ function logoutAdmin() {
 function fetchCurrentSituation() {
   return axios.get(`${BASE_URL}cohort_status/now`);
 }
+function fetchAdmins() {
+  return axios.get(`${BASE_URL}manager`);
+}
 function fetchAdminInfo(tag) {
   return axios.get(`${BASE_URL}manager/${tag}`);
 }
@@ -22,6 +25,9 @@ function fetchUsers() {
 }
 function fetchUserInfo(tag) {
   return axios.get(`${BASE_URL}user/${tag}`);
+}
+function fetchDoomList() {
+  return axios.get(`${BASE_URL}doom`);
 }
 function fetchFacilityList() {
   return axios.get(`${BASE_URL}watchman/myCharge/details`);
@@ -56,7 +62,7 @@ function fetchUsingReport_Id(id) {
 
 // Facility Time Schedule
 function createTimeTable(tableData) {
-  return axios.post(`${BASE_URL}timetable`,tableData);
+  return axios.post(`${BASE_URL}timetable`, tableData);
 }
 function fetchTimeTable(idData) {
   return axios.get(
@@ -70,20 +76,34 @@ function fetchHealthReport(date) {
 }
 
 // Manage Admin
-function fetchAdminInfo_month(dateString) {
+function fetchAdminDuty_month(dateString) {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = date.getMonth()+1;
   return axios.get(`${BASE_URL}watchman/search?year=${year}&month=${month}`);
+}
+function addDuty(data) {
+  const obj = {
+    manager_tags: data.admin,
+    charge_doom: data.doom,
+    responsible_date: data.date,
+  };
+  console.log("obj", obj);
+  return axios.post(`${BASE_URL}watchman`, obj);
+}
+function deleteDuty(id) {
+  return axios.delete(`${BASE_URL}watchman/${id}`);
 }
 
 export {
   loginAdmin,
   logoutAdmin,
   fetchCurrentSituation,
+  fetchAdmins,
   fetchAdminInfo,
   fetchUsers,
   fetchUserInfo,
+  fetchDoomList,
   fetchFacilityList,
   fetchRoomInfo,
   fetchCurrentLocation_BeaconId,
@@ -95,5 +115,7 @@ export {
   createTimeTable,
   fetchTimeTable,
   fetchHealthReport,
-  fetchAdminInfo_month,
+  fetchAdminDuty_month,
+  addDuty,
+  deleteDuty,
 };
