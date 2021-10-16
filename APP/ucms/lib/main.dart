@@ -27,12 +27,6 @@ void main() async {
   
   Get.put(BeaconManager());
 
-  var backMan = Get.put(BackgroundManager());
-  backMan.man.initialize(
-    backMan.callbackDispatcher,
-      isInDebugMode: true 
-  );
-
   var notiMan = Get.put(NotiManager());
   notiMan.initState();
    

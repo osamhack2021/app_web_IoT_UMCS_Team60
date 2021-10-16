@@ -44,7 +44,6 @@ class CohortMain extends StatefulWidget {
 class _CohortMainState extends State<CohortMain> {
   final store = GetStorage();
   UserController u = Get.find<UserController>();
-  BackgroundManager backMan = Get.find<BackgroundManager>();
   PlaceController p = Get.find<PlaceController>();
   CohortController c = Get.isRegistered<CohortController>()? Get.find<CohortController>():Get.put(CohortController());
   
@@ -98,8 +97,6 @@ class _CohortMainState extends State<CohortMain> {
     widget.state = store.read("state");
     if (firstSnack) Snack.warnTop("코호트 상황", "$name 님으로 로그인되었습니다.");
     firstSnack = false;
-
-    backMan.man.registerPeriodicTask("1", "refresh_beacon");
 
     bool assembleVisible = store.read("assemble_visible") ?? false;
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
