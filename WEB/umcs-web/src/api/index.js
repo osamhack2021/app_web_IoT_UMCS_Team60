@@ -35,13 +35,25 @@ function fetchFacilityList() {
 function fetchRoomInfo(id) {
   return axios.get(`${BASE_URL}doomroom/${id}`);
 }
-
-// Monitoring
 function fetchCurrentLocation_Tag(tag) {
   return axios.get(`${BASE_URL}current_position/search?user_tag=${tag}`);
 }
 function fetchCurrentLocation_BeaconId(beaconId) {
   return axios.get(`${BASE_URL}current_position/search?beacon_id=${beaconId}`);
+}
+function deleteFacility(id) {
+  return axios.delete(`${BASE_URL}doomfacility/${id}`);
+}
+
+// Monitoring
+function fetchRoomPickerList() {
+  return axios.get(`${BASE_URL}room_picker`);
+}
+function createRoomPicker(data) {
+  return axios.post(`${BASE_URL}room_picker`, data);
+}
+function deleteRoomPicker(id) {
+  return axios.delete(`${BASE_URL}room_picker/${id}`);
 }
 
 // Moving Report
@@ -75,6 +87,11 @@ function fetchHealthReport(date) {
   return axios.get(`${BASE_URL}anomaly/search?reported_date=${date}`);
 }
 
+// Manage Army
+function createFacility(data) {
+  return axios.post(`${BASE_URL}doomfacility`, data);
+}
+
 // Manage Admin
 function fetchAdminDuty_month(dateString) {
   const date = new Date(dateString);
@@ -96,6 +113,7 @@ function deleteDuty(id) {
 }
 
 export {
+  deleteFacility,
   loginAdmin,
   logoutAdmin,
   fetchCurrentSituation,
@@ -108,6 +126,9 @@ export {
   fetchRoomInfo,
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,
+  fetchRoomPickerList,
+  createRoomPicker,
+  deleteRoomPicker,
   fetchMovingReport,
   fetchMovingReport_Id,
   fetchUsingReport,
@@ -115,6 +136,7 @@ export {
   createTimeTable,
   fetchTimeTable,
   fetchHealthReport,
+  createFacility,
   fetchAdminDuty_month,
   addDuty,
   deleteDuty,

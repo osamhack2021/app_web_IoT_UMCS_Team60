@@ -7,14 +7,14 @@
         class="mx-auto"
       >
         <v-row class="mt-5">
-          <v-col cols="9">
+          <v-col cols="8">
             <div
-              v-for="doom in roomList"
-              :key="doom.doomId"
+              v-for="doom in facilityList"
+              :key="doom.doom_id"
             >
               <v-card>
+                <!-- Dialog for Create Icon -->
                 <v-card-actions>
-                  <!-- Dialog for Create Icon -->
                   <v-dialog
                     v-model="dialog"
                     max-width="600px"
@@ -83,6 +83,7 @@
                   >
                     {{ getEditText }}
                   </v-btn>
+                  ({{ editedX }}, {{ editedY }})
                 </v-card-actions>
               </v-card>
               <!-- v-for 사용하여 나열 -->
@@ -97,52 +98,64 @@
                   {{ floor.name }}
                 </v-card-title>
 
-                <v-img :src="require(`@/assets/doom${doom.doomId}-floor${floor.floor}-drawing.png`)">
-                  <vue-draggable-resizable
-                    v-for="picker in roomPickers[floor.floor-1].items"
-                    :key="picker.beaconId"
-                    :w="50"
-                    :h="50"
-                    :x="picker.x"
-                    :y="picker.y"
-                    :draggable="editMode"
-                    :resizable="false"
-                    class-name="box-content"
-                    @dragging="onDrag"
-                  >
-                    <v-btn
-                      fab
-                      class="info text-body-1 font-weight-medium white--text"
-                      @click="test($event, picker.name, picker.beaconId)"
+                <v-img
+                  :src="
+                    require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
+                  "
+                >
+                  <template v-for="picker in floor.items">
+                    <vue-draggable-resizable
+                      v-if="picker.room_picker"
+                      :key="picker.beacon_id"
+                      :w="50"
+                      :h="50"
+                      :x="picker.room_picker.x"
+                      :y="picker.room_picker.y"
+                      :draggable="editMode"
+                      :resizable="false"
+                      class-name="box-content"
+                      @dragging="onDrag"
                     >
-                      {{ picker.current_count }}
-                    </v-btn>
-                  </vue-draggable-resizable>
+                      <v-btn
+                        fab
+                        small
+                        class="info text-body-1 font-weight-medium white--text"
+                        @click="test($event, picker.name, picker.beacon_id)"
+                      >
+                        {{ picker.current_count }}
+                      </v-btn>
+                    </vue-draggable-resizable>
+                  </template>
                 </v-img>
               </v-card>
             </div>
           </v-col>
 
           <!-- People list -->
-          <v-col cols="3">
+          <v-col cols="4">
             <v-card>
               <v-card-title>
-                {{ focusRoom }}
-
+                {{ focusRoom }} 인원현황
+              </v-card-title>
+              <v-card-text>
+                <!-- Search Bar -->
                 <v-text-field
-                  v-model="searchValue"
+                  v-model="searchInput"
                   append-icon="mdi-magnify"
                   label="Search"
                   single-line
                   hide-details
                   clearable
                 />
-              </v-card-title>
+              </v-card-text>
               <v-data-table
                 :headers="tableHeaders"
-                :items="peopleList"
-                :search="searchValue"
+                :items="tableDatas"
+                :search="searchInput"
+                hide-default-footer
                 :items-per-page="$store.state.ITEMS_PER_PAGE"
+                :page.sync="page"
+                class="elavation-1"
               >
                 <!-- Slot:item.name - user profile routing -->
                 <template v-slot:[`item.name`]="{ item }">
@@ -154,6 +167,14 @@
                   </router-link>
                 </template>
               </v-data-table>
+              <!-- Pagination -->
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="page"
+                  :length="pageCount"
+                  :total-visible="$store.state.TOTAL_VISIBLE"
+                />
+              </div>
             </v-card>
           </v-col>
         </v-row>
@@ -171,7 +192,6 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VueDraggableResizable from "vue-draggable-resizable";
-import { fetchCurrentLocation_BeaconId } from "@/api/index.js";
 
 export default {
   name: "Monitoring",
@@ -195,18 +215,33 @@ export default {
     };
   },
   computed: {
+    ...mapState(["facilityList"]),
     ...mapState("monitoring", [
       "editMode",
       "focusRoom",
       "tableHeaders",
-      "peopleList",
-      "roomList",
-      "roomPickers",
+      "tableDatas",
     ]),
-    ...mapGetters("monitoring", ["getEditText"]),
+    ...mapGetters("monitoring", ["getEditText", "getSearchInput"]),
+    searchInput: {
+      get() {
+        return this.getSearchInput;
+      },
+      set(value) {
+        return this.updateSearchInput(value);
+      },
+    },
+  },
+  created() {
+    console.log(this.facilityList);
   },
   methods: {
-    ...mapMutations("monitoring", ["changeEditMode", "setFocusRoom"]),
+    ...mapMutations("monitoring", [
+      "changeEditMode",
+      "setFocusRoom",
+      "updateSearchInput",
+    ]),
+    ...mapActions("monitoring", ["FETCH_CURRENT_LOCATION_BEACON"]),
     onDrag(x, y) {
       this.editedX = x;
       this.editedY = y;
@@ -221,13 +256,8 @@ export default {
       console.log("beaconId", beaconId);
       this.setFocusRoom(name);
       // beaconId에 해당하는 시설에 있는 인원 목록
-      fetchCurrentLocation_BeaconId(beaconId)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+      this.FETCH_CURRENT_LOCATION_BEACON(beaconId);
     },
   },
 };
 </script>
-
-<style scoped>
-</style>
