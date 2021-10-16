@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/login",
       routes: {
-        "/noti_test" : (context) => const NotiTestPage(),
+      
         "/nav" : (context) => const NavPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),
