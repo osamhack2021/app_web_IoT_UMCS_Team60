@@ -6,6 +6,7 @@ import 'package:ucms/data/places/outside_facility.dart';
 import 'package:ucms/data/places/place.dart';
 import 'package:ucms/data/position.dart';
 import 'package:ucms/data/position_list.dart';
+import 'package:ucms/utils/convert_utf8.dart';
 import 'package:ucms/utils/place_util/place_repository.dart';
 
 class PlaceController extends GetxController {
@@ -81,7 +82,11 @@ class PlaceController extends GetxController {
     // 그 PositionList 를 list 로 정리한다. 
 
     //1.모든 위치정보 가져와 Position 들로 만들기.
-    List<Map<String,dynamic>> l = await repository.positionAll();
+    List<dynamic> temp = await repository.positionAll();
+    List<Map<String,dynamic>> l =[];
+    for(dynamic j in temp) {
+      l.add(convertUtf8ToObject(j));
+    }
 
     List<Position> pos =[];
     for(Map<String,dynamic> json in l) {

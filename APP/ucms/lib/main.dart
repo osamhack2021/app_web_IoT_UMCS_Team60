@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ucms/data/places/place_database.dart';
 import 'package:ucms/data/user.dart';
 
 import 'package:ucms/pages/page_login/login_page.dart';
-import 'package:ucms/pages/page_login/register_page.dart';
-import 'package:ucms/nav.dart';
-import 'package:ucms/pages/page_user/user_assemble.dart';
-import 'package:ucms/pages/page_user/user_main.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/beacon/beacon_manager.dart';
 import 'package:ucms/theme/color_theme.dart';
@@ -21,7 +18,9 @@ void main() async {
   client.startSocket("");
   
   Get.put(BeaconManager());
-   
+  PlaceDatabase placeDB = Get.put(PlaceDatabase());
+  await placeDB.init();
+
   User.userInit();
 
   runApp(const MyApp());

@@ -6,7 +6,6 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
 import 'package:ucms/utils/user_util/user_controller.dart';
@@ -72,7 +71,7 @@ class RegisterPage extends StatelessWidget {
                     };
                     String result = await u.register(json);
                     if (result =="success") {
-                      Get.to(()=>LoginPage());
+                      Get.back();
                       Snack.top("회원가입 시도", "성공");
                     } else {Snack.bottom("회원가입 시도", result);}
                   }                  

@@ -8,13 +8,13 @@ class Place {
   Place.fromJson(Map<String, dynamic> json) 
     : id = json["id"],
       name = json["name"],
-      beaconId = json["beaconId"];
+      beaconId = json["beacon_id"];
 
   Map<String,dynamic> toJson() {
     Map<String,dynamic> result = {
       "id" : id,
       "name" : name,
-      "beaconId" : beaconId
+      "beacon_id" : beaconId
     };
     return result;
   }
