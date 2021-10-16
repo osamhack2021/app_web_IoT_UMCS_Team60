@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:get/get.dart';
+import 'package:ucms/data/dto/server_multi_resp_dto.dart';
 import 'package:ucms/data/dto/server_resp_dto.dart';
 import 'package:ucms/utils/convert_utf8.dart';
 import 'package:ucms/utils/place_util/place_provider.dart';
@@ -46,8 +47,6 @@ class PlaceRepository {
 
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
-
-    debugPrint("doomRoomAll is $convertBody");
 
 
     if (serverRespDto.code == 1) {
@@ -146,7 +145,7 @@ class PlaceRepository {
     dynamic body = resp.body;
 
     dynamic convertBody = convertUtf8ToObject(body);
-    ServerRespDto serverRespDto = ServerRespDto.fromJson(convertBody);
+    ServerMultiRespDto serverRespDto = ServerMultiRespDto.fromJson(convertBody, convertBody["data"]);
 
 
     if (serverRespDto.code == 1) {

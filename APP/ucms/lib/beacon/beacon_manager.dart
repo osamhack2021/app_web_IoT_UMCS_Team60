@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ucms/beacon/beacon_result.dart';
 import 'package:ucms/socket/user_socket_client.dart';
@@ -21,11 +23,12 @@ void startListeningBeacons() {
 }
 
 Future<void> initPlatformState() async {
+    try{
       await BeaconsPlugin.setDisclosureDialogMessage(
         title: "Need Location Permission",
         message: "This app collects location data to work with beacons."
       );
-    
+
     startListeningBeacons();
 
     await BeaconsPlugin.addRegion("testBeacon", "74278BDA-B644-4520-8F0C-720EAF059935");// iBeacon uuid 등록
@@ -50,6 +53,11 @@ Future<void> initPlatformState() async {
       });
     
     if (isRunning) return;
+    }on MissingPluginException catch(e) {
+        debugPrint("Exception caught ${e.message}");
+    }catch(e) {
+      debugPrint(e.toString());
+    }
 }
 
     

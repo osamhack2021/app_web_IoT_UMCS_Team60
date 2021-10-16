@@ -13,17 +13,13 @@ class UserRepository {
   Future<User> login(Map<String, dynamic> json) async {
     Response resp = await _userProvider.login(json);
     dynamic headers = resp.headers;
-    String body = resp.body;
+    dynamic body = resp.body;
     final prefs = GetStorage();
     
     dynamic convertBody = convertUtf8ToObject(body);
     ServerRespDto serverRespDto = ServerRespDto(code: convertBody["code"],msg: convertBody["msg"], data: convertBody["data"]);
     dynamic convertHeader = convertUtf8ToObject(headers);
 
-
-    // debugPrint("convertBody is $convertBody");
-    // debugPrint("convertHeader is $convertHeader");
-    // debugPrint("serverRespDto is  ${serverRespDto.toJson().toString()}");
 
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);

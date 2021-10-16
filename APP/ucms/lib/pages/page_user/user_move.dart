@@ -62,7 +62,7 @@ class _UserMoveState extends State<UserMove> {
               },
             ).toList(),
             ),
-            KTextFormField(hint: "구체적인 사유를 입력하세요", controller: descCon, validator: validateNothing()),
+            KTextFormFieldMultiLine(hint: "구체적인 사유를 입력하세요", controller: descCon, validator: validateNothing()),
             const SizedBox(height: 15),
             PostButton(
                 onPressed: () async {

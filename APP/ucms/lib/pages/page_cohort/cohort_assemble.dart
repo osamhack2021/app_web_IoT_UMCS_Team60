@@ -45,7 +45,7 @@ class _CohortAssembleState extends State<CohortAssemble> {
               
               Visibility(
                 visible: visible.value,
-                child: KTextFormField(hint: "사유를 입력하세요", controller: cannot, validator: validateNull())
+                child: KTextFormFieldMultiLine(hint: "사유를 입력하세요", controller: cannot, validator: validateNull())
               ),
               PageButton(onPressed:(){
                 if(!visible.value) {
