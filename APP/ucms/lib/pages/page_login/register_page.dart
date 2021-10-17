@@ -8,7 +8,7 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/utils/snackbar.dart';
-import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/controllers/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
 class RegisterPage extends StatelessWidget {

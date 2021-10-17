@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/model/hostnames.dart';
 
 class UserProvider extends GetConnect {
   // Promise (데이터 약속)

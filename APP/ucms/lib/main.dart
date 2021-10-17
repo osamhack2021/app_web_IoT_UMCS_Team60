@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ucms/data/places/place_database.dart';
-import 'package:ucms/data/user.dart';
+import 'package:ucms/model/places/place_database.dart';
+import 'package:ucms/model/user.dart';
 
 import 'package:ucms/pages/page_login/login_page.dart';
 import 'package:ucms/socket/user_socket_client.dart';

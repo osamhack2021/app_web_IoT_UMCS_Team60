@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucms/data/places/place_database.dart';
+import 'package:ucms/model/places/place_database.dart';
 import 'package:ucms/utils/timestring_to_datetime.dart';
 import 'package:ucms/components/texts.dart' as text;
 

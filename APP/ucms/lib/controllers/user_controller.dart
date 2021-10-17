@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ucms/data/position.dart';
-import 'package:ucms/data/user.dart';
-import 'package:ucms/data/dto/login_request_dto.dart';
+import 'package:ucms/model/position.dart';
+import 'package:ucms/model/user.dart';
+import 'package:ucms/model/dto/login_request_dto.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/beacon/beacon_manager.dart';
-import 'package:ucms/utils/user_util/user_repository.dart';
+import 'package:ucms/repository/user_repository.dart';
 
 class UserController extends GetxController {
   final RxBool isLogin = false.obs;

@@ -1,4 +1,4 @@
-import 'package:ucms/data/places/place.dart';
+import 'package:ucms/model/places/place.dart';
 
 class Doom extends Place {
   Doom(id, name, beaconId) : super(id : id,name : name,beaconId : beaconId);

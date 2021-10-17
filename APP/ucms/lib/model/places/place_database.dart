@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:ucms/data/places/doom.dart';
-import 'package:ucms/data/places/doomfacility.dart';
-import 'package:ucms/data/places/doomroom.dart';
-import 'package:ucms/data/places/outside_facility.dart';
-import 'package:ucms/utils/place_util/place_controller.dart';
+import 'package:ucms/model/places/doom.dart';
+import 'package:ucms/model/places/doomfacility.dart';
+import 'package:ucms/model/places/doomroom.dart';
+import 'package:ucms/model/places/outside_facility.dart';
+import 'package:ucms/controllers/place_controller.dart';
 
 class PlaceDatabase extends GetxService {
   List<Doom>? dooms;

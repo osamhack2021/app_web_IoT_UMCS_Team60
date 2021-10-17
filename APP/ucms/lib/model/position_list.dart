@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucms/data/places/place.dart';
-import 'package:ucms/data/position.dart';
+import 'package:ucms/model/places/place.dart';
+import 'package:ucms/model/position.dart';
 
 class PositionList extends GetxService {
 
