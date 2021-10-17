@@ -48,7 +48,13 @@
   <script>
     $(function () {
       const socket = io('/manager');
-  
+      jQuery(document).ready(function() {
+        axios.get('/api/watchman/myCharge/details')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#doom').append ($('<option></option>').val(b.doom_id).html(b.doom_name));
+        });
+      });
       $('#to_cohort').click(function(e) {
         e.preventDefault();
         socket.emit('to_cohort');
@@ -82,11 +88,6 @@
 
       socket.once('my_info', function(manager) { 
         $('#my_info').prepend(manager.tag + " " + manager.rank + " " + manager.name+ " 금일 담당생활관id:" + manager.charge_doom); 
-        axios.get('/api/watchman/myCharge/details')
-        .then(function(res) {
-          for(b of res.data.data) 
-            $('#doom').append ($('<option></option>').val(b.doom_id).html(b.doom_name));
-        });
       });
 
       socket.on('cannot_assemble', function(msg) { 
