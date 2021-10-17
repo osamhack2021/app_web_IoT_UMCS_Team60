@@ -31,9 +31,12 @@
             >
               <v-text-field
                 v-model="password"
+                :append-icon="pwShow ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="passwordRules"
+                :type="pwShow ? 'text' : 'password'"
                 label="비밀번호"
                 required
+                @click:append="pwShow = !pwShow"
               />
             </v-col>
             <v-col
@@ -93,7 +96,7 @@
           class="text-decoration-none"
         >
           <p class="text-center my-3">
-            로그인
+            로그인 페이지로 이동
           </p>
         </router-link>
       </v-col>
@@ -112,6 +115,7 @@ export default {
     // 군번 유효성 검사 필요 ('-' 포함, 숫자로만 이루어졌는지)
     adminTagRules: [(v) => !!v || "군번을 입력하세요"],
     password: "",
+    pwShow: false,
     passwordRules: [(v) => !!v || "비밀번호를 입력하세요"],
     items: ["대장", "중장", "소장", "준장", "대령", "중령", "소령", "대위", "중위", "소위", "준위", "원사", "상사", "중사", "하사"],
     rank: "",
