@@ -27,3 +27,9 @@ Vue Project를 Server에 올리기 위해 web file build
 ```
 npm run build
 ```
+
+<br>
+
+# Used Library
+
+- [v-snackbars](https://github.com/Aymkdn/v-snackbars)

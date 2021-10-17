@@ -12,6 +12,7 @@
     "axios": "^0.22.0",
     "core-js": "^3.6.5",
     "socket.io-client": "^2.4.0",
+    "v-snackbars": "^3.2.4",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
     "vue-draggable-resizable": "^2.3.0",

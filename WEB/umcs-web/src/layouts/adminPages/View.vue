@@ -9,7 +9,3 @@ export default {
   name: "DefaultView",
 }
 </script>
-
-<style scoped>
-
-</style>

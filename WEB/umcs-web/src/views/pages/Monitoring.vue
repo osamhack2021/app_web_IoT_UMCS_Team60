@@ -6,13 +6,13 @@
         xl="8"
         class="mx-auto"
       >
-        <v-row class="mt-5">
+        <v-row>
           <v-col cols="8">
             <div
               v-for="doom in facilityList"
               :key="doom.doom_id"
             >
-              <v-card>
+              <v-card class="mt-5">
                 <v-card-actions>
                   <!-- Dialog for Create Icon -->
                   <v-dialog
