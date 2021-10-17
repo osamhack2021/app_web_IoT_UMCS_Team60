@@ -38,6 +38,9 @@ function fetchFacilityList() {
 function fetchRoomInfo(id) {
   return axios.get(`${BASE_URL}doomroom/${id}`);
 }
+function fetchRoomList_doomId(id) {
+  return axios.get(`${BASE_URL}doomroom/search?doom_id=${id}`);
+}
 function fetchCurrentLocation_Tag(tag) {
   return axios.get(`${BASE_URL}current_position/search?user_tag=${tag}`);
 }
@@ -77,13 +80,16 @@ function fetchUsingReport_Id(id) {
 }
 
 // Facility Time Schedule
-function createTimeTable(tableData) {
+function createSchedule(tableData) {
   return axios.post(`${BASE_URL}timetable`, tableData);
 }
 function fetchTimeTable(idData) {
   return axios.get(
     `${BASE_URL}timetable/search?doom_id=${idData.doom_id}&facility_id=${idData.facility_id}`
   );
+}
+function deleteSchedule(id) {
+  return axios.delete(`${BASE_URL}timetable/${id}`);
 }
 
 // HealthCare
@@ -128,6 +134,7 @@ export {
   fetchDoomList,
   fetchFacilityList,
   fetchRoomInfo,
+  fetchRoomList_doomId,
   fetchCurrentLocation_BeaconId,
   fetchCurrentLocation_Tag,
   createRoomPicker,
@@ -137,8 +144,9 @@ export {
   fetchMovingReport_Id,
   fetchUsingReport,
   fetchUsingReport_Id,
-  createTimeTable,
+  createSchedule,
   fetchTimeTable,
+  deleteSchedule,
   fetchHealthReport,
   createFacility,
   fetchAdminDuty_month,

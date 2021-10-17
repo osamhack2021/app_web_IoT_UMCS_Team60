@@ -71,7 +71,7 @@
                         <v-btn
                           color="blue darken-1"
                           text
-                          class="tet-body-1 font-weight-medium"
+                          class="text-body-1 font-weight-medium"
                           @click="saveForm"
                         >
                           저장
