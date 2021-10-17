@@ -16,6 +16,7 @@
     <button id="to_cohort">코호트 상황 전환<br>(to_cohort)</button>
     <button id="to_normal">평시 상황 전환<br>(to_normal)</button><br>
     <select id="doom"></select> <button id="assemble_command">긴급소집하기<br>(assemble_command)</button>
+    <button id="get_in_all">전 인원 호실로 이동<br>(to_normal)</button><br>
   </div>
 
   <form action="" id="move_approval">
@@ -70,6 +71,12 @@
       $('#assemble_command').click(function(e) {
         e.preventDefault();
         socket.emit('assemble_command', {doom_id: $('#doom').val()});
+        return false;
+      });
+
+      $('#get_in_all').click(function(e) {
+        e.preventDefault();
+        socket.emit('get_in_all');
         return false;
       });
 
@@ -139,3 +146,4 @@
   </script>
 </body>
 </html>
+

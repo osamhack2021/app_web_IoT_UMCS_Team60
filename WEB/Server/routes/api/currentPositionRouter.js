@@ -120,13 +120,13 @@ router.get('/search', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:tag', async (req, res) => {
     var msg = {2:'not_found', 4: 'db_error'};
     try {
         var sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id, u.name as user_name, u.rank as user_rank, u.doom_id as user_doom_id, u.room_id as user_room_id "
         sql += "FROM access_record a, beacon b, user u "
-        sql += "WHERE a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL";
-        var [results] = await dbPromiseConnection.query(sql, req.params.id);
+        sql += "WHERE a.user_tag=? AND a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL ORDER BY id DESC LIMIT 1";
+        var [results] = await dbPromiseConnection.query(sql, req.params.tag);
         
         if(!results.length)
             return res.status(200).json({
@@ -174,4 +174,5 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 

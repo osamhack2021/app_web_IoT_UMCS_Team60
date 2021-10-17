@@ -59,8 +59,17 @@ module.exports = (server, session) => {
 
         async function get_out(data) {
             try {
+                if(!data?.beacon_id) {
+                    let sql = "SELECT a.*, b.outside_facility_id, b.doom_id, b.doomroom_id, b.doomfacility_id, u.name as user_name, u.rank as user_rank, u.doom_id as user_doom_id, u.room_id as user_room_id "
+                    sql += "FROM access_record a, beacon b, user u "
+                    sql += "WHERE a.user_tag=? AND a.beacon_id=b.id AND a.user_tag=u.tag AND a.out_time IS NULL ORDER BY id DESC LIMIT 1";
+                    var [results] = await dbPromiseConnection.query(sql, user.tag);
+                    data.beacon_id = results[0].beacon_id;
+                }
+                
                 let sql = "SELECT id FROM access_record WHERE user_tag=? AND beacon_id=? AND out_time IS NULL ORDER BY id DESC LIMIT 1";
                 let [target] = await dbPromiseConnection.query(sql, [user.tag, data.beacon_id]);
+                
                 target = target[0];
 
                 sql = "UPDATE access_record SET out_time=? WHERE id=?";
@@ -170,7 +179,6 @@ module.exports = (server, session) => {
                             ],
                             ...facilityInfo
                         });
-
                         userio.to(user.socket_id).emit(`contact_alert`);
                     }
                 }
@@ -308,9 +316,132 @@ module.exports = (server, session) => {
                 console.log(err);
             }
         });
+       
         
+        // for dev
+        async function get_out(data, user) {
+            try {
+                let sql = "SELECT id FROM access_record WHERE user_tag=? AND beacon_id=? AND out_time IS NULL ORDER BY id DESC LIMIT 1";
+                let [target] = await dbPromiseConnection.query(sql, [user.tag, data.beacon_id]);
+                target = target[0];
+
+                sql = "UPDATE access_record SET out_time=? WHERE id=?";
+                await dbPromiseConnection.query(sql, [nowDateTime(), target?.id]);
+
+                sql = "SELECT * FROM beacon WHERE id=?";
+                let [beaconInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                beaconInfo = beaconInfo[0];
+                
+                Object.keys(beaconInfo).forEach((k) => beaconInfo[k] == null && delete beaconInfo[k]);
+
+                let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
+                    beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
+
+                // 현 인원 감소
+                sql = `UPDATE ${table} SET current_count=current_count-1 WHERE beacon_id=?`;
+                await dbPromiseConnection.query(sql, [data.beacon_id]);
+
+                // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
+                let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
+                sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+
+                let [facilityInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                facilityInfo = facilityInfo[0];
+
+                if(facilityInfo?.doom_id) {
+                    sql = `SELECT name FROM doom WHERE id=?`;
+                    let [doomInfo] = await dbPromiseConnection.query(sql, [facilityInfo.doom_id]);
+                    facilityInfo.doom_name = doomInfo[0].name;
+                }
+                
+                managerio.to(user.doom_id).emit(`${table}_get_out`, {
+                    user_tag: user.tag,
+                    out_time: nowDateTime(),
+                    ...facilityInfo
+                });
+            }
+            catch(err) {
+                console.log(err);
+            }
+        }
+        socket.on('get_in_all', async (data) => {
+            try {
+                sql = "SELECT u.*, d.beacon_id FROM user u, doomroom d where u.room_id=d.id";
+                let [users] = await dbPromiseConnection.query(sql);
+
+                for(data of users) {
+                    let user =data;
+                    // 이전에 비콘 오류로 인해 나가는 것을 감지 못했을 경우
+                    let sql = "SELECT id, beacon_id FROM access_record WHERE user_tag=? AND out_time IS NULL";
+                    let [checks] = await dbPromiseConnection.query(sql, [user.tag]);
+                    if(checks.length) 
+                        for(let check of checks) await get_out(check, user);
+                    
+                    sql = "INSERT INTO access_record VALUE (NULL, ?, ?, ?, NULL)";
+                    await dbPromiseConnection.query(sql, [user.tag, data.beacon_id, nowDateTime()]);
+
+                    sql = "SELECT * FROM beacon WHERE id=?";
+                    let [beaconInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                    beaconInfo = beaconInfo[0];
+                    
+                    Object.keys(beaconInfo).forEach((k) => beaconInfo[k] == null && delete beaconInfo[k]);
+
+                    let table = beaconInfo.outside_facility_id ? 'outside_facility' : beaconInfo.doomfacility_id ? 'doomfacility' :
+                        beaconInfo.doomroom_id ? 'doomroom' : 'doom'; 
+
+                    // 현 인원 증가
+                    sql = `UPDATE ${table} SET current_count=current_count+1 WHERE beacon_id=?`;
+                    await dbPromiseConnection.query(sql, [data.beacon_id]);
+
+                    // 생활관건물 호실이나 공공시설이라면 생활관건물 정보도 알아야 하므로 column에 추가
+                    let column = 'id, name, current_count' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
+                    sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
+                    let [facilityInfo] = await dbPromiseConnection.query(sql, [data.beacon_id]);
+                    facilityInfo = facilityInfo[0];
+
+                    if(facilityInfo?.doom_id) {
+                        sql = `SELECT name FROM doom WHERE id=?`;
+                        let [doomInfo] = await dbPromiseConnection.query(sql, [facilityInfo.doom_id]);
+                        facilityInfo.doom_name = doomInfo[0].name;
+                    }
+                    
+                    managerio.to(user.doom_id).emit(`${table}_get_in`, {
+                        user_tag: user.tag,
+                        in_time: nowDateTime(),
+                        ...facilityInfo
+                    });
+
+                    // 타 호실원과 접촉이 생겼는지 확인
+                    sql = "SELECT * FROM cohort_status ORDER BY id DESC LIMIT 1";
+                    let [cohortStatus] = await dbPromiseConnection.query(sql);
+                    if(cohortStatus[0].isCohort && (table === 'doomfacility' || table === 'doomroom')) {
+                        sql = 'SELECT a.beacon_id, u.tag, u.name, u.rank, u.doom_id, u.room_id FROM access_record a, user u WHERE a.user_tag=u.tag AND a.out_time IS NULL;'
+                        let [currentPositions] = await dbPromiseConnection.query(sql);
+                        
+                        let isContact = false;
+                        for(let currentPosition of currentPositions) 
+                            if(currentPosition.beacon_id == data.beacon_id) // 동일한 위치에 있고
+                                if(currentPosition.doom_id != user.doom_id || currentPosition.room_id != user.room_id) // 다른 호실이라면
+                                    isContact = true;
+                        
+                        if(isContact) {
+                            managerio.to(user.doom_id).emit(`${table}_contact`, {
+                                contact_time: nowDateTime(),
+                                contact_users: [
+                                    ...currentPositions
+                                ],
+                                ...facilityInfo
+                            });
+                            userio.to(user.socket_id).emit(`contact_alert`);
+                        }
+                    }
+                }
+            } 
+            catch(err) {
+                console.log(err);
+            }
+        });
     });
-    
-    
     return io;
 };
+

@@ -136,7 +136,7 @@
 
       $('#get_out').click(function(e) {
         e.preventDefault(); 
-        socket.emit('get_out', {beacon_id: my_pos});
+        socket.emit('get_out', {});
         $('#my_pos').html('');
         return false;
       });
@@ -190,3 +190,4 @@
   </script>
 </body>
 </html>
+
