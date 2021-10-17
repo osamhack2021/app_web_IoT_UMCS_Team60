@@ -101,14 +101,6 @@
                       <v-list-item
                         v-if="item.doomfacility_id"
                         :key="item.beacon_id"
-                        active-class="primary"
-                        @click="
-                          updateSelectedFacility(
-                            item.doom_id,
-                            item.doomfacility_id,
-                            item.name
-                          )
-                        "
                       >
                         <!-- Facility Item -->
                         <v-list-item-content>
