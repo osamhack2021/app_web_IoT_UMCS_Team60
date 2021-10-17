@@ -39,6 +39,14 @@
             Login
           </v-btn>
         </v-form>
+        <router-link
+          to="/authentication/signup"
+          class="text-decoration-none"
+        >
+          <p class="text-center my-3">
+            회원가입
+          </p>
+        </router-link>
       </v-col>
     </v-row>
   </v-container>
@@ -54,11 +62,11 @@ export default {
     adminTag: '',
     // 군번 유효성 검사 필요 ('-' 포함, 숫자로만 이루어졌는지)
     adminTagRules: [
-      v => !!v || 'id is required',
+      v => !!v || '군번을 입력하세요',
     ],
     password: '',
     passwordRules: [
-      v => !!v || 'password is required',
+      v => !!v || '비밀번호를 입력하세요',
     ],
   }),
 
@@ -83,7 +91,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -5,8 +5,8 @@
     dark
   >
     <div class="d-flex align-center">
-      <p class="text-h4 white--text font-weight-medium mb-0 ml-3">
-        UMCS
+      <p class="text-h4-en white--text font-weight-medium mb-0 ml-3">
+        UMCS - {{ $route.name }}
       </p>
     </div>
     <v-spacer />

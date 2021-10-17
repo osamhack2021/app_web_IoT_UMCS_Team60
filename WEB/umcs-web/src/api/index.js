@@ -3,6 +3,9 @@ import axios from "axios";
 const BASE_URL = "/api/";
 
 // Authentication
+function signupAdmin(adminData) {
+  return axios.post(`${BASE_URL}manager/register`, adminData);
+}
 function loginAdmin(adminData) {
   return axios.post(`${BASE_URL}manager/login`, adminData);
 }
@@ -114,6 +117,7 @@ function deleteDuty(id) {
 }
 
 export {
+  signupAdmin,
   loginAdmin,
   logoutAdmin,
   fetchCurrentSituation,
