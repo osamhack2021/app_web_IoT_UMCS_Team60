@@ -209,10 +209,10 @@
                   </v-toolbar>
                   <div class="d-flex justify-center mt-7 mb-2">
                     <v-avatar size="100">
-                      <img
+                      <v-img
                         src="@/assets/default-profile.svg"
                         alt="Default Profile"
-                      >
+                      ></v-img>
                     </v-avatar>
                   </div>
                   <v-card-text class="d-flex justify-center">

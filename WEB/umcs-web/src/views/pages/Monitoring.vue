@@ -24,21 +24,6 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-              <!-- Edit Alert Message -->
-              <v-alert
-                v-if="editMode"
-                type="error"
-                outlined
-                dense
-                text
-                class="mt-3"
-              >
-                <v-row align="center">
-                  <v-col class="grow font-weight-medium">
-                    Room Icon의 편집(위치 이동)은 한번에 하나만 가능합니다
-                  </v-col>
-                </v-row>
-              </v-alert>
               <!-- v-for 사용하여 나열 -->
               <v-card
                 v-for="floor in doom.items"
@@ -51,11 +36,9 @@
                   {{ floor.name }}
                 </v-card-title>
 
-                <v-img
-                  :src="
+                <v-img :src="
                     require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
-                  "
-                >
+                  ">
                   <template v-for="picker in floor.items">
                     <vue-draggable-resizable
                       v-if="picker.room_picker"
@@ -138,6 +121,27 @@
         </v-row>
       </v-col>
     </v-row>
+
+    <v-snackbar
+      v-model="editMode"
+      color="#ff5252"
+      :timeout="-1"
+      absolute
+      top
+    >
+      <v-alert
+        type="error"
+        prominent
+        dense
+        class="pa-0 mx-4 my-0"
+      >
+        <v-row align="center">
+          <v-col class="grow font-weight-medium">
+            Room Icon의 편집(위치 이동)은 한번에 하나만 가능합니다
+          </v-col>
+        </v-row>
+      </v-alert>
+    </v-snackbar>
   </v-container>
 </template>
 

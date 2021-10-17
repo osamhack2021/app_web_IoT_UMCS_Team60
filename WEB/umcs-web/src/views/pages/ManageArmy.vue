@@ -53,36 +53,114 @@
           </v-col>
         </v-row>
 
-        <!-- Data Table -->
-        <v-card>
-          <v-card-title> 용사 목록 </v-card-title>
-          <v-data-table
-            :headers="tableHeaders"
-            :items="userList"
-            :search="searchInput"
-            hide-default-footer
-            :items-per-page="$store.state.ITEMS_PER_PAGE"
-            :page.sync="page"
+        <v-row>
+          <!-- Facility List Info -->
+          <v-col
+            cols="12"
+            sm="6"
           >
-            <!-- Slot:item.name - user profile routing -->
-            <template v-slot:[`item.name`]="{ item }">
-              <router-link
-                :to="`/user/${item.tag}`"
-                class="info--text text-decoration-none"
+            <v-card>
+              <v-list expand>
+                <!-- List Title -->
+                <v-list-item>
+                  <v-list-item-title class="text-h5 py-4">
+                    시설 목록
+                  </v-list-item-title>
+                </v-list-item>
+
+                <!-- List Content -->
+                <!-- Doom List -->
+                <v-list-group
+                  v-for="doomList in facilityList"
+                  :key="doomList.doom_id"
+                  eager
+                >
+                  <template v-slot:activator>
+                    <v-list-item-icon>
+                      <v-icon>mdi-home-city</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                      {{ doomList.doom_name }}
+                    </v-list-item-title>
+                  </template>
+
+                  <!-- Floor List -->
+                  <v-list-group
+                    v-for="floorList in doomList.items"
+                    :key="floorList.floor"
+                    eager
+                  >
+                    <template v-slot:activator>
+                      <v-list-item-title>
+                        {{ floorList.name }}
+                      </v-list-item-title>
+                    </template>
+
+                    <!-- Facility List -->
+                    <template v-for="item in floorList.items">
+                      <v-list-item
+                        v-if="item.doomfacility_id"
+                        :key="item.beacon_id"
+                        link
+                        active-class="primary"
+                        @click="
+                          updateSelectedFacility(
+                            item.doom_id,
+                            item.doomfacility_id,
+                            item.name
+                          )
+                        "
+                      >
+                        <!-- Facility Item -->
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            {{ item.name }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                  </v-list-group>
+                </v-list-group>
+              </v-list>
+            </v-card>
+          </v-col>
+
+          <!-- Data Table -->
+          <v-col
+            cols="12"
+            sm="6"
+          >
+            <v-card>
+              <v-card-title> 용사 목록 </v-card-title>
+              <v-data-table
+                :headers="tableHeaders"
+                :items="userList"
+                :search="searchInput"
+                hide-default-footer
+                :items-per-page="$store.state.ITEMS_PER_PAGE"
+                :page.sync="page"
               >
-                {{ item.name }}
-              </router-link>
-            </template>
-          </v-data-table>
-        </v-card>
-        <!-- Pagination -->
-        <div class="text-center pt-2">
-          <v-pagination
-            v-model="page"
-            :length="pageCount"
-            :total-visible="$store.state.TOTAL_VISIBLE"
-          />
-        </div>
+                <!-- Slot:item.name - user profile routing -->
+                <template v-slot:[`item.name`]="{ item }">
+                  <router-link
+                    :to="`/user/${item.tag}`"
+                    class="info--text text-decoration-none"
+                  >
+                    {{ item.name }}
+                  </router-link>
+                </template>
+              </v-data-table>
+            </v-card>
+            <!-- Pagination -->
+            <div class="text-center pt-2">
+              <v-pagination
+                v-model="page"
+                :length="pageCount"
+                :total-visible="$store.state.TOTAL_VISIBLE"
+              />
+            </div>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -97,7 +175,7 @@ export default {
     page: 1,
   }),
   computed: {
-    ...mapState(["coronaSituation", "userList"]),
+    ...mapState(["coronaSituation", "userList", "facilityList"]),
     ...mapState("army", ["tableHeaders"]),
     ...mapGetters("army", ["getSearchInput"]),
     searchInput: {
