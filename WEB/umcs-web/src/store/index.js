@@ -14,6 +14,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    // 로그인한 관리자 정보
+    loginInfo: {},
+
     // true: 코로나 격리, false: 평시
     coronaSituation: undefined,
     // Data Table에서 한 페이지당 표시할 item 개수
@@ -35,6 +38,9 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    setLoginInfo(state, data) {
+      state.loginInfo = data;
+    },
     setCoronaSituation(state, value) {
       state.coronaSituation = value;
     },
