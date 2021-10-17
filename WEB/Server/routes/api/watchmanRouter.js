@@ -127,7 +127,8 @@ router.get('/myCharge', managerAuth.checkLogin, (req, res) => {
         return res.status(200).json({
             code: 1,
             msg: "success",
-            data: rows[0]
+            total: rows.length,
+            data: rows
         });
     });
 });

@@ -14,8 +14,8 @@
   
   <div>
     <button id="to_cohort">코호트 상황 전환<br>(to_cohort)</button>
-    <button id="to_normal">평시 상황 전환<br>(to_normal)</button>
-    <button id="assemble_command">긴급소집하기<br>(assemble_command)</button>
+    <button id="to_normal">평시 상황 전환<br>(to_normal)</button><br>
+    <select id="doom"></select> <button id="assemble_command">긴급소집하기<br>(assemble_command)</button>
   </div>
 
   <form action="" id="move_approval">
@@ -44,6 +44,7 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     $(function () {
       const socket = io('/manager');
@@ -62,7 +63,7 @@
 
       $('#assemble_command').click(function(e) {
         e.preventDefault();
-        socket.emit('assemble_command');
+        socket.emit('assemble_command', {doom_id: $('#doom').val()});
         return false;
       });
 
@@ -81,6 +82,11 @@
 
       socket.once('my_info', function(manager) { 
         $('#my_info').prepend(manager.tag + " " + manager.rank + " " + manager.name+ " 금일 담당생활관id:" + manager.charge_doom); 
+        axios.get('/api/watchman/myCharge/details')
+        .then(function(res) {
+          for(b of res.data.data) 
+            $('#doom').append ($('<option></option>').val(b.doom_id).html(b.doom_name));
+        });
       });
 
       socket.on('cannot_assemble', function(msg) { 

@@ -236,9 +236,9 @@ module.exports = (server, session) => {
             var sql = "SELECT * FROM watchman WHERE manager_tags=? AND responsible_date=?";
             let [results] = await dbPromiseConnection.query(sql, [manager.tag, nowDate()]);
             if(results.length) { // 금일 근무가 있을 시에만 담당 생활관 room에 참여
-                manager.charge_dooms = [];
+                manager.charge_doom = [];
                 for(let result of results) {
-                    manager.charge_dooms.push(result.charge_doom);
+                    manager.charge_doom.push(result.charge_doom);
                     socket.join(result.charge_doom);
                 }
             }
@@ -271,9 +271,8 @@ module.exports = (server, session) => {
         });
 
         // 긴급 소집 지시
-        socket.on('assemble_command', () =>{
-            for(let doom_id of manager.charge_dooms) 
-                userio.to(doom_id).emit('assemble_command', {send_time: newkrDate()});
+        socket.on('assemble_command', (data) =>{
+            userio.to(data.doom_id).emit('assemble_command', {send_time: newkrDate()});
         });
 
         // 외부시설 이동요청 결재 완료
