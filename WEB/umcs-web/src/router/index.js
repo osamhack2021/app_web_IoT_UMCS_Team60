@@ -17,6 +17,7 @@ const routes = [
   {
     path: "/main",
     name: "메인 화면",
+    redirect: "/monitoring",
     component: () => import("@/layouts/adminPages/Index"),
     beforeEnter(to, from, next) {
       console.log(
@@ -27,7 +28,10 @@ const routes = [
       const socket = io.connect("https://militaryumcs.com/manager", {
         query:
           "session_id=" +
-          window.$cookies.get("express.sid").replace("s:", "").split(".")[0],
+          window.$cookies
+            .get("express.sid")
+            .replace("s:", "")
+            .split(".")[0],
       });
       Vue.use(VueSocketIO, socket);
       next();
