@@ -1,11 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col
-        cols="12"
-        xl="8"
-        class="mx-auto"
-      >
+      <v-col cols="12" xl="8" class="mx-auto">
         <v-row>
           <v-col class="my-4">
             <v-alert
@@ -29,13 +25,7 @@
                 </v-col>
               </v-row>
             </v-alert>
-            <v-alert
-              v-else
-              outlined
-              type="success"
-              prominent
-              text
-            >
+            <v-alert v-else outlined type="success" prominent text>
               <v-row align="center">
                 <v-col class="grow font-weight-medium">
                   현재 부대에는 코로나 격리 상황이 발생하지 않았습니다
@@ -55,10 +45,7 @@
 
         <v-row>
           <!-- Facility List Info -->
-          <v-col
-            cols="12"
-            sm="6"
-          >
+          <v-col cols="12" sm="6">
             <v-card>
               <v-list expand>
                 <!-- List Title -->
@@ -126,12 +113,78 @@
           </v-col>
 
           <!-- Data Table -->
-          <v-col
-            cols="12"
-            sm="6"
-          >
+          <v-col cols="12" sm="6">
             <v-card>
-              <v-card-title> 용사 목록 </v-card-title>
+              <v-row>
+                <v-col>
+                  <v-card-title> 용사 목록 </v-card-title>
+                </v-col>
+                <v-spacer></v-spacer>
+                <v-col>
+                  <v-card-actions>
+                    <v-dialog v-model="dialog" width="600">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          color="secondary"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          긴급 소집
+                        </v-btn>
+                      </template>
+                      <v-card class="pa-3">
+                        <v-card-title>
+                          <span class="text-h5">긴급소집할 범위 선택</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" align-self="center">
+                                <v-select
+                                  v-model="doomToCall"
+                                  :items="doomList"
+                                  label="Select"
+                                  item-text="id"
+                                  prepend-icon="mdi-home-city"
+                                  required
+                                >
+                                  <template v-slot:selection="data">
+                                    {{ data.item.name }}
+                                  </template>
+                                  <template v-slot:item="data">
+                                    <v-list-item-content
+                                      v-text="data.item.name"
+                                    ></v-list-item-content>
+                                  </template>
+                                </v-select>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            class="text-body-1 font-weight-medium"
+                            @click="closeDialog"
+                          >
+                            닫기
+                          </v-btn>
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            class="tet-body-1 font-weight-medium"
+                            @click="emergencyCall"
+                          >
+                            저장
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </v-card-actions>
+                </v-col>
+              </v-row>
               <v-data-table
                 :headers="tableHeaders"
                 :items="userList"
@@ -173,11 +226,12 @@ export default {
   name: "ManageArmy",
   data: () => ({
     page: 1,
+    dialog: false,
   }),
   computed: {
-    ...mapState(["coronaSituation", "userList", "facilityList"]),
+    ...mapState(["coronaSituation", "userList", "doomList", "facilityList"]),
     ...mapState("army", ["tableHeaders"]),
-    ...mapGetters("army", ["getSearchInput"]),
+    ...mapGetters("army", ["getSearchInput", "getFormDoom"]),
     searchInput: {
       get() {
         return this.getSearchInput;
@@ -189,10 +243,18 @@ export default {
     pageCount() {
       return Math.ceil(this.userList.length / this.$store.state.ITEMS_PER_PAGE);
     },
+    doomToCall: {
+      get() {
+        return this.getFormDoom;
+      },
+      set(value) {
+        return this.setFormDoom(value);
+      }
+    }
   },
   methods: {
     ...mapMutations(["setCoronaSituation"]),
-    ...mapMutations("army", ["updateSearchInput"]),
+    ...mapMutations("army", ["updateSearchInput", "setFormDoom"]),
     changeOfSituation_toCohort() {
       this.setCoronaSituation(true);
       this.$socket.client.emit("to_cohort");
@@ -200,6 +262,16 @@ export default {
     changeOfSituation_toNormal() {
       this.setCoronaSituation(false);
       this.$socket.client.emit("to_normal");
+    },
+    closeDialog() {
+      this.dialog = false;
+    },
+    emergencyCall() {
+      const payload = {
+        doom_id: this.getFormDoom,
+      }
+      this.$socket.client.emit("assemble_command", payload);
+      this.closeDialog();
     },
   },
 };
