@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucms/theme/color_theme.dart';
+import 'package:ucms/views/theme/color_theme.dart';
 
 class Snack {
 

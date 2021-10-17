@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ucms/components/texts.dart' as text;
+import 'package:ucms/views/components/texts.dart' as text;
 import 'package:ucms/utils/timestring_to_datetime.dart';
 
 class Position {

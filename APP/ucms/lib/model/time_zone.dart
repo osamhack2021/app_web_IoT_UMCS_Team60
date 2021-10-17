@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucms/model/places/place_database.dart';
 import 'package:ucms/utils/timestring_to_datetime.dart';
-import 'package:ucms/components/texts.dart' as text;
+import 'package:ucms/views/components/texts.dart' as text;
 
 class TimeZone {
   final int id;
