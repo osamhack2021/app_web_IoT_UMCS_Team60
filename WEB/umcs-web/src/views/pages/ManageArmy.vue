@@ -101,7 +101,6 @@
                       <v-list-item
                         v-if="item.doomfacility_id"
                         :key="item.beacon_id"
-                        link
                         active-class="primary"
                         @click="
                           updateSelectedFacility(
