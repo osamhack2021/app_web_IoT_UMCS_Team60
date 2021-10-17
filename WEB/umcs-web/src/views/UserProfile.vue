@@ -12,14 +12,14 @@
           <v-img
             src="@/assets/default-profile.svg"
             alt="Default Profile"
-          ></v-img>
+          />
         </v-avatar>
       </div>
       <v-card-title class="subheading font-weight-bold">
         {{ user.rank }} {{ user.name }}
       </v-card-title>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <v-list dense>
         <v-list-item>

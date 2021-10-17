@@ -3,8 +3,6 @@ import VueRouter from "vue-router";
 import io from "socket.io-client";
 import VueSocketIO from "vue-socket.io-extended";
 
-import Index from "@/layouts/adminPages/Index";
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -19,7 +17,7 @@ const routes = [
   {
     path: "/main",
     name: "메인 화면",
-    component: Index,
+    component: () => import("@/layouts/adminPages/Index"),
     beforeEnter(to, from, next) {
       console.log(
         "cookie",
@@ -42,12 +40,12 @@ const routes = [
       },
       {
         path: "/approval-moving",
-        name: "이동 신청",
+        name: "외부시설 이동신청",
         component: () => import("@/views/pages/MovingApproval"),
       },
       {
         path: "/approval-using",
-        name: "시설 이용 신청",
+        name: "공용시설 이용신청",
         component: () => import("@/views/pages/UsingApproval"),
       },
       {

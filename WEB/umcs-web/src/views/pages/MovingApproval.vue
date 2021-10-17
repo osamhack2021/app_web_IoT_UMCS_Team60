@@ -150,12 +150,14 @@ export default {
     },
   },
   created() {
+    try {
+      this.$socket.$subscribe("move_request", (data) => {
+        this.ADD_MOVING_REPORT(data);
+      });
+    } catch (error) {
+      window.location.reload();
+    }
     this.FETCH_MOVING_REPORT();
-  },
-  mounted() {
-    this.$socket.$subscribe("move_request", (data) => {
-      this.ADD_MOVING_REPORT(data);
-    });
   },
   methods: {
     ...mapMutations("moving_approval", [

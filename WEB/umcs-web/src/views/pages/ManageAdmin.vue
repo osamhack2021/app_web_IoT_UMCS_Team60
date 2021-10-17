@@ -139,7 +139,7 @@
                         color="blue darken-1"
                         text
                         class="text-body-1 font-weight-medium"
-                        @click="closeDialog()"
+                        @click="closeDialog"
                       >
                         닫기
                       </v-btn>
@@ -147,7 +147,7 @@
                         color="blue darken-1"
                         text
                         class="tet-body-1 font-weight-medium"
-                        @click="saveForm()"
+                        @click="saveForm"
                       >
                         저장
                       </v-btn>
@@ -167,7 +167,7 @@
                 :events="events"
                 event-overlap-mode="column"
                 @click:event="showEvent"
-                @change="FETCH_ADMIN_INFO()"
+                @change="FETCH_ADMIN_INFO"
               />
 
               <!-- Event Popup -->
@@ -193,7 +193,7 @@
                     <v-card-actions class="pa-0">
                       <v-btn
                         icon
-                        @click="deleteEvent()"
+                        @click="deleteEvent"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
@@ -212,7 +212,7 @@
                       <v-img
                         src="@/assets/default-profile.svg"
                         alt="Default Profile"
-                      ></v-img>
+                      />
                     </v-avatar>
                   </div>
                   <v-card-text class="d-flex justify-center">
