@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ucms/components/custom_buttons.dart';
-import 'package:ucms/components/custom_screen.dart';
-import 'package:ucms/components/texts.dart';
-import 'package:ucms/theme/size.dart';
+import 'package:ucms/views/components/custom_buttons.dart';
+import 'package:ucms/views/components/custom_screen.dart';
+import 'package:ucms/views/components/texts.dart';
+import 'package:ucms/views/theme/size.dart';
 
 class NavPage extends StatelessWidget {
   const NavPage({Key? key}) : super(key: key);
