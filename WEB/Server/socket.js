@@ -150,7 +150,9 @@ module.exports = (server, session) => {
                 });
 
                 // 타 호실원과 접촉이 생겼는지 확인
-                if(table === 'doomfacility' || table === 'doomroom') {
+                sql = "SELECT * FROM cohort_status ORDER BY id DESC LIMIT 1";
+                let [cohortStatus] = await dbPromiseConnection.query(sql);
+                if(cohortStatus[0].isCohort && (table === 'doomfacility' || table === 'doomroom')) {
                     sql = 'SELECT a.beacon_id, u.tag, u.name, u.rank, u.doom_id, u.room_id FROM access_record a, user u WHERE a.user_tag=u.tag AND a.out_time IS NULL;'
                     let [currentPositions] = await dbPromiseConnection.query(sql);
                     
@@ -312,4 +314,3 @@ module.exports = (server, session) => {
     
     return io;
 };
-
