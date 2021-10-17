@@ -72,8 +72,12 @@ class _CohortMoveState extends State<CohortMove> {
                 onPressed: () async {
                   final store = GetStorage();
                   UserSocketClient socket = Get.find<UserSocketClient>();
-                  socket.moveRequest( outsideId : widget.btns[_value].beaconId, desc: descCon.text.trim());
-                  
+                  if(widget.name=="외부시설") {
+                    socket.moveRequest( outsideId : widget.btns[_value].beaconId, desc: descCon.text.trim());
+                  } else if(widget.name=="건물 내") {
+                    socket.facilityRequest( outsideId : widget.btns[_value].beaconId, desc: descCon.text.trim());
+                  }
+
                   store.write("state","결재 대기중 ( ${store.read("location")} ▶ ${widget.btns[_value].name} )");
                   Get.back();
                   Snack.warnTop("새로고침 필요", "화면을 끌어내려주세요");

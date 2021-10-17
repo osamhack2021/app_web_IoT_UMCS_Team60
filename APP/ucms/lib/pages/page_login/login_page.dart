@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
                     String result =
                         await u.login(_tag.text.trim(), _password.text.trim());
                     if (result == "success") {
-                      store.writeIfNull("state", "정상");
+                      store.write("state", "정상");
                       
                       await u.currentPosition(_tag.text.trim());
                       positions = await p.positionAllInfo();

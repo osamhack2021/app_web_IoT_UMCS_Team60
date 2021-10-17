@@ -42,17 +42,17 @@ class RegisterPage extends StatelessWidget {
               child: Column(
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  LabelFormInput(label: "tag",hint: "군번",controller: _tag,validator: validateId(),),
-                  LabelFormInput(label: "pw", hint: "비밀번호",controller: _pw, validator: validatePw()),
-                  LabelFormInput(label: "pw check", hint: "비밀번호 다시 입력",controller: _pwCheck, 
+                  LabelFormInput(label: "군번",hint: "군번(ex.20-70000000))",controller: _tag,validator: validateId(),),
+                  LabelFormInput(label: "비밀번호", hint: "5자리 이상 입력",controller: _pw, validator: validatePw()),
+                  LabelFormInput(label: "비밀번호 확인", hint: "비밀번호 다시 입력",controller: _pwCheck, 
                   validator: (data) {
                     return ((data==_pw.text.trim())?null:"비밀번호 입력한 값이 서로 다릅니다");
                   }),
-                  LabelFormInput(label: "name", hint: "이름",controller: _name, validator: validateNull(),),
-                  LabelFormDropDown(label: "rank", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: _rank, validator: validateNull(),),
-                  LabelFormIntInput(label: "roomId", hint: "생활실 번호",controller: _roomId, validator: validateNull(),),
-                  LabelFormIntInput(label: "doomId", hint: "생활관 번호",controller: _doomId, validator: validateNull(),),
-                  LabelFormInput(label: "department", hint: "소속 부대",controller: _department, validator: validateNull(),),
+                  LabelFormInput(label: "이름", hint: "이름",controller: _name, validator: validateNull(),),
+                  LabelFormDropDown(label: "계급", labels : const ["훈련병","이병","일병","상병","병장"], hint: "계급",controller: _rank, validator: validateNull(),),
+                  LabelFormIntInput(label: "생활실 번호", hint: "숫자로 입력",controller: _roomId, validator: validateNull(),),
+                  LabelFormIntInput(label: "생활관 번호", hint: "숫자로 입력",controller: _doomId, validator: validateNull(),),
+                  LabelFormInput(label: "소속 부대", hint: "중대급까지 입력",controller: _department, validator: validateNull(),),
                 ],
               ),
             ),

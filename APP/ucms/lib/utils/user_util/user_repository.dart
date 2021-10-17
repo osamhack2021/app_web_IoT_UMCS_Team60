@@ -24,7 +24,6 @@ class UserRepository {
     if (serverRespDto.code == 1) {
       User newUser = User.fromJson(serverRespDto.data);
 
-      //TODO : token 에서 Bearer 떼어내기
       newUser.token=convertHeader["authorization"]??"no auth key";
       
       return newUser;

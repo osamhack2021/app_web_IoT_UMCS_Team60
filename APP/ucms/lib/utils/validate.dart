@@ -21,8 +21,7 @@ validateNull() => (String? value) {
 };
 
 validateTime() => (String? value) {
-  //TODO : implement
-   if (value!.isEmpty) {return "내용을 입력하세요.";}
+   if (value!.isEmpty) {return "시간을 입력하세요.";}
    else {return null;}
 };
 
