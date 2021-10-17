@@ -153,9 +153,13 @@ export default {
     this.FETCH_USING_REPORT();
   },
   mounted() {
-    this.$socket.$subscribe("facility_request", (data) => {
-      this.ADD_USING_REPORT(data);
-    });
+    try {
+      this.$socket.$subscribe("facility_request", (data) => {
+        this.ADD_USING_REPORT(data);
+      });
+    } catch (error) {
+      window.location.reload();
+    }
   },
   methods: {
     ...mapMutations("using_approval", [

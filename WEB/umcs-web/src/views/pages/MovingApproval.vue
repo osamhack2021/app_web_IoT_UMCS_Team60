@@ -153,9 +153,13 @@ export default {
     this.FETCH_MOVING_REPORT();
   },
   mounted() {
-    this.$socket.$subscribe("move_request", (data) => {
-      this.ADD_MOVING_REPORT(data);
-    });
+    try {
+      this.$socket.$subscribe("move_request", (data) => {
+        this.ADD_MOVING_REPORT(data);
+      });
+    } catch (error) {
+      window.location.reload();
+    }
   },
   methods: {
     ...mapMutations("moving_approval", [
