@@ -88,6 +88,14 @@
             Sign Up
           </v-btn>
         </v-form>
+        <router-link
+          to="/authentication/login"
+          class="text-decoration-none"
+        >
+          <p class="text-center my-3">
+            로그인
+          </p>
+        </router-link>
       </v-col>
     </v-row>
   </v-container>
