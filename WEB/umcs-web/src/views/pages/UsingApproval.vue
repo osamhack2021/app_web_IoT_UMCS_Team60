@@ -150,9 +150,6 @@ export default {
     },
   },
   created() {
-    this.FETCH_USING_REPORT();
-  },
-  mounted() {
     try {
       this.$socket.$subscribe("facility_request", (data) => {
         this.ADD_USING_REPORT(data);
@@ -160,6 +157,7 @@ export default {
     } catch (error) {
       window.location.reload();
     }
+    this.FETCH_USING_REPORT();
   },
   methods: {
     ...mapMutations("using_approval", [

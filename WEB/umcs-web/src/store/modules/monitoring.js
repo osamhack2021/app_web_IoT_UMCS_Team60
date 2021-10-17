@@ -125,7 +125,16 @@ const actions = {
     } catch (error) {
       console.log(error);
     }
-  }
+  },
+  async DELETE_ROOM_PICKER({ state }) {
+    try {
+      console.log("api called!!");
+      const response = await deleteRoomPicker(state.focusPickerId);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default {

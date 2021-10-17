@@ -150,9 +150,6 @@ export default {
     },
   },
   created() {
-    this.FETCH_MOVING_REPORT();
-  },
-  mounted() {
     try {
       this.$socket.$subscribe("move_request", (data) => {
         this.ADD_MOVING_REPORT(data);
@@ -160,6 +157,7 @@ export default {
     } catch (error) {
       window.location.reload();
     }
+    this.FETCH_MOVING_REPORT();
   },
   methods: {
     ...mapMutations("moving_approval", [
