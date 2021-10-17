@@ -140,7 +140,7 @@
                   <v-card-actions>
                     <v-dialog
                       v-model="dialog"
-                      width="600"
+                      width="400"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
@@ -160,7 +160,6 @@
                             <v-row>
                               <v-col
                                 cols="12"
-                                sm="6"
                                 align-self="center"
                               >
                                 <v-select
@@ -197,7 +196,7 @@
                           <v-btn
                             color="blue darken-1"
                             text
-                            class="tet-body-1 font-weight-medium"
+                            class="text-body-1 font-weight-medium"
                             @click="emergencyCall"
                           >
                             저장

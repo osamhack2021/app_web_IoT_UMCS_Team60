@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="mt-6">
     <v-row>
       <v-col
         cols="12"
@@ -62,7 +62,7 @@
                           <!-- Select Admin on duty -->
                           <v-col
                             cols="12"
-                            sm="6"
+                            sm="7"
                           >
                             <v-select
                               v-model="adminOnDuty"
@@ -83,7 +83,7 @@
                           <!-- Select Manage Doom -->
                           <v-col
                             cols="12"
-                            sm="6"
+                            sm="5"
                           >
                             <v-select
                               v-model="doomOnDuty"
@@ -146,8 +146,8 @@
                       <v-btn
                         color="blue darken-1"
                         text
-                        class="tet-body-1 font-weight-medium"
-                        @click="saveForm"
+                        class="text-body-1 font-weight-medium"
+                        @click="submitForm"
                       >
                         저장
                       </v-btn>
@@ -326,7 +326,7 @@ export default {
     closeDialog() {
       this.dialog = false;
     },
-    saveForm() {
+    submitForm() {
       this.ADD_EVENT();
       this.closeDialog();
     },
