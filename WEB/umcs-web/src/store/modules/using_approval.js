@@ -91,7 +91,7 @@ const actions = {
           obj.name = `${elem.user_rank} ${elem.user_name}`;
           obj.reportedTime = reportedDate.toLocaleString();
           if (currentLocation.data.code === 1) {
-            obj.currentLocation = currentLocation.data.data.name;
+            obj.currentLocation = currentLocation.data.data[0].name;
           } else {
             obj.currentLocation = "알 수 없음";
           }
