@@ -212,7 +212,7 @@
                       <v-img
                         src="@/assets/default-profile.svg"
                         alt="Default Profile"
-                      ></v-img>
+                      />
                     </v-avatar>
                   </div>
                   <v-card-text class="d-flex justify-center">
