@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:ucms/data/is_cohort.dart';
-import 'package:ucms/data/places/doomfacility.dart';
-import 'package:ucms/data/places/place_database.dart';
-import 'package:ucms/data/time_list.dart';
-import 'package:ucms/data/time_zone.dart';
-import 'package:ucms/utils/cohort_util/cohort_repository.dart';
+import 'package:ucms/model/is_cohort.dart';
+import 'package:ucms/model/places/doomfacility.dart';
+import 'package:ucms/model/places/place_database.dart';
+import 'package:ucms/model/time_list.dart';
+import 'package:ucms/model/time_zone.dart';
+import 'package:ucms/repository/cohort_repository.dart';
 import 'package:ucms/utils/convert_utf8.dart';
 
 class CohortController extends GetxController {

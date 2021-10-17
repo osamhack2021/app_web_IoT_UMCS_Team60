@@ -8,13 +8,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/places/place.dart';
+import 'package:ucms/model/places/place.dart';
 import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
 import 'package:ucms/utils/snackbar.dart';
-import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/controllers/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
 class UserMove extends StatefulWidget {

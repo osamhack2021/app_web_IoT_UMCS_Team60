@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/model/hostnames.dart';
 
 class CohortProvider extends GetConnect {
   Future<Response> cohortStatus() => get("$restAPIHost/cohort_status", headers: {"charset" : "utf-8"});

@@ -1,8 +1,8 @@
 
 import 'package:get/get.dart';
-import 'package:ucms/data/dto/server_multi_resp_dto.dart';
-import 'package:ucms/data/dto/server_resp_dto.dart';
-import 'package:ucms/utils/cohort_util/cohort_provider.dart';
+import 'package:ucms/model/dto/server_multi_resp_dto.dart';
+import 'package:ucms/model/dto/server_resp_dto.dart';
+import 'package:ucms/providers/cohort_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
 
 class CohortRepository {

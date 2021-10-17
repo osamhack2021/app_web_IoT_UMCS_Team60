@@ -12,10 +12,10 @@ import 'package:ucms/components/custom_buttons.dart';
 import 'package:ucms/components/custom_screen.dart';
 import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
-import 'package:ucms/data/expan_item.dart';
-import 'package:ucms/data/places/place.dart';
-import 'package:ucms/data/position_list.dart';
-import 'package:ucms/data/time_list.dart';
+import 'package:ucms/model/expan_item.dart';
+import 'package:ucms/model/places/place.dart';
+import 'package:ucms/model/position_list.dart';
+import 'package:ucms/model/time_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
 import 'package:ucms/pages/page_cohort/cohort_move.dart';
 import 'package:ucms/pages/page_login/login_page.dart';
@@ -24,10 +24,10 @@ import 'package:ucms/socket/user_socket_client.dart';
 import 'package:ucms/theme/color_theme.dart';
 import 'package:ucms/theme/size.dart';
 import 'package:ucms/theme/text_theme.dart';
-import 'package:ucms/utils/cohort_util/cohort_controller.dart';
-import 'package:ucms/utils/place_util/place_controller.dart';
+import 'package:ucms/controllers/cohort_controller.dart';
+import 'package:ucms/controllers/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
-import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/controllers/user_controller.dart';
 import 'package:ucms/utils/validate.dart';
 
 class CohortMain extends StatefulWidget {

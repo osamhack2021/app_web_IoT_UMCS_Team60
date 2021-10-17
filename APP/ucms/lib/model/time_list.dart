@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucms/data/places/doomfacility.dart';
-import 'package:ucms/data/time_zone.dart';
+import 'package:ucms/model/places/doomfacility.dart';
+import 'package:ucms/model/time_zone.dart';
 
 class TimeList extends GetxService {
 

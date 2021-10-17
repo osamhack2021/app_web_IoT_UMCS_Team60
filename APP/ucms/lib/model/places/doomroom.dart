@@ -1,4 +1,4 @@
-import 'package:ucms/data/places/place.dart';
+import 'package:ucms/model/places/place.dart';
 
 class DoomRoom  extends Place{
   DoomRoom({required id, required name, required beaconId, required this.doomId, required this.floor})

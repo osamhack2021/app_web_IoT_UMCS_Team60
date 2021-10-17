@@ -1,4 +1,4 @@
-import 'package:ucms/data/places/place.dart';
+import 'package:ucms/model/places/place.dart';
 
 class OutsideFacility extends Place{
    OutsideFacility({required id, required name, required beaconId}) 

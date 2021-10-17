@@ -5,17 +5,17 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:ucms/data/dto/move_request_dto.dart';
-import 'package:ucms/data/hostnames.dart';
-import 'package:ucms/data/time_list.dart';
+import 'package:ucms/model/dto/move_request_dto.dart';
+import 'package:ucms/model/hostnames.dart';
+import 'package:ucms/model/time_list.dart';
 import 'package:ucms/notification/noti_manager.dart';
 import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
 import 'package:ucms/pages/page_user/user_main.dart';
-import 'package:ucms/utils/cohort_util/cohort_controller.dart';
-import 'package:ucms/utils/place_util/place_controller.dart';
+import 'package:ucms/controllers/cohort_controller.dart';
+import 'package:ucms/controllers/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
-import 'package:ucms/utils/user_util/user_controller.dart';
+import 'package:ucms/controllers/user_controller.dart';
 
 class UserSocketClient extends GetxService {
   var prefs = GetStorage();

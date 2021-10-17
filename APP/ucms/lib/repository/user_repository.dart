@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ucms/data/user.dart';
-import 'package:ucms/data/dto/server_resp_dto.dart';
-import 'package:ucms/utils/user_util/user_provider.dart';
+import 'package:ucms/model/user.dart';
+import 'package:ucms/model/dto/server_resp_dto.dart';
+import 'package:ucms/providers/user_provider.dart';
 import 'package:ucms/utils/convert_utf8.dart';
 
 
