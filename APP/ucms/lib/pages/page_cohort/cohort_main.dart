@@ -14,7 +14,6 @@ import 'package:ucms/components/label.dart';
 import 'package:ucms/components/texts.dart';
 import 'package:ucms/data/expan_item.dart';
 import 'package:ucms/data/places/place.dart';
-import 'package:ucms/data/places/place_database.dart';
 import 'package:ucms/data/position_list.dart';
 import 'package:ucms/data/time_list.dart';
 import 'package:ucms/pages/page_cohort/cohort_assemble.dart';
@@ -74,8 +73,9 @@ class _CohortMainState extends State<CohortMain> {
     beaconMan.startListeningBeacons();
     Timer.periodic(const Duration(seconds: 2), (timer) {
       if (min15 >= 0) {
-        socketClient.getIn(
+        socketClient.locationReport(
             macAddress: beaconResult.macAddress,
+            proximity: double.parse(beaconResult.proximity)
         );
         min15 -= 2;
       } else {
@@ -337,6 +337,7 @@ class _CohortMainState extends State<CohortMain> {
           title("프로필"),
           quote("내 사용자 정보"),
           const SizedBox(height: 20),
+          const Icon(Icons.account_circle, size: 100.0,),
           quote("$name 님 환영합니다."),
           const SizedBox(height: 20),
           WarnButton(

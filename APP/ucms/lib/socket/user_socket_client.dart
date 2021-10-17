@@ -7,9 +7,15 @@ import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:ucms/data/dto/move_request_dto.dart';
 import 'package:ucms/data/hostnames.dart';
+import 'package:ucms/data/time_list.dart';
 import 'package:ucms/notification/noti_manager.dart';
+import 'package:ucms/pages/page_cohort/cohort_main.dart';
 import 'package:ucms/pages/page_user/user_assemble.dart';
+import 'package:ucms/pages/page_user/user_main.dart';
+import 'package:ucms/utils/cohort_util/cohort_controller.dart';
+import 'package:ucms/utils/place_util/place_controller.dart';
 import 'package:ucms/utils/snackbar.dart';
+import 'package:ucms/utils/user_util/user_controller.dart';
 
 class UserSocketClient extends GetxService {
   var prefs = GetStorage();
@@ -28,7 +34,6 @@ class UserSocketClient extends GetxService {
 
     //LISTEN
     socket.on("move_approval", (_) async {
-      //TODO:  impelment
 
       NotiManager n = Get.find<NotiManager>();
 
@@ -36,8 +41,9 @@ class UserSocketClient extends GetxService {
     1,"test", "testBody",n.platformChannelSpecifics);
     });
     
-    socket.on("facility_approval", (_){
-      //TODO:  impelment
+    socket.on("facility_approval", (data){
+      dynamic json = jsonDecode(utf8.decode(data));
+      
     });
 
     socket.on("assemble_command", (data) {
@@ -50,7 +56,7 @@ class UserSocketClient extends GetxService {
       Snack.warnTop("소집 지시", "소집 지시가 내려왔습니다.");
     });
 
-    socket.on("to_cohort", (data) {
+    socket.on("to_cohort", (data) async {
       dynamic json = jsonDecode(utf8.decode(data));
       bool flag =false;
       String tag = prefs.read("tag");
@@ -61,16 +67,42 @@ class UserSocketClient extends GetxService {
         }
       }
       if(flag) {
-        
-      }
+        GetStorage store = GetStorage();
+        UserController u = Get.find<UserController>();
+        PlaceController p = Get.find<PlaceController>();
+        store.writeIfNull("state", "정상");
+            
+        await u.currentPosition(store.read("tag"));
+        var positions = await p.positionAllInfo();
+        CohortController c = Get.isRegistered<CohortController>()? Get.find<CohortController>():Get.put(CohortController());
+        List<TimeList> times = await c.timeTableAllInfo();
+
+        Snack.top("로그인 시도", "성공");
+        Get.to(CohortMain(
+          location: store.read("recent_place_name") ??
+              "error in LoginPage",
+          state: store.read("state") ?? "",
+          positions : positions,
+          times : times
+        ));
+        }
     });
 
-    socket.on("to_normal", (_) {
-      //TODO:  impelment
+    socket.on("to_normal", (_) async {
+      GetStorage store = GetStorage();
+      UserController u = Get.find<UserController>();
+      PlaceController p = Get.find<PlaceController>();
+      store.write("state", "정상");
+      
+
+      await u.currentPosition(store.read("recent_place_name"));
+      var positions = await p.positionAllInfo();
+      Get.to(UserMain(location:store.read("recent_place_name"), state: store.read("state"), positions: positions,));
+      Snack.top("평시로 전환", "코호트 상황이 풀렸습니다.");
     });
 
      socket.on("contact_alert", (_) {
-      //TODO:  impelment
+      Snack.warnTop("접촉 경고", "코호트 대상자와 접촉하였습니다.");
     });
 
   }
@@ -85,6 +117,7 @@ class UserSocketClient extends GetxService {
     socket.emit("cannot_assemble", json);
   }
 
+  @Deprecated("this emit is absorbed by method locationReport")
   void getIn({required String macAddress}) {
     startSocket(prefs.read("token"));
     Map<String, dynamic> json = {
@@ -94,14 +127,14 @@ class UserSocketClient extends GetxService {
     socket.emit("get_in", json);
   }
 
+  @Deprecated("this emit is absorbed by method locationReport")
   void getOut({required String macAddress}) {
-    //TODO : impelment 
     startSocket(prefs.read("token"));
     Map<String, dynamic> json = {
       "beacon_id": macAddress,
     };
 
-    socket.emit("get_in", json);
+    socket.emit("get_out", json);
   }
 
   void moveRequest({required String outsideId, required String desc}) {
@@ -110,25 +143,21 @@ class UserSocketClient extends GetxService {
   }
 
   void facilityRequest({required String outsideId, required String desc}) {
-    //TODO : implement
     MoveRequestDto dto = MoveRequestDto(outsideId: outsideId, description: desc);
-    socket.emit("move_request", dto.toJson());
+    socket.emit("facility_request", dto.toJson());
   }
 
-  void locationReport({required String macAddress, required String scanTime}) {
+  void locationReport({required String macAddress, required double proximity}) {
     startSocket(prefs.read("token"));
     socket.io.options['extraHeaders'] = {'authorization': 'Bearer ${prefs.read("token")}'};
     socket.io..disconnect()..connect();
 
-    // TODO : implement 
     Map<String, dynamic> json = {
-      "tag": prefs.read("tag"),
-      "beacon_id": macAddress,
-      "time": scanTime,
+      "beacon_id": macAddress
     };
 
-    socket.emit("get_in", json);
-    //get_in, get_out
+    if(proximity>=0.8) socket.emit("get_in", json);
+    if(proximity<=0.2) socket.emit("get_out", json);
   }
 
   

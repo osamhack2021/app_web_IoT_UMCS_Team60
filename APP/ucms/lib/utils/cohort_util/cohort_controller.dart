@@ -1,13 +1,11 @@
 import 'package:get/get.dart';
 import 'package:ucms/data/is_cohort.dart';
 import 'package:ucms/data/places/doomfacility.dart';
-import 'package:ucms/data/places/outside_facility.dart';
 import 'package:ucms/data/places/place_database.dart';
 import 'package:ucms/data/time_list.dart';
 import 'package:ucms/data/time_zone.dart';
 import 'package:ucms/utils/cohort_util/cohort_repository.dart';
 import 'package:ucms/utils/convert_utf8.dart';
-import 'package:ucms/utils/place_util/place_controller.dart';
 
 class CohortController extends GetxController {
   final repository = CohortRepository();

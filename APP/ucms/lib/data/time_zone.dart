@@ -30,9 +30,7 @@ class TimeZone {
         "start_time" : startTime.toString(),
         "end_time" : endTime.toString(),
       };
-  ListTile toListTile() {
-    //TODO : roomId 가지고 이름으로 변환하기
-    
+  ListTile toListTile() { 
     String doomName = placeDB.getDoomName(doomId);
     String roomName = placeDB.getRoomName(roomId);
     return ListTile(

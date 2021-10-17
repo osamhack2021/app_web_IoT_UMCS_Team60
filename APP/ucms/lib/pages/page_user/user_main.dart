@@ -62,8 +62,9 @@ class _UserMainState extends State<UserMain> {
     beaconMan.startListeningBeacons();
     Timer.periodic(const Duration(minutes: 2), (timer) {
       if (min15 >= 0) {
-        socketClient.getIn(
+        socketClient.locationReport(
             macAddress: beaconResult.macAddress,
+            proximity: double.parse(beaconResult.proximity)
         );
         min15 -= 2;
       } else {
@@ -167,8 +168,7 @@ class _UserMainState extends State<UserMain> {
           topMargin(),
           title("모니터링"),
           quote("사용자들의 위치를 파악합니다"),
-          quote("장소 갯수 : ${positions.length}"),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           ExpansionPanelList(
             animationDuration: const Duration(milliseconds: 2000),
             children: [
@@ -232,6 +232,7 @@ class _UserMainState extends State<UserMain> {
           title("프로필"),
           quote("내 사용자 정보"),
           const SizedBox(height: 20),
+          const Icon(Icons.account_circle, size: 100.0,),
           quote("$name 님 환영합니다."),
           const SizedBox(height: 20),
           PageButton(
