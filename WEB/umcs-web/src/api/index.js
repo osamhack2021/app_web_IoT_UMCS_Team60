@@ -2,6 +2,9 @@ import axios from "axios";
 
 const BASE_URL = "/api/";
 
+function deleteOutsideFacility(id) {
+  return axios.delete(`${BASE_URL}outside_facility/${id}`);
+}
 // Authentication
 function signupAdmin(adminData) {
   return axios.post(`${BASE_URL}manager/register`, adminData);
@@ -34,6 +37,9 @@ function fetchDoomList() {
 }
 function fetchFacilityList() {
   return axios.get(`${BASE_URL}watchman/myCharge/details`);
+}
+function fetchOutsideFacilityList() {
+  return axios.get(`${BASE_URL}outside_facility`);
 }
 function fetchRoomInfo(id) {
   return axios.get(`${BASE_URL}doomroom/${id}`);
@@ -123,6 +129,7 @@ function deleteDuty(id) {
 }
 
 export {
+  deleteOutsideFacility,
   signupAdmin,
   loginAdmin,
   logoutAdmin,
@@ -133,6 +140,7 @@ export {
   fetchUserInfo,
   fetchDoomList,
   fetchFacilityList,
+  fetchOutsideFacilityList,
   fetchRoomInfo,
   fetchRoomList_doomId,
   fetchCurrentLocation_BeaconId,
