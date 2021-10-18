@@ -35,6 +35,9 @@ function fetchDoomList() {
 function fetchFacilityList() {
   return axios.get(`${BASE_URL}watchman/myCharge/details`);
 }
+function fetchOutsideFacilityList() {
+  return axios.get(`${BASE_URL}outside_facility`);
+}
 function fetchRoomInfo(id) {
   return axios.get(`${BASE_URL}doomroom/${id}`);
 }
@@ -133,6 +136,7 @@ export {
   fetchUserInfo,
   fetchDoomList,
   fetchFacilityList,
+  fetchOutsideFacilityList,
   fetchRoomInfo,
   fetchRoomList_doomId,
   fetchCurrentLocation_BeaconId,

@@ -28,10 +28,7 @@ const routes = [
       const socket = io.connect("https://militaryumcs.com/manager", {
         query:
           "session_id=" +
-          window.$cookies
-            .get("express.sid")
-            .replace("s:", "")
-            .split(".")[0],
+          window.$cookies.get("express.sid").replace("s:", "").split(".")[0],
       });
       Vue.use(VueSocketIO, socket);
       next();
@@ -40,7 +37,21 @@ const routes = [
       {
         path: "/monitoring",
         name: "실시간 모니터링",
+        redirect: "/monitoring/doom",
         component: () => import("@/views/pages/Monitoring"),
+        children: [
+          {
+            path: "doom",
+            name: "영내 시설 모니터링",
+            component: () => import("@/components/Monitoring/DoomMonitoring"),
+          },
+          {
+            path: "outside",
+            name: "영외 시설 모니터링",
+            component: () =>
+              import("@/components/Monitoring/OutsideMonitoring"),
+          },
+        ],
       },
       {
         path: "/approval-moving",

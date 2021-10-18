@@ -64,6 +64,7 @@ export default {
       this.FETCH_USER_LIST();
       this.FETCH_DOOM_LIST();
       this.FETCH_FACILITY_LIST();
+      this.FETCH_OUTSIDE_FACILITY_LIST();
     } catch (error) {
       window.location.reload();
     }
@@ -75,6 +76,7 @@ export default {
       "FETCH_USER_LIST",
       "FETCH_DOOM_LIST",
       "FETCH_FACILITY_LIST",
+      "FETCH_OUTSIDE_FACILITY_LIST",
     ]),
   },
 };

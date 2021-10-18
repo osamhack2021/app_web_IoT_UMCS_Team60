@@ -8,6 +8,7 @@ import {
   fetchUsers,
   fetchDoomList,
   fetchFacilityList,
+  fetchOutsideFacilityList,
 } from "@/api/index.js";
 
 Vue.use(Vuex);
@@ -35,6 +36,8 @@ export default new Vuex.Store({
 
     // 관리하는 장소들의 목록
     facilityList: [],
+    // 외부시설 목록
+    outsideFacilityList: [],
   },
 
   mutations: {
@@ -55,6 +58,9 @@ export default new Vuex.Store({
     },
     setFacilityList(state, data) {
       state.facilityList = data;
+    },
+    setOutsideFacilityList(state, data) {
+      state.outsideFacilityList = data;
     },
   },
 
@@ -114,6 +120,16 @@ export default new Vuex.Store({
         const response = await fetchFacilityList();
         const resData = response.data.data;
         commit("setFacilityList", resData);
+        return resData;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async FETCH_OUTSIDE_FACILITY_LIST({ commit }) {
+      try {
+        const response = await fetchOutsideFacilityList();
+        const resData = response.data.data;
+        commit("setOutsideFacilityList", resData);
         return resData;
       } catch (error) {
         console.log(error);
