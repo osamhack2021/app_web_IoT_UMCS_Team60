@@ -1,40 +1,60 @@
 <template>
-  <v-row>
-    <v-col
-      cols="12"
-      xl="8"
-      class="mx-auto"
+  <div>
+    <v-snackbar
+      v-model="editMode"
+      color="#ff5252"
+      :timeout="-1"
+      class="mb-8"
     >
-      <v-row>
-        <v-col cols="8">
-          <div
-            v-for="doom in facilityList"
-            :key="doom.doom_id"
-          >
-            <v-card class="mt-5">
-              <v-card-actions>
-                <v-row>
-                  <v-spacer />
-                  <v-col cols="3">
-                    <v-btn
-                      block
-                      @click="test"
-                    >
-                      추가
-                    </v-btn>
-                  </v-col>
-                  <v-spacer />
-                  <v-col cols="3">
-                    <!-- Edit Mode Changer -->
-                    <v-btn
-                      block
-                      @click="editModeChanged"
-                    >
-                      {{ getEditText }}
-                    </v-btn>
-                  </v-col>
-                  <v-spacer />
-                </v-row>
+      <v-alert
+        type="error"
+        prominent
+        dense
+        class="pa-0 mx-4 my-0"
+      >
+        <v-row align="center">
+          <v-col class="grow font-weight-medium">
+            Room Icon의 편집(위치 이동)은 한번에 하나만 가능합니다
+          </v-col>
+        </v-row>
+      </v-alert>
+    </v-snackbar>
+    <v-row>
+      <v-col
+        cols="12"
+        xl="8"
+        class="mx-auto"
+      >
+        <v-row>
+          <v-col cols="8">
+            <div
+              v-for="doom in facilityList"
+              :key="doom.doom_id"
+            >
+              <v-card class="mt-5">
+                <v-card-actions>
+                  <v-row>
+                    <v-spacer />
+                    <v-col cols="3">
+                      <v-btn
+                        block
+                        @click="test"
+                      >
+                        추가
+                      </v-btn>
+                    </v-col>
+                    <v-spacer />
+                    <v-col cols="3">
+                      <!-- Edit Mode Changer -->
+                      <v-btn
+                        block
+                        @click="editModeChanged"
+                      >
+                        {{ getEditText }}
+                      </v-btn>
+                    </v-col>
+                    <v-spacer />
+                  </v-row>
                 <!-- Dialog for Create Icon -->
                 <!-- <v-dialog v-model="dialog" width="600">
                     <template v-slot:activator="{ on, attrs }">
@@ -96,118 +116,119 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog> -->
-              </v-card-actions>
-              <!-- v-for 사용하여 나열 -->
-              <v-card
-                v-for="floor in doom.items"
-                :key="floor.floor"
-                outlined
-              >
-                <!-- Toolbar -->
-                <v-card-title class="py-2">
-                  {{ floor.name }}
-                </v-card-title>
-
-                <v-img
-                  :src="
-                    require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
-                  "
+                </v-card-actions>
+                <!-- v-for 사용하여 나열 -->
+                <v-card
+                  v-for="floor in doom.items"
+                  :key="floor.floor"
+                  outlined
                 >
-                  <template v-for="picker in floor.items">
-                    <vue-draggable-resizable
-                      v-if="picker.room_picker"
-                      :key="picker.beacon_id"
-                      :w="50"
-                      :h="50"
-                      :x="picker.room_picker.x"
-                      :y="picker.room_picker.y"
-                      :draggable="editMode"
-                      :resizable="false"
-                      class-name="box-content"
-                      @dragging="onDrag"
-                    >
-                      <v-btn
-                        fab
-                        small
-                        class="info text-body-1 font-weight-medium white--text"
-                        @click="
-                          pickerClicked(
-                            picker.name,
-                            picker.beacon_id,
-                            picker.room_picker.id
-                          )
-                        "
+                  <!-- Toolbar -->
+                  <v-card-title class="py-2">
+                    {{ floor.name }}
+                  </v-card-title>
+
+                  <v-img
+                    :src="
+                      require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
+                    "
+                  >
+                    <template v-for="picker in floor.items">
+                      <vue-draggable-resizable
+                        v-if="picker.room_picker"
+                        :key="picker.beacon_id"
+                        :w="50"
+                        :h="50"
+                        :x="picker.room_picker.x"
+                        :y="picker.room_picker.y"
+                        :draggable="editMode"
+                        :resizable="false"
+                        class-name="box-content"
+                        @dragging="onDrag"
                       >
-                        {{ picker.current_count }}
-                      </v-btn>
-                    </vue-draggable-resizable>
-                  </template>
-                </v-img>
+                        <v-btn
+                          fab
+                          small
+                          class="info text-body-1 font-weight-medium white--text"
+                          @click="
+                            pickerClicked(
+                              picker.name,
+                              picker.beacon_id,
+                              picker.room_picker.id
+                            )
+                          "
+                        >
+                          {{ picker.current_count }}
+                        </v-btn>
+                      </vue-draggable-resizable>
+                    </template>
+                  </v-img>
+                </v-card>
               </v-card>
-            </v-card>
-          </div>
-        </v-col>
-
-        <!-- People list -->
-        <v-col
-          cols="4"
-          class="mt-5"
-        >
-          <v-card>
-            <v-card-title>
-              <span>{{ focusRoom }} 인원현황</span>
-              <v-spacer />
-              <v-icon
-                v-if="focusPickerId"
-                @click="deleteRoomIcon"
-              >
-                mdi-delete
-              </v-icon>
-            </v-card-title>
-            <v-card-text>
-              <!-- Search Bar -->
-              <v-text-field
-                v-model="searchInput"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-                clearable
-              />
-            </v-card-text>
-            <v-data-table
-              :headers="tableHeaders"
-              :items="tableDatas"
-              :search="searchInput"
-              :loading="isLoading"
-              hide-default-footer
-              :items-per-page="$store.state.ITEMS_PER_PAGE"
-              :page.sync="page"
-              class="elavation-1"
-            >
-              <!-- Slot:item.name - user profile routing -->
-              <template v-slot:[`item.name`]="{ item }">
-                <router-link
-                  :to="`/user/${item.tag}`"
-                  class="info--text text-decoration-none"
-                >
-                  {{ item.name }}
-                </router-link>
-              </template>
-            </v-data-table>
-            <!-- Pagination -->
-            <div class="text-center pt-2">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-                :total-visible="$store.state.TOTAL_VISIBLE"
-              />
             </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-col>
-  </v-row>
+          </v-col>
+
+          <!-- People list -->
+          <v-col
+            cols="4"
+            class="mt-5"
+          >
+            <v-card>
+              <v-card-title>
+                <span>{{ focusRoom }} 인원현황</span>
+                <v-spacer />
+                <v-icon
+                  v-if="focusPickerId"
+                  @click="deleteRoomIcon"
+                >
+                  mdi-delete
+                </v-icon>
+              </v-card-title>
+              <v-card-text>
+                <!-- Search Bar -->
+                <v-text-field
+                  v-model="searchInput"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                  clearable
+                />
+              </v-card-text>
+              <v-data-table
+                :headers="tableHeaders"
+                :items="tableDatas"
+                :search="searchInput"
+                :loading="isLoading"
+                hide-default-footer
+                :items-per-page="$store.state.ITEMS_PER_PAGE"
+                :page.sync="page"
+                class="elavation-1"
+              >
+                <!-- Slot:item.name - user profile routing -->
+                <template v-slot:[`item.name`]="{ item }">
+                  <router-link
+                    :to="`/user/${item.tag}`"
+                    class="info--text text-decoration-none"
+                  >
+                    {{ item.name }}
+                  </router-link>
+                </template>
+              </v-data-table>
+              <!-- Pagination -->
+              <div class="text-center pt-2">
+                <v-pagination
+                  v-model="page"
+                  :length="pageCount"
+                  :total-visible="$store.state.TOTAL_VISIBLE"
+                />
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -236,14 +257,14 @@ export default {
   },
   computed: {
     ...mapState(["facilityList"]),
-    ...mapState("monitoring", [
+    ...mapState("doom_monitoring", [
       "editMode",
       "focusPickerId",
       "focusRoom",
       "tableHeaders",
       "tableDatas",
     ]),
-    ...mapGetters("monitoring", [
+    ...mapGetters("doom_monitoring", [
       "getEditText",
       "getEditedX",
       "getEditedY",
@@ -300,7 +321,7 @@ export default {
   },
   methods: {
     ...mapMutations(["deleteRoomPicker"]),
-    ...mapMutations("monitoring", [
+    ...mapMutations("doom_monitoring", [
       "changeEditMode",
       "setEditedX",
       "setEditedY",
@@ -309,7 +330,7 @@ export default {
       "updateSearchInput",
       "setLoading",
     ]),
-    ...mapActions("monitoring", [
+    ...mapActions("doom_monitoring", [
       "FETCH_CURRENT_LOCATION_BEACON",
       "EDIT_ROOM_PICKER",
       "DELETE_ROOM_PICKER",
