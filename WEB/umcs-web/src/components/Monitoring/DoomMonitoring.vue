@@ -36,12 +36,88 @@
                   <v-row>
                     <v-spacer />
                     <v-col cols="3">
-                      <v-btn
-                        block
-                        @click="test"
+                      <!-- Dialog for Create Icon -->
+                      <v-dialog
+                        v-model="dialog"
+                        width="600"
                       >
-                        추가
-                      </v-btn>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            block
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            추가
+                          </v-btn>
+                        </template>
+                        <v-card class="pa-3">
+                          <v-card-title>
+                            <span class="text-h5">관리자 등록</span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-container>
+                              <v-row>
+                                <!-- Select Manage Doom -->
+                                <v-col
+                                  cols="12"
+                                  sm="4"
+                                >
+                                  <v-select
+                                    :items="facilityList"
+                                    label="건물 선택"
+                                    item-text="doom_name"
+                                    prepend-icon="mdi-home-city"
+                                  >
+                                    <!-- <template v-slot:selection="data">
+                                      {{ data.item.doom_name }}
+                                    </template>
+                                    <template v-slot:item="data">
+                                      <v-list-item-content v-text="data.item.doom_name" />
+                                    </template> -->
+                                  </v-select>
+                                </v-col>
+                                <v-col
+                                  cols="12"
+                                  sm="4"
+                                >
+                                  <v-select
+                                    :items="tempFloorList"
+                                    label="층 선택"
+                                  />
+                                </v-col>
+                                <v-col
+                                  cols="12"
+                                  sm="4"
+                                >
+                                  <v-select
+                                    :items="tempRoomList"
+                                    label="장소 선택"
+                                  />
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer />
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              class="text-body-1 font-weight-medium"
+                              @click="closeDialog"
+                            >
+                              닫기
+                            </v-btn>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              class="text-body-1 font-weight-medium"
+                              @click="submitForm"
+                            >
+                              저장
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                     </v-col>
                     <v-spacer />
                     <v-col cols="3">
@@ -55,90 +131,27 @@
                     </v-col>
                     <v-spacer />
                   </v-row>
-                <!-- Dialog for Create Icon -->
-                <!-- <v-dialog v-model="dialog" width="600">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        추가
-                      </v-btn>
-                    </template>
-                    <v-card class="pa-3">
-                      <v-card-title>
-                        <span class="text-h5">관리자 등록</span>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            Select Manage Doom
-                            <v-col cols="12" sm="6">
-                              <v-select
-                                v-model="doomSelected"
-                                :items="facilityList"
-                                label="시설 선택"
-                                item-text="doom_name"
-                                prepend-icon="mdi-home-city"
-                                required
-                              >
-                                <template v-slot:selection="data">
-                                  {{ data.item.doom_name }}
-                                </template>
-                                <template v-slot:item="data">
-                                  <v-list-item-content
-                                    v-text="data.item.doom_name"
-                                  />
-                                </template>
-                              </v-select>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer />
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          class="text-body-1 font-weight-medium"
-                          @click="closeDialog"
-                        >
-                          닫기
-                        </v-btn>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          class="text-body-1 font-weight-medium"
-                          @click="submitForm"
-                        >
-                          저장
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog> -->
                 </v-card-actions>
+
                 <!-- v-for 사용하여 나열 -->
                 <v-card
                   v-for="floor in doom.items"
                   :key="floor.floor"
                   outlined
+                  class="mt-2 mb-7"
                 >
                   <!-- Toolbar -->
                   <v-card-title class="py-2">
                     {{ floor.name }}
                   </v-card-title>
 
-                  <v-img
-                    :src="
-                      require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)
-                    "
-                  >
+                  <v-img :src="require(`@/assets/doom${doom.doom_id}-floor${floor.floor}-drawing.png`)">
                     <template v-for="picker in floor.items">
                       <vue-draggable-resizable
                         v-if="picker.room_picker"
                         :key="picker.beacon_id"
-                        :w="50"
-                        :h="50"
+                        :w="1"
+                        :h="1"
                         :x="picker.room_picker.x"
                         :y="picker.room_picker.y"
                         :draggable="editMode"
@@ -250,9 +263,19 @@ export default {
     return {
       page: 1,
       dialog: false,
-      doomSelected: "",
-      floorSelected: "",
-      placeSelected: "",
+      tempFloorList: ["1층", "2층"],
+      tempRoomList: [
+        "1호실",
+        "2호실",
+        "3호실",
+        "4호실",
+        "5호실",
+        "세탁실",
+        "화장실",
+        "세면장",
+        "샤워실",
+        "체력단련실",
+      ],
     };
   },
   computed: {
@@ -332,6 +355,7 @@ export default {
     ]),
     ...mapActions("doom_monitoring", [
       "FETCH_CURRENT_LOCATION_BEACON",
+      "CREATE_ROOM_PICKER",
       "EDIT_ROOM_PICKER",
       "DELETE_ROOM_PICKER",
     ]),
@@ -345,8 +369,14 @@ export default {
       this.dialog = false;
     },
     submitForm() {
-      // this.ADD_EVENT();
+      const payload = {
+        x: 461,
+        y: 36,
+        size: "small",
+        beacon_id: "rr:rr:rr:rr:rr:rr",
+      };
       this.closeDialog();
+      this.CREATE_ROOM_PICKER(payload);
     },
     editModeChanged() {
       this.changeEditMode();
@@ -365,7 +395,6 @@ export default {
     },
     deleteRoomIcon() {
       this.DELETE_ROOM_PICKER();
-      window.location.reload();
     },
     pickerClicked(name, beaconId, roomPickerId) {
       this.setFocusPickerId(roomPickerId);
@@ -373,7 +402,15 @@ export default {
       // beaconId에 해당하는 시설에 있는 인원 목록
       this.FETCH_CURRENT_LOCATION_BEACON(beaconId);
     },
-    test() {},
+    test() {
+      const payload = {
+        x: 461,
+        y: 36,
+        size: "small",
+        beacon_id: "rr:rr:rr:rr:rr:rr",
+      };
+      this.CREATE_ROOM_PICKER(payload);
+    },
   },
 };
 </script>

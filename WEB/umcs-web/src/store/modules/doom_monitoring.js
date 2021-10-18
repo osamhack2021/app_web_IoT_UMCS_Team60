@@ -113,6 +113,15 @@ const actions = {
       console.log(error);
     }
   },
+  async CREATE_ROOM_PICKER({ commit }, payload) {
+    try {
+      const response = await createRoomPicker(payload);
+      window.location.reload();
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async EDIT_ROOM_PICKER({ state }) {
     try {
       const payload = {
@@ -130,6 +139,7 @@ const actions = {
     try {
       console.log("api called!!");
       const response = await deleteRoomPicker(state.focusPickerId);
+      window.location.reload();
       return response;
     } catch (error) {
       console.log(error);

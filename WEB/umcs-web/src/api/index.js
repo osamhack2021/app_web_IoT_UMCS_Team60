@@ -2,9 +2,6 @@ import axios from "axios";
 
 const BASE_URL = "/api/";
 
-function deleteOutsideFacility(id) {
-  return axios.delete(`${BASE_URL}outside_facility/${id}`);
-}
 // Authentication
 function signupAdmin(adminData) {
   return axios.post(`${BASE_URL}manager/register`, adminData);
@@ -129,7 +126,6 @@ function deleteDuty(id) {
 }
 
 export {
-  deleteOutsideFacility,
   signupAdmin,
   loginAdmin,
   logoutAdmin,

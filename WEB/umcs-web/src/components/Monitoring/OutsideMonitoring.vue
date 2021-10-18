@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import { deleteOutsideFacility } from "@/api/index.js";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
