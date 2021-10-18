@@ -32,6 +32,20 @@
               :key="doom.doom_id"
             >
               <v-card class="mt-5">
+                <v-card-title>
+                  <v-row>
+                    <v-col
+                      cols="8"
+                      class="mx-auto"
+                    >
+                      <v-select
+                        v-model="tempSelect"
+                        :items="['제1생활관', '제2생활관', '제3생활관']"
+                        prepend-icon="mdi-home-city"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card-title>
                 <v-card-actions>
                   <v-row>
                     <v-spacer />
@@ -83,6 +97,7 @@
                                   <v-select
                                     :items="tempFloorList"
                                     label="층 선택"
+                                    prepend-icon="mdi-home-floor-a"
                                   />
                                 </v-col>
                                 <v-col
@@ -92,6 +107,7 @@
                                   <v-select
                                     :items="tempRoomList"
                                     label="장소 선택"
+                                    prepend-icon="mdi-map-marker"
                                   />
                                 </v-col>
                               </v-row>
@@ -263,6 +279,7 @@ export default {
     return {
       page: 1,
       dialog: false,
+      tempSelect: "제1생활관",
       tempFloorList: ["1층", "2층"],
       tempRoomList: [
         "1호실",
