@@ -61,10 +61,11 @@
 - 권장: Android 8.0(API 26) 이상
 
 ### 서버 최소 사양
+- Node.js 14.18 이상 
 - Operating Systems
     - Ubuntu (16.04/18.04/20.04)
 - Database
-    - Mysql 8.0 
+    - Mysql 8.0 이상
 
 ## 기술 스택 (Technique Used) 
 ### Infra
