@@ -43,7 +43,13 @@
 
 
 ## 기능 설명
- - 설명 기입
+![image](https://user-images.githubusercontent.com/28801695/137847000-9a8856d9-4d9d-45c0-af3e-4988a6236ff8.png)
+![image](https://user-images.githubusercontent.com/28801695/137847063-02f300fe-e201-4640-94df-84ef775d087f.png)
+![image](https://user-images.githubusercontent.com/28801695/137847123-5cbee7a3-98a5-42bc-b436-dfb87dc07816.png)
+![image](https://user-images.githubusercontent.com/28801695/137847184-111a8eb5-6da1-45e6-baba-bc24541241b0.png)
+![image](https://user-images.githubusercontent.com/28801695/137847248-09834e6a-a65e-497c-b344-d3dc587348f6.png)
+
+
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 * ECMAScript 6 지원 브라우저 사용
