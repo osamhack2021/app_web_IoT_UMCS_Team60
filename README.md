@@ -10,9 +10,9 @@
 </p>
 </p>
 <p align="center">
+	<a href="https://team60.gitbook.io/militaryumcs"><img src='https://img.shields.io/badge/DOCUMENT-blue?style=for-the-badge'></a>
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/VIDEO-blue?style=for-the-badge'></a>
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/HOMEPAGE-gray?style=for-the-badge'></a>
-	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/DOCUMENT-blue?style=for-the-badge'></a>
 </p>
 
 ### APP, WEB 로고
