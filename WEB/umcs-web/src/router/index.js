@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import io from "socket.io-client";
 import VueSocketIO from "vue-socket.io-extended";
 
+import Index from "@/layouts/adminPages/Index";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -18,7 +20,7 @@ const routes = [
     path: "/main",
     name: "메인 화면",
     redirect: "/monitoring",
-    component: () => import("@/layouts/adminPages/Index"),
+    component: Index,
     beforeEnter(to, from, next) {
       console.log(
         "cookie",
