@@ -1,6 +1,6 @@
 # UMCS(untact movement control system) 
 ### 비대면이동통제시스템
-<img src="./docs/banner-2.0.png" height=200 alt="Team banner">
+![image](https://user-images.githubusercontent.com/28801695/137842853-77403590-036b-4f38-9bfb-480d93c263c4.png)
 
 </p>
 <p align="center">
