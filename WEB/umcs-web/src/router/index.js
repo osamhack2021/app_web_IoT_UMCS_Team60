@@ -13,10 +13,6 @@ const routes = [
     redirect: "/authentication/login",
   },
   {
-    path: "/test",
-    component: () => import("@/views/Test"),
-  },
-  {
     path: "/main",
     name: "메인 화면",
     redirect: "/monitoring",

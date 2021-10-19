@@ -302,28 +302,7 @@ class _CohortMainState extends State<CohortMain> {
             child: Column(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                LabelFormDropDown(
-                  label: "계급",
-                  labels: const ["훈련병", "이병", "일병", "상병", "병장"],
-                  hint: "계급",
-                  controller: rankCon,
-                  validator: validateNull(),
-                  isCohort: true,
-                ),
-                LabelFormInput(
-                  label: "이름",
-                  hint: "이름",
-                  controller: nameCon,
-                  validator: validateNull(),
-                  isCohort: true,
-                ),
-                LabelFormDateTimeInput(
-                  label: "현재 시간",
-                  hint: "${_now.hour}:${_now.minute}",
-                  controller: timeCon,
-                  validator: validateTime(),
-                  isCohort: true,
-                ),
+            
                 LabelFormFloatInput(
                   label: "현재 체온",
                   hint: "36.5",

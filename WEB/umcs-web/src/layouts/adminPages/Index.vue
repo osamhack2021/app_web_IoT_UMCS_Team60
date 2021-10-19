@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import DefaultBar from "./AppBar";
 import DefaultDrawer from "./Drawer";
 import DefaultView from "./View";
@@ -31,6 +31,9 @@ export default {
   data: () => ({
     objects: [],
   }),
+  computed: {
+    ...mapState(["coronaSituation"]),
+  },
   created() {
     // 모든 page에서 공통적으로 사용할 data들을 initializing한다
     this.FETCH_CORONA_SITUATION();
@@ -51,23 +54,29 @@ export default {
         this.ADD_MOVING_REPORT(data);
       });
       this.$socket.$subscribe("facility_request", (data) => {
-        this.objects.push({
-          message: "공공시설 이용신청이 도착했습니다",
-          color: "primary",
-        });
-        this.ADD_USING_REPORT(data);
+        if (this.coronaSituation) {
+          this.objects.push({
+            message: "공용시설 이용신청이 도착했습니다",
+            color: "primary",
+          });
+          this.ADD_USING_REPORT(data);
+        }
       });
       this.$socket.$subscribe("doomroom_contact", (data) => {
-        this.objects.push({
-          message: `${data.doom_name} ${data.name}에서 타 호실원끼리 접촉이 발생했습니다`,
-          color: "red darken-2",
-        });
+        if (this.coronaSituation) {
+          this.objects.push({
+            message: `${data.doom_name} ${data.name}에서 타 호실원끼리 접촉이 발생했습니다`,
+            color: "red darken-2",
+          });
+        }
       });
       this.$socket.$subscribe("doomfacility_contact", (data) => {
-        this.objects.push({
-          message: `${data.doom_name} ${data.name}에서 타 호실원끼리 접촉이 발생했습니다`,
-          color: "red darken-2",
-        });
+        if (this.coronaSituation) {
+          this.objects.push({
+            message: `${data.doom_name} ${data.name}에서 타 호실원끼리 접촉이 발생했습니다`,
+            color: "red darken-2",
+          });
+        }
       });
     } catch (error) {
       window.location.reload();

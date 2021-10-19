@@ -29,6 +29,14 @@ class PlaceDatabase extends GetxService {
     return res;
   }
 
+  String getDoomFacilName(int doomFacilId) {
+    String res="";
+    for(DoomFacility df in doomFacils!){
+      if(df.id == doomFacilId) {res=df.name;break;}
+    }
+    return res;
+  }
+
   String getOutsideFacilName(int outsideFacilId) {
     String res="";
     for(OutsideFacility o in outsideFacils!){

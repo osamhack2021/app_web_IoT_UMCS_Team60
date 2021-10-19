@@ -32,6 +32,20 @@
               :key="doom.doom_id"
             >
               <v-card class="mt-5">
+                <v-card-title>
+                  <v-row>
+                    <v-col
+                      cols="8"
+                      class="mx-auto"
+                    >
+                      <v-select
+                        v-model="tempSelect"
+                        :items="['제1생활관', '제2생활관', '제3생활관']"
+                        prepend-icon="mdi-home-city"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card-title>
                 <v-card-actions>
                   <v-row>
                     <v-spacer />
@@ -63,10 +77,12 @@
                                   sm="4"
                                 >
                                   <v-select
+                                    v-model="formSelectedDoom"
                                     :items="facilityList"
-                                    label="건물 선택"
+                                    label="부대 선택"
                                     item-text="doom_name"
                                     prepend-icon="mdi-home-city"
+                                    @update="test($event)"
                                   >
                                     <!-- <template v-slot:selection="data">
                                       {{ data.item.doom_name }}
@@ -83,6 +99,7 @@
                                   <v-select
                                     :items="tempFloorList"
                                     label="층 선택"
+                                    prepend-icon="mdi-home-floor-a"
                                   />
                                 </v-col>
                                 <v-col
@@ -92,6 +109,7 @@
                                   <v-select
                                     :items="tempRoomList"
                                     label="장소 선택"
+                                    prepend-icon="mdi-map-marker"
                                   />
                                 </v-col>
                               </v-row>
@@ -263,6 +281,10 @@ export default {
     return {
       page: 1,
       dialog: false,
+      formSelectedDoom: "",
+
+      //
+      tempSelect: "제1생활관",
       tempFloorList: ["1층", "2층"],
       tempRoomList: [
         "1호실",
@@ -402,14 +424,8 @@ export default {
       // beaconId에 해당하는 시설에 있는 인원 목록
       this.FETCH_CURRENT_LOCATION_BEACON(beaconId);
     },
-    test() {
-      const payload = {
-        x: 461,
-        y: 36,
-        size: "small",
-        beacon_id: "rr:rr:rr:rr:rr:rr",
-      };
-      this.CREATE_ROOM_PICKER(payload);
+    test(event) {
+      console.log(event);
     },
   },
 };

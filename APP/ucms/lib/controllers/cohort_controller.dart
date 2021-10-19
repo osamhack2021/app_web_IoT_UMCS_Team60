@@ -68,7 +68,7 @@ class CohortController extends GetxController {
 
     for (TimeZone t in innerTimes) {
       for (int i = 0; i < list.length; i++) {
-        if (list[i].place.doomId == t.doomId) {
+        if (list[i].place.name == placeDB.getDoomFacilName(t.facilityId)) {
           list[i].list.add(t);
           break;
         }
