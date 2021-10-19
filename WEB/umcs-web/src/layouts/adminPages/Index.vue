@@ -54,11 +54,13 @@ export default {
         this.ADD_MOVING_REPORT(data);
       });
       this.$socket.$subscribe("facility_request", (data) => {
-        this.objects.push({
-          message: "공공시설 이용신청이 도착했습니다",
-          color: "primary",
-        });
-        this.ADD_USING_REPORT(data);
+        if (this.coronaSituation) {
+          this.objects.push({
+            message: "공공시설 이용신청이 도착했습니다",
+            color: "primary",
+          });
+          this.ADD_USING_REPORT(data);
+        }
       });
       this.$socket.$subscribe("doomroom_contact", (data) => {
         if (this.coronaSituation) {
