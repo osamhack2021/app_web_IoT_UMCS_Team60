@@ -23,7 +23,7 @@
         color="secondary"
         to="/approval-moving"
       >
-        이동 신청
+        외부시설 이동
       </v-btn>
     </v-badge>
 
@@ -39,7 +39,7 @@
         color="secondary"
         to="/approval-using"
       >
-        이용 신청
+        공용시설 이용
       </v-btn>
     </v-badge>
 
