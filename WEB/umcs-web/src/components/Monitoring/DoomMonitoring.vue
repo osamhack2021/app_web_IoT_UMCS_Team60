@@ -77,10 +77,12 @@
                                   sm="4"
                                 >
                                   <v-select
+                                    v-model="formSelectedDoom"
                                     :items="facilityList"
-                                    label="건물 선택"
+                                    label="부대 선택"
                                     item-text="doom_name"
                                     prepend-icon="mdi-home-city"
+                                    @update="test($event)"
                                   >
                                     <!-- <template v-slot:selection="data">
                                       {{ data.item.doom_name }}
@@ -279,6 +281,9 @@ export default {
     return {
       page: 1,
       dialog: false,
+      formSelectedDoom: "",
+
+      //
       tempSelect: "제1생활관",
       tempFloorList: ["1층", "2층"],
       tempRoomList: [
@@ -419,14 +424,8 @@ export default {
       // beaconId에 해당하는 시설에 있는 인원 목록
       this.FETCH_CURRENT_LOCATION_BEACON(beaconId);
     },
-    test() {
-      const payload = {
-        x: 461,
-        y: 36,
-        size: "small",
-        beacon_id: "rr:rr:rr:rr:rr:rr",
-      };
-      this.CREATE_ROOM_PICKER(payload);
+    test(event) {
+      console.log(event);
     },
   },
 };

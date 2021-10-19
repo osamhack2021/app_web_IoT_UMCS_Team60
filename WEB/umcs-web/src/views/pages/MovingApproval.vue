@@ -149,26 +149,12 @@ export default {
       );
     },
   },
-  created() {
-    try {
-      this.$socket.$subscribe("move_request", (data) => {
-        this.ADD_MOVING_REPORT(data);
-      });
-    } catch (error) {
-      window.location.reload();
-    }
-    this.FETCH_MOVING_REPORT();
-  },
   methods: {
     ...mapMutations("moving_approval", [
       "updateSearchInput",
       "updateSelectedItems",
       "setLoading",
       "deleteMovingReport",
-    ]),
-    ...mapActions("moving_approval", [
-      "FETCH_MOVING_REPORT",
-      "ADD_MOVING_REPORT",
     ]),
     acceptReport(id) {
       const load = {
