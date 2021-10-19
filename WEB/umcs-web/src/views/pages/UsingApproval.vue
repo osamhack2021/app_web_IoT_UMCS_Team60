@@ -149,16 +149,6 @@ export default {
       );
     },
   },
-  created() {
-    try {
-      this.$socket.$subscribe("facility_request", (data) => {
-        this.ADD_USING_REPORT(data);
-      });
-    } catch (error) {
-      window.location.reload();
-    }
-    this.FETCH_USING_REPORT();
-  },
   methods: {
     ...mapMutations("using_approval", [
       "updateSearchInput",
@@ -166,7 +156,6 @@ export default {
       "setLoading",
       "deleteUsingReport",
     ]),
-    ...mapActions("using_approval", ["FETCH_USING_REPORT", "ADD_USING_REPORT"]),
     acceptReport(id) {
       const load = {
         id,
