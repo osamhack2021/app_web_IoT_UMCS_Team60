@@ -217,7 +217,7 @@ This project is licensed under the terms of the Apache 2.0 license.
 
 [WEB 오픈소스 인용 정보](WEB/open_source.md)
 
-[SERVER 오픈소스 인용 정보](WEB/Server/open_source.md)
+[SERVER 오픈소스 인용 정보](https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/blob/main/WEB/open_source.md#back-end)
 
 [IoT 오픈소스 인용 정보](IoT/open_source.md)
 
