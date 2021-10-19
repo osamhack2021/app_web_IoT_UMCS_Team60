@@ -57,6 +57,8 @@
 - 권장: Google Chrome Version 77 이상, Edge Version 93 이상
 
 ### 앱 최소 사양
+- 최소사양: Android 5.0(API 21) 이상
+- 권장: Android 8.0(API 26) 이상
 
 ### 서버 최소 사양
 - Operating Systems
