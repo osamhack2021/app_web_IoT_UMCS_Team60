@@ -52,8 +52,17 @@
 
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
-* ECMAScript 6 지원 브라우저 사용
-* 권장: Google Chrome 버젼 77 이상
+### 웹 최소 사양
+- ECMAScript 6 지원 브라우저 사용
+- 권장: Google Chrome 버젼 77 이상
+
+### 앱 최소 사양
+
+### 서버 최소 사양
+- Operating Systems
+    - Ubuntu (16.04/18.04/20.04)
+- Database
+    - Mysql 8.0 
 
 ## 기술 스택 (Technique Used) 
 ### Infra
