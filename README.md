@@ -213,6 +213,4 @@ This project is licensed under the terms of the Apache 2.0 license.
 
 [IoT 오픈소스 인용 정보](IoT/open_source.md)
 
-[DB 오픈소스 인용 정보](DB/open_source.md)
-
 [기타 프로젝트 간 오픈소스 인용 정보](open_source.md)
