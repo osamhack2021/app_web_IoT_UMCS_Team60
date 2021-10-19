@@ -15,6 +15,17 @@
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/DOCUMENT-blue?style=for-the-badge'></a>
 </p>
 
+### APP, WEB 로고
+<table><tbody>
+ <tr>
+  <td>
+   <div align="center"> <img src="https://user-images.githubusercontent.com/28801695/137842313-936caec0-67ff-4b50-a336-b816bbb46c65.png" width="270" height="270"/> </div>
+  </td>
+ </tr>
+ </tbody></table>
+
+
+
 ## UMCS 프로젝트 소개
 ### :mask: 배경
 - 끝나지 않는 코로나, 예방적인 **실시간 비대면 유동병력 관리 개선** 필요성 증대
