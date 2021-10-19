@@ -54,7 +54,7 @@
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 ### 웹 최소 사양
 - ECMAScript 6 지원 브라우저 사용
-- 권장: Google Chrome 버젼 77 이상
+- 권장: Google Chrome Version 77 이상, Edge Version 93 이상
 
 ### 앱 최소 사양
 
