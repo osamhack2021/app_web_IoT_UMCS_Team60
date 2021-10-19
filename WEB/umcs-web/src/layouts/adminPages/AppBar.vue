@@ -14,9 +14,10 @@
     <v-spacer />
 
     <v-badge
+      :content="getCountMovingReport"
+      :value="getCountMovingReport"
       color="error"
       overlap
-      :content="getCountMovingReport"
     >
       <v-btn
         color="secondary"
@@ -28,9 +29,10 @@
 
     <v-badge
       v-if="coronaSituation"
+      :content="getCountUsingReport"
+      :value="getCountUsingReport"
       color="error"
       overlap
-      :content="getCountUsingReport"
       class="mx-6"
     >
       <v-btn

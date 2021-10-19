@@ -38,6 +38,27 @@ export default new Vuex.Store({
     facilityList: [],
     // 외부시설 목록
     outsideFacilityList: [],
+
+    // Doom Monitoring Select Form
+    formData: {
+      doomId: 0,
+      floor: 0,
+      roomBeaconId: 0,
+    },
+    selectedFloorList: [],
+    selectedRoomList: [],
+  },
+
+  getters: {
+    getFormDoomId(state) {
+      return state.formData.doomId;
+    },
+    getFormFloor(state) {
+      return state.formData.floor;
+    },
+    getFormRoomBeaconId(state) {
+      return state.formData.roomBeaconId;
+    },
   },
 
   mutations: {
@@ -61,6 +82,25 @@ export default new Vuex.Store({
     },
     setOutsideFacilityList(state, data) {
       state.outsideFacilityList = data;
+    },
+    setFormDoomId(state, value) {
+      state.formData.doomId = value;
+      state.facilityList.forEach((elem) => {
+        if (elem.doom_id === value) {
+          state.selectedFloorList = elem.items;
+        }
+      });
+    },
+    setFormFloor(state, value) {
+      state.formData.floor = value;
+      state.selectedFloorList.forEach((elem) => {
+        if (elem.floor === value) {
+          state.selectedRoomList = elem.items;
+        }
+      })
+    },
+    setFormRoomBeaconId(state, value) {
+      state.formData.roomBeaconId = value;
     },
   },
 

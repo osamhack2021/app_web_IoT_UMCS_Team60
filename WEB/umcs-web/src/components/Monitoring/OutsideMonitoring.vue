@@ -1,80 +1,72 @@
 <template>
   <v-row>
     <v-col
-      cols="12"
-      xl="8"
-      class="mx-auto"
+      cols="5"
+      class="mt-5"
     >
-      <v-row>
-        <v-col
-          cols="5"
-          class="mt-5"
-        >
-          <v-card>
-            <v-card-title>
-              영외 시설 모니터링
-            </v-card-title>
-            <v-data-table
-              :headers="monitoringHeaders"
-              :items="outsideFacilityList"
-              hide-default-footer
-              :items-per-page="outsideFacilityList.length+5"
-              class="elavation-1"
-              @click:row="rowClick"
-            />
-          </v-card>
-        </v-col>
+      <v-card>
+        <v-card-title>
+          영외 시설 모니터링
+        </v-card-title>
+        <v-data-table
+          :headers="monitoringHeaders"
+          :items="outsideFacilityList"
+          hide-default-footer
+          :items-per-page="outsideFacilityList.length+5"
+          class="elavation-1"
+          @click:row="rowClick"
+        />
+      </v-card>
+    </v-col>
 
-        <!-- People list -->
-        <v-col
-          cols="7"
-          class="mt-5"
+    <!-- People list -->
+    <v-col
+      cols="7"
+      class="mt-5"
+    >
+      <v-card>
+        <v-card-title>
+          <span>{{ focusRoom }} 인원현황</span>
+        </v-card-title>
+        <v-card-text>
+          <!-- Search Bar -->
+          <v-text-field
+            v-model="searchInput"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            clearable
+          />
+        </v-card-text>
+        <v-data-table
+          :headers="peopleHeaders"
+          :items="peopleDatas"
+          :search="searchInput"
+          hide-default-footer
+          :items-per-page="$store.state.ITEMS_PER_PAGE"
+          :page.sync="page"
+          class="elavation-1"
         >
-          <v-card>
-            <v-card-title>
-              <span>{{ focusRoom }} 인원현황</span>
-            </v-card-title>
-            <v-card-text>
-              <!-- Search Bar -->
-              <v-text-field
-                v-model="searchInput"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-                clearable
-              />
-            </v-card-text>
-            <v-data-table
-              :headers="peopleHeaders"
-              :items="peopleDatas"
-              :search="searchInput"
-              hide-default-footer
-              :items-per-page="$store.state.ITEMS_PER_PAGE"
-              :page.sync="page"
-              class="elavation-1"
+          <!-- Slot:item.name - user profile routing -->
+          <template v-slot:[`item.name`]="{ item }">
+            <router-link
+              :to="`/user/${item.tag}`"
+              class="info--text text-decoration-none"
             >
-              <!-- Slot:item.name - user profile routing -->
-              <template v-slot:[`item.name`]="{ item }">
-                <router-link
-                  :to="`/user/${item.tag}`"
-                  class="info--text text-decoration-none"
-                >
-                  {{ item.name }}
-                </router-link>
-              </template>
-            </v-data-table>
-            <!-- Pagination -->
-            <div class="text-center pt-2">
-              <v-pagination
-                v-model="page"
-                :length="pageCount"
-                :total-visible="$store.state.TOTAL_VISIBLE"
-              />
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
+              {{ item.name }}
+            </router-link>
+          </template>
+        </v-data-table>
+        <!-- Pagination -->
+        <div class="text-center pt-2">
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            :total-visible="$store.state.TOTAL_VISIBLE"
+          />
+        </div>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -133,7 +125,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations("outside_monitoring", ["updateSearchInput", "setFocusRoom"]),
+    ...mapMutations("outside_monitoring", [
+      "updateSearchInput",
+      "setFocusRoom",
+    ]),
     ...mapActions("outside_monitoring", ["FETCH_CURRENT_LOCATION_BEACON"]),
     getIn() {
       window.location.reload();
