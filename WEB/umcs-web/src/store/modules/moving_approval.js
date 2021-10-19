@@ -40,6 +40,9 @@ const getters = {
   getLoading(state) {
     return state.loading;
   },
+  getCountMovingReport(state) {
+    return state.tableDatas.length;
+  },
 };
 
 const mutations = {

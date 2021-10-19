@@ -56,7 +56,7 @@ export default {
       this.$socket.$subscribe("facility_request", (data) => {
         if (this.coronaSituation) {
           this.objects.push({
-            message: "공공시설 이용신청이 도착했습니다",
+            message: "공용시설 이용신청이 도착했습니다",
             color: "primary",
           });
           this.ADD_USING_REPORT(data);
@@ -95,7 +95,10 @@ export default {
       "FETCH_MOVING_REPORT",
       "ADD_MOVING_REPORT",
     ]),
-    ...mapActions("using_approval", ["FETCH_USING_REPORT", "ADD_USING_REPORT"]),
+    ...mapActions("using_approval", [
+      "FETCH_USING_REPORT",
+      "ADD_USING_REPORT",
+    ]),
   },
 };
 </script>

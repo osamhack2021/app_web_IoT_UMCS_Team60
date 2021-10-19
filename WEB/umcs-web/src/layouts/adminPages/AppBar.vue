@@ -13,18 +13,33 @@
 
     <v-spacer />
 
-    <v-btn
-      class="mr-5"
-      icon
+    <v-badge
+      color="error"
+      overlap
+      :content="getCountMovingReport"
     >
-      <v-badge
+      <v-btn
         color="secondary"
-        overlap
-        content="5"
+        to="/approval-moving"
       >
-        <v-icon>mdi-bell</v-icon>
-      </v-badge>
-    </v-btn>
+        이동 신청
+      </v-btn>
+    </v-badge>
+
+    <v-badge
+      v-if="coronaSituation"
+      color="error"
+      overlap
+      :content="getCountUsingReport"
+      class="mx-6"
+    >
+      <v-btn
+        color="secondary"
+        to="/approval-using"
+      >
+        이용 신청
+      </v-btn>
+    </v-badge>
 
     <v-btn
       color="secondary"
@@ -37,6 +52,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
 import { logoutAdmin } from "@/api/index.js";
 
 export default {
@@ -44,29 +60,34 @@ export default {
   data() {
     return {
       toggleSwitch: false,
-    }
+    };
   },
   computed: {
+    ...mapState(["coronaSituation"]),
+    ...mapGetters("moving_approval", ["getCountMovingReport"]),
+    ...mapGetters("using_approval", ["getCountUsingReport"]),
     drawer: {
       get() {
-        return this.$store.getters['drawer/getDrawer'];
+        return this.$store.getters["drawer/getDrawer"];
       },
       set(value) {
-        return this.$store.dispatch('drawer/toggleDrawer', value);
-      }
-    }
+        return this.$store.dispatch("drawer/toggleDrawer", value);
+      },
+    },
+  },
+  mounted() {
+    console.log("getCountMovingReport: ", this.getCountMovingReport);
   },
   methods: {
     async logout() {
       try {
         await logoutAdmin();
         this.$router.push("/authentication/login");
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
-
-    }
-  }
+    },
+  },
 };
 </script>
 
