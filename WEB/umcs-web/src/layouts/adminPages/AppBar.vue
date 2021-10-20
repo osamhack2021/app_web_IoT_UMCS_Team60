@@ -18,6 +18,7 @@
       :value="getCountMovingReport"
       color="error"
       overlap
+      class="mr-6"
     >
       <v-btn
         color="secondary"
@@ -33,7 +34,7 @@
       :value="getCountUsingReport"
       color="error"
       overlap
-      class="mx-6"
+      class="mr-6"
     >
       <v-btn
         color="secondary"
