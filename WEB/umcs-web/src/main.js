@@ -8,13 +8,10 @@ import vuetify from "./plugins/vuetify";
 import VueDraggableResizable from "vue-draggable-resizable";
 import "vue-draggable-resizable/dist/VueDraggableResizable.css";
 import io  from 'socket.io-client'
-import VueSocketIO from 'vue-socket.io-extended'
-import VueCookies from "vue-cookies";
+import VueSocketIO from 'vue-socket.io-extended';
 
-// 실 배포때는 option 제거할 것
-const socket = io.connect('https://militaryumcs.com/manager', { query: 'session_id=' + window.$cookies.get('express.sid')?.replace('s:','').split('.')[0] });
+const socket = io.connect('https://militaryumcs.com/manager');
 
-Vue.use(VueCookies);
 Vue.use(VueSocketIO, socket);
 Vue.config.productionTip = false;
 

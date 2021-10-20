@@ -14,7 +14,6 @@
     "socket.io-client": "^2.4.0",
     "v-snackbars": "^3.2.4",
     "vue": "^2.6.11",
-    "vue-cookies": "^1.7.4",
     "vue-draggable-resizable": "^2.3.0",
     "vue-router": "^3.2.0",
     "vue-socket.io-extended": "^4.2.0",
