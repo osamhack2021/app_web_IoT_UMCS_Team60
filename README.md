@@ -12,7 +12,6 @@
 <p align="center">
 	<a href="https://team60.gitbook.io/militaryumcs"><img src='https://img.shields.io/badge/DOCUMENT-blue?style=for-the-badge'></a>
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/VIDEO-blue?style=for-the-badge'></a>
-	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60"><img src='https://img.shields.io/badge/HOMEPAGE-gray?style=for-the-badge'></a>
 </p>
 
 ### APP, WEB 로고
@@ -225,7 +224,7 @@
 |정재욱<br>상병|web-frontend 담당(Vue.js)| 아주대학교 2학년 휴학<br>소프트웨어학과 전공 |<a href="https://github.com/Wo-ogie"> <img src="http://img.shields.io/badge/-green?style=social&logo=github"/> | <a href="mailto:siwall0105@gmail.com"> <img src="https://img.shields.io/badge/siwall0105@gmail.com-green?logo=gmail&style=social">| 
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
- [Apache 2.0](https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/blob/main/LICENSE)
+ [Apache 2.0](https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/blob/main/license.md)
 
 This project is licensed under the terms of the Apache 2.0 license.
 
