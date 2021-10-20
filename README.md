@@ -192,10 +192,14 @@
 ## 설치 안내 (Installation Process)
  
  [Server 설치 안내](./WEB/Server/README.md)
+ 
+ [WEB 설치 안내](./WEB/umcs-web/readme.md)
 
  [APP 설치 안내](./APP/README.md)
 
  [DB 설치 안내](./DB/README.md)
+ 
+
 
 ## 프로젝트 사용법 (Getting Started)
 본 시스템은 부대 단위로 도입되게 됩니다.
