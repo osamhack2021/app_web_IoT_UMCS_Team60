@@ -93,6 +93,7 @@ export default {
   methods: {
     ...mapMutations(["deleteRoomPicker"]),
     ...mapMutations("doom_monitoring", ["updateSearchInput", "setLoading"]),
+    ...mapActions("doom_monitoring", ["DELETE_ROOM_PICKER"]),
     deleteRoomIcon() {
       this.DELETE_ROOM_PICKER();
     },

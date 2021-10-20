@@ -265,7 +265,6 @@ export default {
       "FETCH_CURRENT_LOCATION_BEACON",
       "CREATE_ROOM_PICKER",
       "EDIT_ROOM_PICKER",
-      "DELETE_ROOM_PICKER",
     ]),
     closeDialog() {
       this.dialog = false;
