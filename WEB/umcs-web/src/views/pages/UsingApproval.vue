@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import UsingApprovalDataTable from "@/src/components/UsingApproval/DataTable";
+import UsingApprovalDataTable from "@/components/UsingApproval/DataTable";
 
 export default {
   name: "UsingApprovalReport",
