@@ -48,7 +48,6 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-const uploadRouter = require('./routes/uploadRouter');
 const devRouter = require('./routes/devRouter');
 
 app.use('/api', apiRouter);
