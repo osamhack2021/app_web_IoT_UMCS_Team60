@@ -18,16 +18,7 @@ const routes = [
     redirect: "/monitoring",
     component: Index,
     beforeEnter(to, from, next) {
-      console.log(
-        "cookie",
-        window.$cookies.get("express.sid").replace("s:", "").split(".")[0]
-      );
-      // 실 배포시에는 option 제거할 것
-      const socket = io.connect("https://militaryumcs.com/manager", {
-        query:
-          "session_id=" +
-          window.$cookies.get("express.sid").replace("s:", "").split(".")[0],
-      });
+      const socket = io.connect("https://militaryumcs.com/manager");
       Vue.use(VueSocketIO, socket);
       next();
     },
