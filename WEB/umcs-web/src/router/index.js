@@ -27,18 +27,18 @@ const routes = [
         path: "/monitoring",
         name: "실시간 모니터링",
         redirect: "/monitoring/doom",
-        component: () => import("@/views/pages/Monitoring"),
+        component: () => import("@/views/pages/Monitoring/Monitoring"),
         children: [
           {
             path: "doom",
             name: "영내 시설 모니터링",
-            component: () => import("@/components/Monitoring/DoomMonitoring"),
+            component: () => import("@/views/pages/Monitoring/DoomMonitoringPage"),
           },
           {
             path: "outside",
             name: "영외 시설 모니터링",
             component: () =>
-              import("@/components/Monitoring/OutsideMonitoring"),
+              import("@/views/pages/Monitoring/OutsideMonitoringPage"),
           },
         ],
       },
