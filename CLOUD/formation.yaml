@@ -165,52 +165,32 @@ Resources:
             Type: "A"
             AliasTarget: 
                 HostedZoneId: !GetAtt ElasticLoadBalancingV2LoadBalancer.CanonicalHostedZoneID
-                DNSName: !Sub "dualstack.umcs-alb-v2-720019138.${AWS::Region}.elb.amazonaws.com."
+                DNSName: 
                 EvaluateTargetHealth: true
-            HostedZoneId: "Z02020082H4T9C6XADU2Z"
+            HostedZoneId: 
 
     Route53RecordSet2:
         Type: "AWS::Route53::RecordSet"
         Properties:
             Name: !Ref Route53RecordSet3
             Type: "NS"
-            TTL: 172800
+            TTL:
             ResourceRecords: 
               - "ns-715.awsdns-25.net."
               - "ns-1699.awsdns-20.co.uk."
               - "ns-1328.awsdns-38.org."
               - "ns-211.awsdns-26.com."
-            HostedZoneId: "Z02020082H4T9C6XADU2Z"
+            HostedZoneId: 
 
     Route53RecordSet3:
         Type: "AWS::Route53::RecordSet"
         Properties:
             Name: "militaryumcs.com."
             Type: "SOA"
-            TTL: 900
+            TTL: 
             ResourceRecords: 
-              - "ns-715.awsdns-25.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
-            HostedZoneId: "Z02020082H4T9C6XADU2Z"
-
-    Route53RecordSet4:
-        Type: "AWS::Route53::RecordSet"
-        Properties:
-            Name: !Sub "_75828ad43dc999697f90023f6239e8a6.${Route53RecordSet}"
-            Type: "CNAME"
-            TTL: 300
-            ResourceRecords: 
-              - "_06a6e55cd7bd5e86c536acd5ac05b9d6.fsdcfjjflr.acm-validations.aws."
-            HostedZoneId: !Ref Route53HostedZone
-
-    Route53RecordSet5:
-        Type: "AWS::Route53::RecordSet"
-        Properties:
-            Name: !Sub "_1d8360e7d97318897c01148895bbb440.www.${Route53RecordSet}"
-            Type: "CNAME"
-            TTL: 300
-            ResourceRecords: 
-              - "_f26779e5844714b6a93e1c47254e87d2.fsdcfjjflr.acm-validations.aws."
-            HostedZoneId: !Ref Route53HostedZone
+              - 
+            HostedZoneId: 
 
     EC2Instance:
         Type: "AWS::EC2::Instance"
@@ -498,107 +478,15 @@ Resources:
             InstanceId: !Ref EC2Instance2
             Device: "/dev/sda1"
 
-    EC2NetworkInterface:
-        Type: "AWS::EC2::NetworkInterface"
-        Properties:
-            Description: "Primary network interface"
-            PrivateIpAddress: !GetAtt EC2Instance.PrivateIp
-            PrivateIpAddresses: 
-              - 
-                PrivateIpAddress: !GetAtt EC2Instance.PrivateIp
-                Primary: true
-            SubnetId: !Ref EC2Subnet2
-            SourceDestCheck: true
-            Tags: 
-              - 
-                Key: "Name"
-                Value: "Private_Server"
-            GroupSet: 
-              - !Ref EC2SecurityGroup3
-
-    EC2NetworkInterface2:
-        Type: "AWS::EC2::NetworkInterface"
-        Properties:
-            Description: "Primary network interface"
-            PrivateIpAddress: !GetAtt EC2Instance2.PrivateIp
-            PrivateIpAddresses: 
-              - 
-                PrivateIpAddress: !GetAtt EC2Instance2.PrivateIp
-                Primary: true
-            SubnetId: !Ref EC2Subnet3
-            SourceDestCheck: true
-            Tags: 
-              - 
-                Key: "Name"
-                Value: "Public_Server_v3"
-            GroupSet: 
-              - !Ref EC2SecurityGroup
-
-    EC2NetworkInterface3:
-        Type: "AWS::EC2::NetworkInterface"
-        Properties:
-            Description: !Sub "ELB app/${ElasticLoadBalancingV2LoadBalancer.LoadBalancerName}/ef286757a8e71e8e"
-            PrivateIpAddress: "10.0.2.189"
-            PrivateIpAddresses: 
-              - 
-                PrivateIpAddress: "10.0.2.189"
-                Primary: true
-            SubnetId: !Ref EC2Subnet
-            SourceDestCheck: true
-            GroupSet: 
-              - !Sub "${ElasticLoadBalancingV2LoadBalancer.SecurityGroups}"
-
-    EC2NetworkInterface4:
-        Type: "AWS::EC2::NetworkInterface"
-        Properties:
-            Description: !Sub "ELB app/${ElasticLoadBalancingV2LoadBalancer.LoadBalancerName}/ef286757a8e71e8e"
-            PrivateIpAddress: "10.0.0.201"
-            PrivateIpAddresses: 
-              - 
-                PrivateIpAddress: "10.0.0.201"
-                Primary: true
-            SubnetId: !Ref EC2Subnet3
-            SourceDestCheck: true
-            GroupSet: 
-              - !Sub "${ElasticLoadBalancingV2LoadBalancer.SecurityGroups}"
-
-    EC2NetworkInterface5:
-        Type: "AWS::EC2::NetworkInterface"
-        Properties:
-            Description: !Sub "Interface for NAT Gateway ${EC2NatGateway}"
-            PrivateIpAddress: "10.0.0.187"
-            PrivateIpAddresses: 
-              - 
-                PrivateIpAddress: "10.0.0.187"
-                Primary: true
-            SubnetId: !Ref EC2Subnet3
-            SourceDestCheck: false
-
-    EC2NetworkInterfaceAttachment:
-        Type: "AWS::EC2::NetworkInterfaceAttachment"
-        Properties:
-            NetworkInterfaceId: "eni-0b69d883f45d6726b"
-            DeviceIndex: 0
-            InstanceId: !Ref EC2Instance
-            DeleteOnTermination: true
-
-    EC2NetworkInterfaceAttachment2:
-        Type: "AWS::EC2::NetworkInterfaceAttachment"
-        Properties:
-            NetworkInterfaceId: "eni-06e5581650a5db2cb"
-            DeviceIndex: 0
-            InstanceId: !Ref EC2Instance2
-            DeleteOnTermination: true
-
     S3Bucket:
         Type: "AWS::S3::Bucket"
         Properties:
-            BucketName: !Sub "codepipeline-${AWS::Region}-71505270630"
+            BucketName: 
 
     S3Bucket2:
         Type: "AWS::S3::Bucket"
         Properties:
-            BucketName: !Sub "cf-templates-mjt2vibepve4-${AWS::Region}"
+            BucketName: 
             BucketEncryption: 
                 ServerSideEncryptionConfiguration: 
                   - 
@@ -619,46 +507,6 @@ Resources:
               - 
                 Key: "Name"
                 Value: "s3_deploy"
-
-    S3BucketPolicy:
-        Type: "AWS::S3::BucketPolicy"
-        Properties:
-            Bucket: !Ref S3Bucket
-            PolicyDocument: 
-                Version: "2012-10-17"
-                Id: "SSEAndSSLPolicy"
-                Statement: 
-                  - 
-                    Sid: "DenyUnEncryptedObjectUploads"
-                    Effect: "Deny"
-                    Principal: "*"
-                    Action: "s3:PutObject"
-                    Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
-                    Condition: 
-                        StringNotEquals: 
-                            "s3:x-amz-server-side-encryption": "aws:kms"
-                  - 
-                    Sid: "DenyInsecureConnections"
-                    Effect: "Deny"
-                    Principal: "*"
-                    Action: "s3:*"
-                    Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
-                    Condition: 
-                        Bool: 
-                            "aws:SecureTransport": "false"
-
-    RDSDBSubnetGroup:
-        Type: "AWS::RDS::DBSubnetGroup"
-        Properties:
-            DBSubnetGroupDescription: "Created from the RDS Management Console"
-            DBSubnetGroupName: "default-vpc-0a32c2bf73a4dfc84"
-            SubnetIds: 
-              - "subnet-0dd910d4a67aba3ea"
-              - "subnet-0b3c3247792381183"
-              - "subnet-03c96819a251e9650"
-              - "subnet-01b47afac30497575"
-              - "subnet-00c34217324e9d102"
-              - "subnet-00fdd3bf31e1f9ef6"
 
     ElastiCacheUser:
         Type: "AWS::ElastiCache::User"
@@ -906,7 +754,7 @@ Resources:
             Name: "UMCScodepipeline--Source--osamhack2021appwebIoTUMCSTe--794268076"
             TargetPipeline: "UMCS_codepipeline"
             TargetAction: "Source"
-            Authentication: "GITHUB_HMAC"
+            Authentication: 
             AuthenticationConfiguration: 
                 SecretToken: 
 
