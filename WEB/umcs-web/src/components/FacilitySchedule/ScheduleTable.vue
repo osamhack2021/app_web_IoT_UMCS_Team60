@@ -17,6 +17,7 @@
             {{ selectedFacilityName }} 이용 시간표
           </v-toolbar-title>
           <v-spacer />
+          <schedule-creation-form />
         </v-toolbar>
       </template>
       <!-- Slot:item.actions - display delete icon -->
@@ -44,9 +45,13 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import ScheduleCreationForm from "./ScheduleCreationForm.vue";
 
 export default {
   name: "FacilityScheduleTable",
+  components: {
+    ScheduleCreationForm,
+  },
   data: () => ({
     page: 1,
   }),
