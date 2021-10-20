@@ -141,7 +141,7 @@ export default {
     endTimeMenu: false,
   }),
   computed: {
-    ...mapState("facility", ["roomList", "selectedDoomId"]),
+    ...mapState("facility", ["roomList"]),
     ...mapGetters("facility", ["getFormSelectedDoomRoom"]),
     formSelectedDoomRoom: {
       get() {

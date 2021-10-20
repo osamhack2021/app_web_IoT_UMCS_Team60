@@ -65,7 +65,7 @@ import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "FacilityList",
   computed: {
-    ...mapState(["facilityList"]),
+    ...mapState(["facilityList", "selectedDoomId"]),
   },
   methods: {
     ...mapMutations("facility", [
