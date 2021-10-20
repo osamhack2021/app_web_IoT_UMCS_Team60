@@ -62,7 +62,6 @@ export default {
       "selectedFacilityName",
     ]),
     ...mapGetters("facility", ["getLoading"]),
-    ...mapActions("facility", ["DELETE_SCHEDULE"]),
     isLoading: {
       get() {
         return this.getLoading;
@@ -79,6 +78,7 @@ export default {
   },
   methods: {
     ...mapMutations("facility", ["setLoading"]),
+    ...mapActions("facility", ["DELETE_SCHEDULE"]),
   },
 };
 </script>
