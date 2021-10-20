@@ -28,7 +28,7 @@ app.use(session({
     resave: true,
     cookie: {
         httpOnly: true,
-        secure: true
+        secure: false
     },
     store: new FileStore({logFn: function(){}}),
 }));
@@ -48,7 +48,7 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-app.use('/api', apiRouter);
+app.use('/api', apiRouter); 
 
 //setting cors 
 app.all('/*', (req, res, next) => {
