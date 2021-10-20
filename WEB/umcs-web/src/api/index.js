@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "/api/";
+const BASE_URL = process.env.VUE_API_URL;
 
 // Authentication
 function signupAdmin(adminData) {
