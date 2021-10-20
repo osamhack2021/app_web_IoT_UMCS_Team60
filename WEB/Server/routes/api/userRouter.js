@@ -136,9 +136,7 @@ router.get('/:tag/recent_position', async (req, res) => {
             // 생활관건물 호실이나 공공시설이라면 생활관건물 id도 알아야 하므로 column에 추가
             let column = 'name' + ((table === 'outside_facility' || table === 'doom') ? '': ', doom_id');
             sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
-            console.log(sql, record.beacon_id)
             let [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
-            console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
             if(facilityinfo[0].doom_id) {

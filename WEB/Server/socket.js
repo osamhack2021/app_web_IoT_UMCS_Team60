@@ -1,7 +1,5 @@
 const passportSocketIo = require("passport.socketio");
 const { decodeToken } = require(`./middleware/auth`);
-const axios = require('axios');
-const request = require('request');
 
 const dbModule = require(`./database`)();
 const dbConnection = dbModule.init();
@@ -276,7 +274,6 @@ module.exports = (server, session) => {
         socket.on('to_normal', async () =>{
             let sql = "INSERT INTO cohort_status VALUE (NULL, false, ?)";
             let [result] = await dbPromiseConnection.query(sql, [nowDateTime()]);
-            console.log("to_normal");
             userio.emit('to_normal');
         });
 

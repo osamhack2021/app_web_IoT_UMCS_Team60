@@ -27,7 +27,6 @@ router.get('/', async (req, res) => {
             
             sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
             var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
-            console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
             if(facilityinfo[0].doom_id) {
@@ -85,7 +84,6 @@ router.get('/search', async (req, res) => {
             
             sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
             var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
-            console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
             if(facilityinfo[0].doom_id) {
@@ -140,7 +138,6 @@ router.get('/:id', async (req, res) => {
             
             sql = `SELECT ${column} FROM ${table} WHERE beacon_id=?`;
             var [facilityinfo] = await dbPromiseConnection.query(sql, [record.beacon_id]);
-            console.log(facilityinfo)
             record.name = facilityinfo[0].name;
 
             if(facilityinfo[0].doom_id) {

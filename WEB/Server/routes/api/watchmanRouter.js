@@ -84,7 +84,6 @@ router.get('/search', (req, res) => {
         }
         sql = sql.substr(0, sql.length - 3);
     }
-    console.log(sql);
     dbConnection.query(sql, Object.values(req.query), (err, rows) => {
         if(err)
             return res.status(400).json({

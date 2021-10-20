@@ -6,11 +6,11 @@ module.exports = () => {
   return {
     init: () => {
       return mysql.createConnection({
-        host: '10.0.1.174',
-        port: '3306',
-        user: 'root',
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: 'UMCS'
+        database: process.env.DB_NAME
       })
     },
 
