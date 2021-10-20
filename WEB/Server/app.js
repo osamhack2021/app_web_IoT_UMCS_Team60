@@ -48,11 +48,7 @@ managerPassportConfig();
 
 // router
 const apiRouter = require('./routes/apiRouter');
-const devRouter = require('./routes/devRouter');
-
 app.use('/api', apiRouter);
-app.use('/upload', uploadRouter);
-app.use('/dev', devRouter);
 
 //setting cors 
 app.all('/*', (req, res, next) => {
