@@ -193,7 +193,7 @@
  
  [Server 설치 안내](./WEB/Server/README.md)
  
- [WEB 설치 안내](./WEB/umcs-web/readme.md)
+ [WEB 설치 안내](./WEB/umcs-web/README.md)
 
  [APP 설치 안내](./APP/README.md)
 
