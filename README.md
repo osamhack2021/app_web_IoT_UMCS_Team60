@@ -6,6 +6,7 @@
 <p align="center">
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/search?l=JavaScript&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/osamhack2021/app_web_IoT_UMCS_Team60"></a>
 	<a href="https://github.com/osamhack2021/app_web_IoT_UMCS_Team60/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/osamhack2021/app_web_IoT_UMCS_Team60?color=success"></a>
+	<a href="https://team60.gitbook.io/militaryumcs/"><img src='https://img.shields.io/badge/license-apach%202.0-green'></a>
 </p>
 </p>
 <p align="center">
